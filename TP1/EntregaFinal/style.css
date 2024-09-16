@@ -95,7 +95,7 @@ h3{
   span{
     height: 50px;
     width: 2px;
-    background-color: var(--clr-black);
+    background-color: var(--clr-secondary-dark-3);
   }
 }
 
