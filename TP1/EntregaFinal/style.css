@@ -60,7 +60,8 @@ body{
 
 h3{
   font-size: var(--fs-h3);
-  text-wrap: pretty;
+  text-wrap: balance;
+  text-align: center;
 
   &::after,&::before{
     content: '⯌';
@@ -74,6 +75,7 @@ h3{
   gap: 1rem;
   justify-content: center;
   align-items: center;
+  flex-wrap: wrap;
 
   a{
     color: var(--clr-accent);
