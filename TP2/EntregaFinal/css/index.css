@@ -1,0 +1,121 @@
+@import url(root.css);
+@import url(header.css);
+@import url(badge.css);
+@import url(card.css);
+@import url(button.css);
+@import url(form.css);
+
+.stack{
+  display: grid;
+  grid-template-areas: "stack";
+  align-items: center;
+
+  >* {
+    grid-area: stack;
+  }
+}
+
+
+*,
+::after,
+::before {
+  box-sizing: border-box;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  font-family: inherit;
+  color: inherit;
+}
+
+html:focus-within {
+  scroll-behavior: smooth;
+}
+
+
+img,
+picture,
+svg {
+  max-width: 100%;
+  display: block;
+}
+
+input {
+  border-style: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html:focus-within {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+body {
+  background-color: var(--clr-secondary-light-3);
+
+  font-family: var(--ff);
+
+  font-size: var(--fs-body);
+  color: var(--clr-black);
+
+  display: grid;
+  --_padding-inline: 3rem;
+  grid-template-columns: var(--_padding-inline) [content-start] auto [content-end] var(--_padding-inline);
+
+  > * {
+    grid-column: content;
+  }
+
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  text-wrap: balance;
+}
+
+h5{
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-h5);
+}
+
+h4{
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-h4);
+}
+
+h3{
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-h3);
+}
+
+h2{
+  font-weight: var(--fw-black);
+  font-size: var(--fs-h2);
+}
+
+h1{
+  font-weight: var(--fw-black);
+  font-size: var(--fs-h1);
+}
+
+p,
+li {
+  text-wrap: pretty;
+}
+
+.bold{
+  font-weight: var(--fw-bold);
+}

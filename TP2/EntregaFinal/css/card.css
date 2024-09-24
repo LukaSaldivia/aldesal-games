@@ -1,0 +1,45 @@
+section.sm{
+
+  display: flex;
+  gap: 40px;
+
+
+
+  > .card, > .card a{
+    text-decoration: none;
+    position: relative;
+    max-width: fit-content;
+    cursor: default;
+
+    &:hover, &:focus{
+
+      outline-color: var(--clr-accent);
+
+      > .black{
+        opacity: 1;
+      }
+
+    }
+
+    > .black{
+      background-color: rgba(0, 0, 0, 50%);
+      border-radius: 20px;
+      overflow: hidden;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      transition: opacity 200ms ease-out;
+    }
+
+    > img{
+      border-radius: 20px;
+      overflow: hidden;
+      width: 195px;
+      aspect-ratio: 3/2;
+      object-fit: cover;
+    }
+
+    
+  }
+
+}

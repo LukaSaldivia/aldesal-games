@@ -1,0 +1,30 @@
+body > header{
+  display: flex;
+  align-items: center;
+  padding-block: 25px;
+
+  > :is(:first-child,:last-child){
+    flex-grow: 1;
+    flex-basis: 0;
+  }
+
+  > :last-child{
+    justify-content: end;
+  }
+
+  .aside{
+    display: flex;
+    align-items: center;
+    gap: 30px;
+
+    .logo{
+      color: var(--clr-primary-dark-3);
+      transition: color .2s ease-out;
+
+      &:hover{
+        color: var(--clr-primary);
+      }
+    }
+  }
+
+}
