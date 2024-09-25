@@ -37,7 +37,7 @@ body>footer {
       display: flex;
       justify-content: space-between;
       flex-wrap: wrap;
-      gap: 3rem;
+      gap: 2rem;
 
       li {
         display: grid;
@@ -56,6 +56,10 @@ body>footer {
 
           >a {
             text-decoration: none;
+
+            &:hover{
+              color: var(--clr-accent-light-2);
+            }
           }
         }
       }
