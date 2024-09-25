@@ -38,13 +38,13 @@
 
   --clr-discount: #FFFF04;
 
-  --fs-min: 11.2px;
-  --fs-body: 14px;
-  --fs-h5: 17.5px;
-  --fs-h4: 21.88px;
-  --fs-h3: 27.35px;
-  --fs-h2: 34.19px;
-  --fs-h1: 42.74px;
+  --fs-min: clamp(0.625rem, 0.6036rem + 0.1071vw, 0.7rem);
+  --fs-body: clamp(0.75rem, 0.7143rem + 0.1786vw, 0.875rem);
+  --fs-h5: clamp(0.9375rem, 0.8929rem + 0.2232vw, 1.09375rem);
+  --fs-h4: clamp(1.0625rem, 0.9754rem + 0.4357vw, 1.3675rem);
+  --fs-h3: clamp(1.1875rem, 1.0384rem + 0.7455vw, 1.709375rem);
+  --fs-h2: clamp(1.3125rem, 1.077rem + 1.1777vw, 2.136875rem);
+  --fs-h1: clamp(1.5625rem, 1.2457rem + 1.5839vw, 2.67125rem);
 
   --ff: 'Montserrat', system-ui;
 

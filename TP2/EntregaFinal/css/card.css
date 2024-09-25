@@ -6,6 +6,7 @@ section.sm{
 
 
   > .card, > .card a{
+    height: fit-content;
     text-decoration: none;
     position: relative;
     max-width: fit-content;

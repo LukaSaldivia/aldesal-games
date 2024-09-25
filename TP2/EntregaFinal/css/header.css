@@ -1,7 +1,8 @@
-body > header{
+body > header > .wrapper{
   display: flex;
   align-items: center;
   padding-block: 25px;
+
 
   > :is(:first-child,:last-child){
     flex-grow: 1;
