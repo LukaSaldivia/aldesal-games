@@ -15,7 +15,7 @@ label[role="group"] {
     padding: 10px;
     border-radius: 12px;
     background-color: var(--clr-white);
-    border: 1px solid var(--clr-free);
+    border: 1px solid var(--clr-grey);
     font-size: var(--fs-min);
     color: var(--clr-black);
 
@@ -26,7 +26,7 @@ label[role="group"] {
 
     &:focus-visible {
       outline: none;
-      background-color: var(--clr-free);
+      background-color: var(--clr-grey);
     }
   }
 }

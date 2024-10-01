@@ -73,6 +73,11 @@ input {
   }
 }
 
+::selection{
+  background-color: var(--clr-primary);
+  color: var(--clr-white);
+}
+
 .content-grid,
 .full-width{
 

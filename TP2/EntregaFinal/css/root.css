@@ -20,23 +20,18 @@
   --clr-secondary-dark-2: #A68F5D;
   --clr-secondary-dark-3: #88714E;
 
-  --clr-accent-light-3: #2DD3D5;
-  --clr-accent-light-2: #1EB5C6;
-  --clr-accent-light-1: #0F97B7;
-  --clr-accent: #0079A8;
-  --clr-accent-dark-1: #005B99;
-  --clr-accent-dark-2: #003D8A;
-  --clr-accent-dark-3: #001F7B;
+  --clr-accent: #1EB5C6;
+
+
 
   --clr-black: #012622;
   --clr-white: #FBFCF8;
 
-  --clr-price: #00A552;
-  --clr-free: #D9D9D9;
+  --clr-grey: #b1b1b1;
 
   --clr-trend: #FF8204;
 
-  --clr-discount: #FFFF04;
+  --clr-green: #0a8834;
 
   --fs-min: clamp(0.625rem, 0.6036rem + 0.1071vw, 0.7rem);
   --fs-body: clamp(0.75rem, 0.7143rem + 0.1786vw, 0.875rem);

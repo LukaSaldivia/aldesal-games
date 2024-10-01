@@ -7,6 +7,7 @@ body>footer {
   >.wrapper {
     display: grid;
     gap: 80px;
+    justify-items: center;
 
     .links-container {
       display: flex;
@@ -37,7 +38,7 @@ body>footer {
       display: flex;
       justify-content: space-between;
       flex-wrap: wrap;
-      gap: 2rem;
+      gap: 5rem;
 
       li {
         display: grid;
@@ -58,7 +59,7 @@ body>footer {
             text-decoration: none;
 
             &:hover{
-              color: var(--clr-accent-light-2);
+              color: var(--clr-accent);
             }
           }
         }
@@ -66,7 +67,7 @@ body>footer {
     }
 
     >.copyright {
-      color: var(--clr-free);
+      color: var(--clr-grey);
     }
   }
 }

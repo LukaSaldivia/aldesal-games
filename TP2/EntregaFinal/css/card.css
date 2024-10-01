@@ -3,6 +3,11 @@ section.sm{
   display: flex;
   gap: 40px;
 
+  > .card{
+    display: grid;
+    gap: 10px;
+  }
+
 
 
   > .card, > .card a{
@@ -11,6 +16,9 @@ section.sm{
     position: relative;
     max-width: fit-content;
     cursor: default;
+    width: 195px;
+    text-align: center;
+
 
     &:hover, &:focus{
 
@@ -20,11 +28,17 @@ section.sm{
         opacity: 1;
       }
 
+      > .game-name{
+        opacity: 1;
+        translate: 0;
+      }
+
     }
 
     > .black{
-      background-color: rgba(0, 0, 0, 50%);
+      background-color: rgba(0, 0, 0, 80%);
       border-radius: 20px;
+      border-bottom-left-radius: 0;
       overflow: hidden;
       opacity: 0;
       width: 100%;
@@ -34,10 +48,21 @@ section.sm{
 
     > img{
       border-radius: 20px;
+      border-bottom-left-radius: 0;
       overflow: hidden;
       width: 195px;
       aspect-ratio: 3/2;
       object-fit: cover;
+    }
+
+    > .game-name{
+      color: var(--clr-white);
+      font-weight: var(--fw-bold);
+      text-wrap: wrap;
+      opacity: 0;
+      transition: translate .2s ease-out, opacity .2s ease-out;
+      translate: 0 8px;
+
     }
 
     
