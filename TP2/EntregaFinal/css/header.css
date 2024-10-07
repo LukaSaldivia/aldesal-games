@@ -1,4 +1,20 @@
-body > header > .wrapper{
+body > header {
+  
+  position: sticky;
+  background-color: var(--clr-secondary-light-3);
+  z-index: 1;
+  transition: box-shadow .3s ease-out;
+
+  &.active{
+    top: var(--_top);
+  }
+
+  &.clr{
+    box-shadow : 0 10px 12px #0002;
+  }
+  
+
+  & > .wrapper{
   display: flex;
   align-items: center;
   padding-block: 25px;
@@ -26,6 +42,10 @@ body > header > .wrapper{
         color: var(--clr-primary);
       }
     }
+
+
+    
   }
 
+}
 }
