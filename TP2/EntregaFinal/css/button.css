@@ -28,6 +28,9 @@
     background-color: var(--_background-hover, var(--clr-free));
     box-shadow: inset 0 -2px 0 0px var(--_stroke, var(--clr-black));
 
+    > * {
+      translate: 0 1px;
+    }
 
   }
 

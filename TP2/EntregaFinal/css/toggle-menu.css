@@ -34,27 +34,26 @@ details.menu{
   > ul{
     position: absolute;
     top: 150%;
+    overflow: hidden;
+
+    border-radius: 10px;
 
     &.left{
       left: 0;
+      border-top-left-radius: 0;
     }
-
+    
     &.right{
       right: 0;
+      border-top-right-radius: 0;
     }
 
     background-color: var(--clr-primary-dark-3);
     width: 200px;
 
-    > li.label{
-      background-color: var(--clr-primary-light-3);
-      padding-inline: 10px;
-      padding-block: 5px;
-      font-size: var(--fs-min);
-      color: var(--clr-primary-dark-3);
-    }
 
-    > li:not(.label) > *{
+
+    > li > *{
       cursor: default;
       width: 100%;
       display: flex;

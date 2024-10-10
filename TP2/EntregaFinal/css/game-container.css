@@ -1,0 +1,121 @@
+.game-page-wrapper {
+  display: grid;
+  width: 100%;
+  grid-template-columns: [full-start info-start info-reduced-start] 80ch [info-reduced-end] 20ch [info-end more-games-start] auto [ more-games-end full-end];
+  grid-template-rows:
+    [breadcrumbs-start]
+    auto
+    [breadcrumbs-end game-start]
+    auto
+    [game-end gameTitle-start]
+    var(--fs-h2)
+    [gameTitle-end gameRate-start]
+    auto
+    [gameRate-end gameInfo-start]
+    auto 
+    [gameInfo-end];
+
+    gap: 12px;
+
+
+  .breadcrumbs {
+    grid-column: info;
+    grid-row: breadcrumbs;
+
+    display: flex;
+
+    gap: 6px;
+
+    color: var(--clr-primary-dark-3);
+
+    > a{
+      text-decoration: none;
+
+      &[href]:hover{
+        text-decoration: underline;
+      }
+    }
+
+    > a:last-of-type{
+      color: var(--clr-secondary-dark-2);
+    }
+  }
+
+  .col-full{
+    grid-column: full;
+  }
+
+  .col-info{
+    grid-column: info;
+  }
+  
+  .col-more-games{
+    grid-column: more-games;
+  }
+
+  .col-info-reduced{
+    grid-column: info-reduced;
+  }
+
+  > .game-title {
+    grid-row: gameTitle;
+    color: var(--clr-primary-dark-3);
+    display: grid;
+    grid-template-rows: auto;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: 20px;
+
+    > .buttons-container{
+      display: flex;
+      justify-content: space-between;
+
+      > span{
+        display: flex;
+        gap: 20px;
+      }
+    }
+  }
+
+  > .game-rate {
+    grid-row: gameRate;
+    display: flex;
+  }
+
+  #game-container {
+    justify-items: center;
+    grid-row: game;
+    overflow: hidden;
+    justify-items: center;
+    border-radius: 20px;
+    max-height: 100%;
+
+    >img {
+      max-height: 500px;
+      width: 100%;
+      object-fit: cover;
+      scale: 1.02;
+      filter: blur(3px) brightness(.25);
+    }
+
+    > .game-title {
+      z-index: 0;
+      display: grid;
+      justify-items: center;
+      gap: 12px;
+      color: var(--clr-white);
+    }
+
+  }
+
+  > .game-description{
+    grid-row: gameInfo;
+  }
+
+  aside{
+    background-color: var(--clr-secondary);
+    grid-row: gameInfo;
+  }
+
+
+}

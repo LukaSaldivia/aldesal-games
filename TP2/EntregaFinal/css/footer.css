@@ -3,6 +3,7 @@ body>footer {
   background-color: var(--clr-primary-dark-3);
   color: var(--clr-white);
   padding-block: 40px;
+
   
   >.wrapper {
     display: grid;
@@ -69,5 +70,11 @@ body>footer {
     >.copyright {
       color: var(--clr-grey);
     }
+  }
+}
+
+@media screen and (width < 800px) {
+  body > footer > .wrapper > .links-container > ul{
+    display: none;
   }
 }
