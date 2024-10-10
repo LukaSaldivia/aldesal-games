@@ -113,8 +113,9 @@
   }
 
   aside{
+    margin-top: 24px;
     background-color: var(--clr-secondary);
-    grid-row: gameInfo;
+    grid-row: gameRate-start / gameInfo-end;
   }
 
 
