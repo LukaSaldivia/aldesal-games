@@ -1,18 +1,11 @@
-span.price {
-  background-color: var(--clr-secondary);
-  font-weight: var(--fw-bold);
-  width: fit-content;
-  padding: 4px 8px;
-  border-radius: 5px;
+.price-cart-container{
+  grid-column: game-image-start/background-end;
+  grid-row: price-cart;
   display: flex;
   align-items: center;
-  user-select: none;
-}
-
-.price-cart-container{
-  display: flex;
-  align-items: stretch;
   justify-content: space-between;
+  padding-bottom: 10px;
+  padding-right: 10px;
 }
 
 .add-to-cart{

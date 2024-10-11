@@ -85,6 +85,8 @@ input {
 .content-grid,
 .full-width {
 
+  overflow: hidden;
+
 
   --_padding-inline: 50px;
   --_content-max-width: 1300px;

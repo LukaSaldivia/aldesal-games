@@ -3,34 +3,74 @@ section.sm{
   display: flex;
   gap: 40px;
 
+  overflow-x: scroll;
+
   > .card{
     display: grid;
-    gap: 10px;
+    --_offset : 16px;
+    /* gap: 10px; */
+    grid-template-columns: [background-start] var(--_offset) [game-image-start] auto [background-end] var(--_offset) [game-image-end];
+    grid-template-rows: 
+    [game-image-start]
+    var(--_offset)
+    [background-start]
+    auto
+    [game-image-end price-cart-start]
+    auto
+    [price-cart-end background-end]
+    
+    ;
+
+
+    border-radius: 20px;
+    padding-bottom: 12px;
+    row-gap: 6px;
+
+    
+    > .card-background{
+      background-color: var(--clr-secondary);
+      border-radius: 20px;
+
+      grid-area: background;
+    }
+  }
+
+  > .card a{
+    display: grid;
+    grid-area: game-image;
+    transition: translate .3s;
+
+    &:hover, &:focus-visible{
+      
+
+    }
   }
 
 
 
   > .card, > .card a{
-    height: fit-content;
     text-decoration: none;
     position: relative;
-    max-width: fit-content;
-    cursor: default;
     width: 195px;
     text-align: center;
 
 
-    &:hover, &:focus{
+    &:hover, &:focus-visible{
 
       outline-color: var(--clr-accent);
 
-      > .black{
+      .black{
         opacity: 1;
       }
-
-      > .game-name{
+      
+      .game-name{
         opacity: 1;
         translate: 0;
+      }
+
+      > a{
+        translate: calc(var(--_offset) * -1);
+
       }
 
     }
@@ -38,7 +78,6 @@ section.sm{
     > .black{
       background-color: rgba(0, 0, 0, 80%);
       border-radius: 20px;
-      border-bottom-left-radius: 0;
       overflow: hidden;
       opacity: 0;
       width: 100%;
@@ -48,11 +87,11 @@ section.sm{
 
     > img{
       border-radius: 20px;
-      border-bottom-left-radius: 0;
       overflow: hidden;
       width: 195px;
       aspect-ratio: 3/2;
       object-fit: cover;
+      border: 5px solid var(--clr-secondary-dark-2);
     }
 
     > .game-name{
@@ -62,6 +101,7 @@ section.sm{
       opacity: 0;
       transition: translate .2s ease-out, opacity .2s ease-out;
       translate: 0 8px;
+      padding: 12px;
 
     }
 
