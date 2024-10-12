@@ -39,11 +39,6 @@ section.sm{
     display: grid;
     grid-area: game-image;
     transition: translate .3s;
-
-    &:hover, &:focus-visible{
-      
-
-    }
   }
 
 
