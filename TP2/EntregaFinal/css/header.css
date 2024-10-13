@@ -2,7 +2,7 @@ body > header {
   
   position: sticky;
   background-color: var(--clr-secondary-light-3);
-  z-index: 1;
+  z-index: 9;
   transition: box-shadow .3s ease-out;
 
   &.active{

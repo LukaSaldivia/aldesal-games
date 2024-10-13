@@ -8,7 +8,7 @@ section.sm{
 
   overflow-x: scroll;
 
-  > .card{
+  .card{
     display: grid;
     --_offset : 16px;
     /* gap: 10px; */
@@ -38,7 +38,7 @@ section.sm{
     }
   }
 
-  > .card a{
+  .card a{
     display: grid;
     grid-area: game-image;
     transition: translate .3s;
@@ -46,7 +46,7 @@ section.sm{
 
 
 
-  > .card, > .card a{
+  .card, .card a{
     text-decoration: none;
     position: relative;
     width: 195px;
@@ -76,11 +76,11 @@ section.sm{
     > .black{
       background-color: rgba(0, 0, 0, 80%);
       border-radius: 20px;
-      /* overflow: hidden; */
       opacity: 0;
       width: 195px;
       height: 130px;
       transition: opacity 200ms ease-out;
+      z-index: 0;
     }
 
     > img{

@@ -1,0 +1,56 @@
+.carousel{
+  position: relative;
+  /* overflow: hidden; */
+  display: flex;
+  align-items: center;
+
+
+  * > *:not(.arrow){
+    transition: scale .2s;
+    z-index: 0;
+  }
+
+  > .carousel-items{
+    display: flex;
+    gap: 40px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    transition: filter .3s;
+  }
+}
+
+.carousel .arrow {
+  position: absolute;
+  border: none;
+  z-index: 1;
+  width: fit-content;
+  top: 50%;
+  translate: 0 -50%;
+
+  z-index: 1;
+
+  filter: drop-shadow(0 0 5px #0008);
+
+  &.none{
+    display: none;
+  }
+
+}
+
+.left {
+  left: 10px;
+}
+
+.right {
+  right: 10px;
+}
+
+.carousel-items.carousel-items.scale-effect{
+  filter: blur(4px);
+}
+
+/* Efecto de inclinación (skew) */
+.carousel-items.scale-effect * {
+  scale: 0.95 1;
+}
+
