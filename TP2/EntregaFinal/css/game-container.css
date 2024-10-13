@@ -1,7 +1,7 @@
 .game-page-wrapper {
   display: grid;
   width: 100%;
-  grid-template-columns: [full-start info-start info-reduced-start] 80ch [info-reduced-end] 20ch [info-end more-games-start] auto [ more-games-end full-end];
+  grid-template-columns: [full-start info-start info-reduced-start] 1fr [info-reduced-end] 20ch [info-end more-games-start] auto [ more-games-end full-end];
   grid-template-rows:
     [breadcrumbs-start]
     auto
@@ -112,10 +112,13 @@
     grid-row: gameInfo;
   }
 
-  aside{
-    margin-top: 24px;
-    background-color: var(--clr-secondary);
-    grid-row: gameRate-start / gameInfo-end;
+  section.sm{
+    display: grid;
+    justify-items: center;
+    grid-row: gameInfo;
+    overflow: unset;
+    width: fit-content;
+    padding: 20px;
   }
 
 

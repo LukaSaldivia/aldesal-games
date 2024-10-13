@@ -99,7 +99,7 @@ section.sm{
       opacity: 0;
       transition: translate .2s ease-out, opacity .2s ease-out;
       translate: 0 8px;
-      padding: 12px;
+      padding: 6px;
 
     }
 
