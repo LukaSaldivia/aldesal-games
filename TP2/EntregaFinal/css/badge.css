@@ -6,6 +6,10 @@
   justify-content: space-between;
   padding-bottom: 10px;
   padding-right: 10px;
+
+  > span.price{
+    cursor: default;
+  }
 }
 
 .add-to-cart{
@@ -38,6 +42,12 @@
   &:has(input:checked){
     background-color: var(--clr-green);
     color: var(--clr-white);
+
+    > .cart{
+      animation: shake .15s ease-in;
+      animation-iteration-count: 2;
+      animation-delay: .2s;
+    }
 
     > .plus{
       display: none;

@@ -1,9 +1,9 @@
 @import url(root.css);
 @import url(header.css);
+@import url(form.css);
 @import url(badge.css);
 @import url(card.css);
 @import url(button.css);
-@import url(form.css);
 @import url(avatar.css);
 @import url(footer.css);
 @import url(toggle-menu.css);
@@ -85,8 +85,6 @@ input {
 .content-grid,
 .full-width {
 
-  overflow: hidden;
-
 
   --_padding-inline: 50px;
   --_content-max-width: 1300px;
@@ -119,6 +117,9 @@ body {
   display: grid;
   grid-template-rows: [header-start] auto [header-end main-start] 1fr [main-end footer-start] auto [footer-end];
 
+  > main > .wrapper{
+    overflow: hidden;
+  }
 }
 
 h1,
