@@ -31,34 +31,40 @@
   position: absolute;
   border: none;
   z-index: 1;
-  top: 50%;
-  translate: 0 -50%;
   height: 100%;
-  background-color: var(--clr-secondary-light-1);
-  color: var(--clr-primary-dark-3);
+  background-color: var(--clr-primary-dark-1);
+  color: var(--clr-white);
   padding-inline: 10px;
-  border-radius: 4px;
+  border-radius: 40px;
   cursor: pointer;
 
   z-index: 1;
+
+  box-shadow: 0 0 10px #000;
 
   &.none{
     display: none;
   }
 
   &:hover{
-    background-color: var(--clr-secondary);
+    background-color: var(--clr-primary-light-1);
+  }
+
+  &.left {
+    left: 0;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+  
+  &.right {
+    right: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
   }
 
 }
 
-.left {
-  left: 0;
-}
 
-.right {
-  right: 0;
-}
 
 .carousel-items.carousel-items.scale-effect{
   scale: 0.95;
