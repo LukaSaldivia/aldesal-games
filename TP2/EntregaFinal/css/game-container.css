@@ -23,6 +23,7 @@
     ;
 
     gap: 12px;
+    column-gap: 60px;
 
 
   .breadcrumbs {
@@ -171,6 +172,7 @@
 
         animation: translateTop var(--_time) cubic-bezier(.0,-5,0,5) forwards;
         opacity: 0;
+        rotate: -10deg;
 
         &:nth-child(1){animation-delay: calc(var(--_time) * 0);}
         &:nth-child(2){animation-delay: calc(var(--_time) * 1);}
@@ -208,5 +210,6 @@
   to{
     translate: 0 -3px;
     opacity: 1;
+    rotate: 0deg;
   }
 }
