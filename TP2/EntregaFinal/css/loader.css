@@ -15,6 +15,7 @@
   height: 200%;
 
   background-color: var(--clr-secondary-light-2);
+  visibility: hidden;
 
   svg{
     --d-a: 3355;
