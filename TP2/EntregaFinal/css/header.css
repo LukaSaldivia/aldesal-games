@@ -1,4 +1,8 @@
 body > header {
+
+  .mobile{
+    display: none;
+  }
   
   position: sticky;
   background-color: var(--clr-secondary-light-3);
@@ -34,19 +38,58 @@ body > header {
     display: flex;
     align-items: center;
     gap: 30px;
+  }
 
-    .logo{
-      color: var(--clr-primary-dark-3);
-      transition: color .2s ease-out;
+  .logo{
+    color: var(--clr-primary-dark-3);
+    transition: color .2s ease-out;
 
-      &:hover{
-        color: var(--clr-primary);
-      }
+    &:hover{
+      color: var(--clr-primary);
     }
-
-
-    
   }
 
 }
+}
+
+@media screen and (width < 800px) {
+  body > header > .wrapper{
+
+    .mobile{
+      display: block;
+    }
+
+    .desktop{
+      display: none;
+    }
+
+    .aside{
+      gap: 15px;
+    }
+
+    > [role="searchbox"]{
+      display: none;
+    }
+
+    .buscar.mobile{
+      color: var(--clr-primary-dark-3);
+      background-color: transparent;
+      border: none;
+    }
+
+    #buscar-mobile{
+      z-index: 9;
+      background-color: transparent;
+      border: none;
+      position: fixed;
+      inset: 0;
+      left: 50%;
+      top: 20px;
+      translate: -50%;
+
+      &::backdrop{
+        background-color: #0008;
+      }
+    }
+  }
 }
