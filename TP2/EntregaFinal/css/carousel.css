@@ -2,7 +2,6 @@
   position: relative;
   display: flex;
   align-items: center;
-  overflow: hidden;
 
 
   * > *:not(.arrow){
@@ -21,6 +20,10 @@
     > *{
       transition: transform .3s, scale .3s, rotate .3s;
     }
+
+    &::-webkit-scrollbar{
+      height: 0;
+    }
   }
 }
 
@@ -28,26 +31,33 @@
   position: absolute;
   border: none;
   z-index: 1;
-  width: fit-content;
   top: 50%;
   translate: 0 -50%;
+  height: 100%;
+  background-color: var(--clr-secondary-light-1);
+  color: var(--clr-primary-dark-3);
+  padding-inline: 10px;
+  border-radius: 4px;
+  cursor: pointer;
 
   z-index: 1;
-
-  filter: drop-shadow(0 0 5px #0008);
 
   &.none{
     display: none;
   }
 
+  &:hover{
+    background-color: var(--clr-secondary);
+  }
+
 }
 
 .left {
-  left: 10px;
+  left: 0;
 }
 
 .right {
-  right: 10px;
+  right: 0;
 }
 
 .carousel-items.carousel-items.scale-effect{

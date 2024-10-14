@@ -231,7 +231,7 @@
       </section>
       <p>ó</p>
 
-      <form action="login.html" class="form">
+      <form action="login.html" class="form" id="registerForm">
         <label role="group" class="text">
           <p>Nombre y Apellido</p>
           <input required type="text" placeholder="">
@@ -386,6 +386,19 @@
 
 
   </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const form = document.getElementById('registerForm');
+        
+        form.addEventListener('submit', function(event) {
+            event.preventDefault(); // Evitar el envío por defecto
+
+            // Redirigir a login.html con un parámetro indicativo
+            window.location.href = 'login.html?registered=true';
+        });
+    });
+</script>
 
 </body>
 

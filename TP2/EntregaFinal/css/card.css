@@ -2,11 +2,11 @@ section.sm{
 
   display: flex;
   gap: 40px;
-  padding-block: 16px;
+  /* padding-block: 16px; */
 
   /* width: 1; */
 
-  overflow-x: scroll;
+  /* overflow-x: scroll; */
 
   .card{
     display: grid;
