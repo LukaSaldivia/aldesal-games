@@ -37,7 +37,6 @@ function applyScaleEffect(container) {
 }
 
 function applySkewEffect(container, direction) {
-  console.log(direction)
   if (direction === 'right') {
       container.classList.add('skew-right');
       setTimeout(() => container.classList.remove('skew-right'), 300);
