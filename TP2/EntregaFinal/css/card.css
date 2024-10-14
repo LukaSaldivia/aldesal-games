@@ -1,12 +1,21 @@
+.title-group{
+  margin-bottom: 16px;
+  color: var(--clr-primary-dark-3);
+  display: flex;
+  gap: 10px;
+  align-items: center;
+
+  & ~ *:is(.title-group){
+    margin-top: 40px;
+  }
+}
+
+
 section.sm{
 
   display: flex;
   gap: 40px;
-  /* padding-block: 16px; */
 
-  /* width: 1; */
-
-  /* overflow-x: scroll; */
 
   .card{
     display: grid;

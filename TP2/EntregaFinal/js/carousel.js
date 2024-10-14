@@ -3,7 +3,6 @@ document.querySelectorAll('.carousel').forEach(carousel => {
   const rightArrow = carousel.querySelector('.arrow.right');
   const container = carousel.querySelector('.carousel-items');
 
-
   checkArrowsVisibility(container, leftArrow, rightArrow);
 
   rightArrow.addEventListener('click', () => {

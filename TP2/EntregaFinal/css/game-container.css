@@ -11,9 +11,12 @@
     var(--fs-h2)
     [gameTitle-end gameRate-start]
     auto
-    [gameRate-end gameInfo-start]
-    auto 
-    [gameInfo-end];
+    [gameRate-end gameInfo-start more-games-start]
+    calc(var(--fs-body) * 10) 
+    [gameInfo-end related-content-start]
+    240px
+    [related-content-end more-games-end]
+    ;
 
     gap: 12px;
 
@@ -112,10 +115,14 @@
     grid-row: gameInfo;
   }
 
+  > .related-content{
+    grid-row: related-content;
+  }
+
   section.sm{
     display: grid;
     justify-items: center;
-    grid-row: gameInfo;
+    grid-row: more-games;
     overflow: unset;
     width: fit-content;
     padding: 20px;
