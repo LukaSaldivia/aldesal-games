@@ -87,6 +87,10 @@ body > header {
       top: 20px;
       translate: -50%;
 
+      form{
+        width: 80vw;
+      }
+
       &::backdrop{
         background-color: #0008;
       }
