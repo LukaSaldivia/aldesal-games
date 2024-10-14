@@ -20,7 +20,7 @@ document.querySelectorAll('.carousel').forEach(carousel => {
   });
 
   container.addEventListener('scroll', () => {
-    // applyScaleEffect(container);
+    applyScaleEffect(container);
     checkArrowsVisibility(container, leftArrow, rightArrow)}
   );
 });
