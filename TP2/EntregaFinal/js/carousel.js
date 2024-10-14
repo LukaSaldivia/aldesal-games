@@ -32,7 +32,6 @@ function checkArrowsVisibility(container, leftArrow, rightArrow) {
 
 
 function applyScaleEffect(container) {
-  container.classList.add('scale-effect');
   setTimeout(() => container.classList.remove('scale-effect'), 200);
 }
 
