@@ -15,7 +15,11 @@
     calc(var(--fs-body) * 10) 
     [gameInfo-end related-content-start]
     240px
-    [related-content-end more-games-end]
+    [related-content-end rate-game-start]
+    auto
+    [rate-game-end comment-group-start]
+    auto
+    [comment-group-end more-games-end]
     ;
 
     gap: 12px;
@@ -115,8 +119,76 @@
     grid-row: gameInfo;
   }
 
-  > .related-content{
+  > .related-content-title{
     grid-row: related-content;
+  }
+
+  > .related-content{
+    margin-top: 36px;
+    grid-row: related-content;
+  }
+
+  > .rate-game{
+    margin-block: 40px;
+    display: flex;
+    border-radius: 20px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--clr-secondary-light-1);
+    padding-block: 20px;
+
+    gap: 12px;
+    grid-row: rate-game;
+
+    > .stars-group {
+      color: var(--clr-accent);
+
+      &:has(.empty svg:nth-child(1):hover) .filled svg:nth-child(-1n + 1){visibility: visible;}
+      &:has(.empty svg:nth-child(2):hover) .filled svg:nth-child(-1n + 2){visibility: visible;}
+      &:has(.empty svg:nth-child(3):hover) .filled svg:nth-child(-1n + 3){visibility: visible;}
+      &:has(.empty svg:nth-child(4):hover) .filled svg:nth-child(-1n + 4){visibility: visible;}
+      &:has(.empty svg:nth-child(5):hover) .filled svg:nth-child(-1n + 5){visibility: visible;}
+
+      > *{
+      display: flex;
+      gap: 2px;
+      cursor: pointer;
+
+      &.filled{
+        pointer-events: none;
+
+        svg{
+          visibility: hidden;
+        }
+      }
+
+
+
+      &.visible > *{
+        --_time : .2s;
+
+
+        animation: translateTop var(--_time) cubic-bezier(.0,-5,0,5) forwards;
+        opacity: 0;
+
+        &:nth-child(1){animation-delay: calc(var(--_time) * 0);}
+        &:nth-child(2){animation-delay: calc(var(--_time) * 1);}
+        &:nth-child(3){animation-delay: calc(var(--_time) * 2);}
+        &:nth-child(4){animation-delay: calc(var(--_time) * 3);}
+        &:nth-child(5){animation-delay: calc(var(--_time) * 4);}
+      }
+    }
+  }
+  }
+
+  > .comment-group-title{
+    grid-row: comment-group;
+  }
+
+  > .comment-group{
+    margin-top: 50px;
+    grid-row: comment-group;
   }
 
   section.sm{
@@ -130,4 +202,11 @@
   }
 
 
+}
+
+@keyframes translateTop {
+  to{
+    translate: 0 -3px;
+    opacity: 1;
+  }
 }
