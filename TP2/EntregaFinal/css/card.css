@@ -54,6 +54,7 @@ section.sm,section.lg{
     position: relative;
     width: 195px;
     text-align: center;
+    aspect-ratio: 3/2;
 
 
     &:hover, &:focus-visible{
