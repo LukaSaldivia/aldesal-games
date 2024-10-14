@@ -10,13 +10,86 @@
   }
 }
 
+section.lg{
+  
+  + *{
+    margin-top: 36px;
+  }
+
+  .card{
+    background-color: var(--clr-secondary);
+    box-sizing: border-box;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    border-radius: 30px;
+
+    > .price-cart-container{
+      padding: 0;
+    }
+  }
+
+  .card, .card a{
+    justify-self: center;
+    &:hover, &:focus-visible{
+
+      outline-color: var(--clr-accent);
+
+      .black{
+        opacity: 1;
+      }
+      
+      .game-name{
+        opacity: 1;
+        translate: 0;
+      }
+
+
+
+
+    }
+
+    > .black{
+      background-color: rgba(0, 0, 0, 80%);
+      border-radius: 20px;
+      opacity: 0;
+      width: 400px;
+      height: 100%;
+      transition: opacity 200ms ease-out;
+      z-index: 0;
+      }
+
+      > .game-name{
+        color: var(--clr-white);
+        font-weight: var(--fw-bold);
+        text-wrap: wrap;
+        opacity: 0;
+        transition: translate .2s ease-out, opacity .2s ease-out;
+        translate: 0 8px;
+        padding: 6px;
+  
+      }
+  }
+
+  .card a{
+    width: 400px;
+    text-decoration: none;
+    position: relative;
+    text-align: center;
+
+    > img{
+      border-radius: 20px;
+      overflow: hidden;
+      object-fit: cover;
+      border: 5px solid var(--clr-secondary-dark-2);
+    }
+  }
+
+}
+
 
 section.sm{
-
-  display: flex;
-  gap: 40px;
-
-
   .card{
     display: grid;
     --_offset : 16px;
