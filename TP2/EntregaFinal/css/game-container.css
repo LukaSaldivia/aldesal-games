@@ -13,8 +13,10 @@
     auto
     [gameRate-end gameInfo-start more-games-start]
     calc(var(--fs-body) * 10) 
-    [gameInfo-end related-content-start]
-    240px
+    [gameInfo-end game-instructions-start]
+    auto
+    [game-instructions-end related-content-start]
+    300px
     [related-content-end rate-game-start]
     auto
     [rate-game-end comment-group-start]
@@ -121,6 +123,7 @@
   }
 
   > .related-content-title{
+    margin-top: 36px;
     grid-row: related-content;
   }
 
@@ -191,6 +194,22 @@
   > .comment-group{
     margin-top: 50px;
     grid-row: comment-group;
+  }
+
+  > .game-instructions-title{
+    grid-row: game-instructions;
+  }
+
+  > .game-instructions{
+    margin-top: 24px;
+    grid-row: game-instructions;
+    display: grid;
+    gap: 10px;
+
+    ol{
+      line-height: 1.5rem;
+      list-style-position: inside;
+    }
   }
 
   section.sm{
