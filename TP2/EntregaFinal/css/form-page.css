@@ -1,0 +1,78 @@
+main{
+  background-color: var(--clr-secondary);
+}
+
+main > .wrapper{
+
+  background-color: var(--clr-secondary-light-3);
+  width: fit-content;
+  padding-inline: 200px;
+  justify-self: center;
+
+  display: grid;
+  justify-items: center;
+
+  padding-top: 2rem;
+
+  gap: 18px;
+
+
+  .logo{
+    color: var(--clr-primary-dark-3);
+    display: grid;
+    justify-items: center;
+    gap: 6px;
+  }
+
+  .other-methods{
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+
+    .btn{
+      width: 46px;
+    }
+
+    .facebook{
+      --_background: #007AFF;
+      --_background-hover: #005ab9;
+      --_background-active: #00346b;
+      --_text: var(--clr-white);
+      --_stroke: #2E2A99;
+    }
+    .google{
+      --_background: var(--clr-white);
+      --_background-hover: #eee;
+      --_background-active: var(--clr-grey);
+      --_text: var(--clr-white);
+      --_stroke: var(--clr-grey);
+    }
+  }
+
+  form > a{
+    color: var(--clr-accent);
+    font-size: var(--fs-min);
+  }
+
+  .btn{
+    width: 100%;
+  }
+
+  .fake-inputs{
+    display: flex;
+    gap: 10px;
+
+    span{
+      color: var(--clr-black);
+      display: flex;
+      align-items: center;
+      background-color: var(--clr-white);
+      border: 1px solid var(--clr-grey);
+      gap: 10px;
+      padding: 10px;
+      border-radius: 12px;
+      font-size: var(--fs-min);
+    }
+  }
+
+}

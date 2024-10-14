@@ -1,8 +1,8 @@
 .carousel{
   position: relative;
-  /* overflow: hidden; */
   display: flex;
   align-items: center;
+  overflow: hidden;
 
 
   * > *:not(.arrow){
@@ -13,9 +13,14 @@
   > .carousel-items{
     display: flex;
     gap: 40px;
+    overflow: hidden;
     overflow-x: auto;
     scroll-behavior: smooth;
-    transition: filter .3s;
+    transition: scale .3s;
+
+    > *{
+      transition: transform .3s, scale .3s, rotate .3s;
+    }
   }
 }
 
@@ -46,11 +51,20 @@
 }
 
 .carousel-items.carousel-items.scale-effect{
-  filter: blur(4px);
+  scale: 0.95;
+  filter: blur(1px);
 }
 
-/* Efecto de inclinación (skew) */
 .carousel-items.scale-effect * {
-  scale: 0.95 1;
+  scale: .9 1;
+}
+
+.carousel-items.skew-right *{
+  transform: skew(8deg);
+  rotate: -2deg;
+}
+.carousel-items.skew-left *{
+  transform: skew(-8deg);
+  rotate: 2deg;
 }
 

@@ -44,15 +44,14 @@
     color: var(--clr-white);
 
     > .cart{
-      animation: shake .15s ease-in;
+      animation: jump .3s cubic-bezier(.0,-2,1,1);
       animation-iteration-count: 2;
-      animation-delay: .2s;
     }
-
+    
     > .plus{
       display: none;
     }
-
+    
     > .check{
       display: block;
     }
@@ -63,11 +62,23 @@
 .trend-badge {
   position: absolute;
   box-shadow: 0 4px 4px rgba(0, 0, 0, 25%);
-  top: -5px;
-  right: 15px;
+  top: 3px;
+  right: 0;
   background-color: var(--clr-trend);
   color: var(--clr-white);
   padding-block: 10px;
   padding-inline: 8px;
-  border-radius: 5px;
+  border-radius: 0 15px 0 10px;
+}
+
+@keyframes jump {
+  50%{
+    translate: 0 -2px;
+    rotate: -10deg;
+  }
+
+  100%{
+    translate: 0;
+    rotate: 10deg;
+  }
 }

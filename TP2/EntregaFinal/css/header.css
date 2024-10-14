@@ -5,6 +5,7 @@ body > header {
   z-index: 9;
   transition: box-shadow .3s ease-out;
 
+
   &.active{
     top: var(--_top);
   }

@@ -1,4 +1,4 @@
-label[role="group"] {
+label[role="group"].text {
   display: grid;
   gap: 4px;
   color: var(--clr-secondary-dark-3);
@@ -10,7 +10,7 @@ label[role="group"] {
     margin-inline: 4px;
   }
 
-  input[type="text"] {
+  input{
     width: 100%;
     padding: 10px;
     border-radius: 12px;
@@ -28,6 +28,34 @@ label[role="group"] {
       outline: none;
       background-color: var(--clr-grey);
     }
+  }
+}
+
+label[role="group"].checkbox{
+
+  display: flex;
+  gap: 8px;
+  cursor: pointer;
+
+  input{
+    display: none;
+  }
+
+  p{
+    font-size: var(--fs-min);
+  }
+
+  .box{
+    box-sizing: border-box;
+    aspect-ratio: 1;
+    width: 20px;
+    background-color: var(--clr-black);
+    border: 2px solid var(--clr-black);
+    border-radius: 4px;
+  }
+
+  &:has(input:checked) .box{
+    background-color: var(--clr-accent);
   }
 }
 
@@ -105,4 +133,7 @@ label[role="group"] {
   }
 }
 
-
+form.form{
+  display: grid;
+  gap: 18px;
+}
