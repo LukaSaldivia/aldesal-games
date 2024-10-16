@@ -158,6 +158,8 @@ class Tablero {
         return ['der-arr', true];
       }
     }
+
+    
     // chequear hacia derecha-abajo
 
     if (columna + this.fichasNecesarias - 1 < this.columnas && fila + this.fichasNecesarias - 1 < this.filas &&
