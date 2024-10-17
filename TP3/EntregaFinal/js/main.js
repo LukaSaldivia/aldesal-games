@@ -1,5 +1,3 @@
-import Tablero from './Tablero.js'
-
 const c = document.querySelector('#c')
 
 const sizes = {

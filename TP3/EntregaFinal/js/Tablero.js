@@ -1,4 +1,4 @@
-export default class Tablero extends Dibujable{
+class Tablero extends Dibujable{
   constructor(columns = 7, rows = 6, imgs = [Image] ,xPos = 0, yPos = 0, ctx = CanvasRenderingContext2D) {
     super(ctx, xPos, yPos)
     
