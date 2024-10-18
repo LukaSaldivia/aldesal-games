@@ -1,5 +1,5 @@
 class Ficha extends Dibujable{
-  constructor(image = new Image(), jugador = 0, xPos = 0, yPos = 0 ,ctx = new CanvasRenderingContext2D()){
+  constructor(image = new Image(), jugador = 0, xPos = 0, yPos = 0 ,ctx = CanvasRenderingContext2D){
     super(ctx, xPos, yPos)
 
     this._image = image
@@ -11,7 +11,7 @@ class Ficha extends Dibujable{
 
     this.isHover = false
     this.isClicked = false
-    this.isHovereable = false
+    this.isHovereable = true
   }
 
   draw(){
@@ -31,6 +31,19 @@ class Ficha extends Dibujable{
     super.updatePos(x,y)
     this.image.updatePos(x,y)
     this.circle.updatePos(x + this.size / 2, y + this.size / 2)
+  }
+
+  hasMouseOver(x = 0, y = 0){
+    
+    let centerX = this.pos.x + this.size / 2;
+    let centerY = this.pos.y + this.size / 2;
+  
+    let dx = x - centerX;
+    let dy = y - centerY;
+  
+    let distance = Math.sqrt(dx ** 2 + dy ** 2);
+  
+    return distance < (this.size / 2 + 10);
   }
 
 

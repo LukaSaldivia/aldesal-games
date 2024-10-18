@@ -71,7 +71,8 @@ loop()
 
 let mouse = {
   x : 0,
-  y : 0
+  y : 0,
+  isClicking : false
 }
 
 c.addEventListener('mousemove', (e) => {
@@ -83,7 +84,36 @@ c.addEventListener('mousemove', (e) => {
   mouse.x = Math.floor(layerX - canvasXOffset)
   mouse.y = Math.floor(layerY - canvasYOffset)
 
+
+  const bool = ficha_rebelde.hasMouseOver(mouse.x, mouse.y)
+
+  ficha_rebelde.isHover = bool
+
+
+  c.classList.toggle('hover', bool)
+
+  if(ficha_rebelde.isClicked){
+    ficha_rebelde.updatePos(mouse.x - ficha_rebelde.size/2, mouse.y - ficha_rebelde.size/2)
+
+  }
+
   
   
   
+})
+
+c.addEventListener('mouseup', (e) => {
+  ficha_rebelde.isClicked = false
+  mouse.isClicking = false
+})
+
+c.addEventListener('mousedown', (e) =>{
+  if (ficha_rebelde.isHover) {
+    ficha_rebelde.isClicked = true
+  }
+})
+
+c.addEventListener('mouseleave', (e)=>{
+  ficha_rebelde.isClicked = false
+  ficha_rebelde.isHover = false
 })

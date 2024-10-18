@@ -15,6 +15,8 @@ class Casillero extends Dibujable{
   setJugador(jugador = Ficha){
     this.jugador = new Ficha(jugador._image, jugador.jugador, undefined, undefined, jugador.ctx)
 
+    this.jugador.isHovereable = false
+
     this.jugador.updatePos(this.pos.x + 9, this.pos.y + 9)
   }
 }
