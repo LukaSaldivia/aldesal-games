@@ -12,6 +12,10 @@ class Tablero extends Dibujable{
 
     this.matrix = new Array(this.columns).fill().map(() => new Array(this.rows).fill())
 
+    this.fixedZones = []
+
+
+
     this.setMatrix()
   }
 
@@ -22,6 +26,25 @@ class Tablero extends Dibujable{
         let resized = new ResizedImage(img, this.cellSize, this.cellSize, this.pos.x + this.cellSize * i, this.pos.y + this.cellSize * j, this.ctx)
         this.matrix[i][j] = new Casillero(resized , this.pos.x + this.cellSize*i	, this.pos.y + this.cellSize*j, this.ctx)
       }
+    }
+
+    this.fixedZones = []
+
+    for (let i = 0; i < this.columns; i++) {
+
+      this.fixedZones.push(
+      { x : {
+            start : this.pos.x + i * this.cellSize,
+            end : this.pos.x + (i+1) * this.cellSize
+          },
+
+        y : {
+          start : 0,
+          end : this.pos.y
+        }
+      }
+      )
+      
     }
   }
 

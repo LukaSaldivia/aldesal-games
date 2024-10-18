@@ -16,4 +16,8 @@ body{
   &.hover{
     cursor: grab;
   }
+
+  &.grabbing{
+    cursor: grabbing;
+  }
 }
