@@ -5,7 +5,7 @@ class Tablero extends Dibujable{
     this.rows = rows
     this.columns = columns
 
-    this.cellSize = 60
+    this.cellSize = 68
 
     this.imgs = imgs
     
@@ -13,50 +13,12 @@ class Tablero extends Dibujable{
     this.matrix = new Array(this.columns).fill().map(() => new Array(this.rows).fill())
 
     this.setMatrix()
-
-
-
-    
-
-    
-
-
-
-    // this._image = new Image()
-    // this._image.src = '../EntregaFinal/img/juego/tablero_cell.png'
-
-    // this.image = new ImagenRedimensionada(this._image, this.cellSize, this.cellSize).get()
-
-
-    // this.fichasNecesarias = fichasNecesarias
-
-    // if filas == 6 && columnas == 7
-    //   matriz[0][2] => 1
-
-    // 0 0 1 0 0 0
-    // 0 0 0 0 0 0
-    // 0 0 0 0 0 0
-    // 0 0 0 0 0 0
-    // 0 0 0 0 0 0
-    // 0 0 0 0 0 0
-    // 0 0 0 0 0 0
-
-    // en tablero es
-
-    // 0 0 0 0 0 0 0
-    // 0 0 0 0 0 0 0
-    // 1 0 0 0 0 0 0
-    // 0 0 0 0 0 0 0
-    // 0 0 0 0 0 0 0
-    // 0 0 0 0 0 0 0
   }
 
   setMatrix(){
     for (let i = 0; i < this.columns; i++) {
       for (let j = 0; j < this.rows; j++) {        
-        let img  = this.imgs[Math.floor(Math.random()*this.imgs.length)]
-        console.log(i, j);
-        
+        let img  = this.imgs[Math.floor(Math.random()*this.imgs.length)]        
         let resized = new ResizedImage(img, this.cellSize, this.cellSize, this.pos.x + this.cellSize * i, this.pos.y + this.cellSize * j, this.ctx)
         this.matrix[i][j] = new Casillero(resized , this.pos.x + this.cellSize*i	, this.pos.y + this.cellSize*j, this.ctx)
       }
@@ -67,7 +29,7 @@ class Tablero extends Dibujable{
     super.draw()
     
     for (let i = 0; i < this.columns; i++) {
-      for (let j = 0; j < this.rows; j++) {        
+      for (let j = 0; j < this.rows; j++) {  
         this.matrix[i][j].draw()
       }
       
@@ -89,16 +51,19 @@ class Tablero extends Dibujable{
 
 //   }
 
-//   addFicha(column = 0, n = 0) {
-//     let i = this.filas - 1;
-//     while (this.matriz[column][i] != 0) {
-//       i--
-//     }
+  addFicha(column = 0, jugador = Ficha) {
+    let i = this.rows - 1;    
+    while (i >= 0 && this.matrix[column][i].jugador) {
+      i--
+    }
 
-//     this.matriz[column][i] = n
+    if (i >= 0) {
+      this.matrix[column][i].setJugador(jugador)
+      return i
+    }
 
-//     return i
-//   }
+
+  }
 
 //   checkMatriz(n = 0){
 //     for (let i = 0; i < this.columnas; i++) {
