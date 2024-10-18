@@ -43,7 +43,7 @@ class Ficha extends Dibujable{
   
     let distance = Math.sqrt(dx ** 2 + dy ** 2);
   
-    return distance < (this.size / 2 + 10);
+    return distance < (this.size / 2 + 15);
   }
 
 

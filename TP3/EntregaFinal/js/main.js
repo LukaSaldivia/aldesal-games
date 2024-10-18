@@ -113,7 +113,7 @@ c.addEventListener('mousemove', (e) => {
         mouse.y <= coord.y.end &&
         mouse.y > coord.y.start
     })) {
-      ficha_rebelde.updatePos((column.x.end - column.x.start) / 2 + column.x.start - ficha_rebelde.size / 2, (column.y.end - column.y.start) / 2 + column.y.start - ficha_rebelde.size / 2)
+      ficha_rebelde.updatePos((column.x.end - column.x.start) / 2 + column.x.start - ficha_rebelde.size / 2, column.y.end - ficha_rebelde.size - 10)
     }else{
       game.column = undefined
     }
