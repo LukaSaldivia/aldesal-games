@@ -67,6 +67,7 @@ function loop() {
   requestAnimationFrame(loop)
 }
 
+
 loop()
 
 let mouse = {
@@ -89,7 +90,7 @@ c.addEventListener('mousemove', (e) => {
   mouse.y = Math.floor(layerY - canvasYOffset)
 
 
-  const bool = ficha_rebelde.hasMouseOver(mouse.x, mouse.y)
+  const bool = ficha_rebelde.hasMouseOver(mouse.x, mouse.y) && ficha_rebelde.isHovereable
 
   ficha_rebelde.isHover = bool
 
@@ -108,8 +109,8 @@ c.addEventListener('mousemove', (e) => {
       column = coord
       return (
         mouse.x > coord.x.start &&
-        mouse.x < coord.x.end) &&
-        mouse.y < coord.y.end &&
+        mouse.x <= coord.x.end) &&
+        mouse.y <= coord.y.end &&
         mouse.y > coord.y.start
     })) {
       ficha_rebelde.updatePos((column.x.end - column.x.start) / 2 + column.x.start - ficha_rebelde.size / 2, (column.y.end - column.y.start) / 2 + column.y.start - ficha_rebelde.size / 2)
@@ -138,8 +139,9 @@ c.addEventListener('mouseup', (e) => {
   c.classList.remove('grabbing')
 })
 
+
 c.addEventListener('mousedown', (e) => {
-  if (ficha_rebelde.isHover) {
+  if (ficha_rebelde.isHover && ficha_rebelde.isHovereable) {
     ficha_rebelde.isClicked = true
     c.classList.add('grabbing')
   }
