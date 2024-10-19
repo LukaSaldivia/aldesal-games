@@ -50,14 +50,13 @@ class Tablero extends Dibujable {
   }
 
   draw() {
-    super.draw()
 
     for (let i = 0; i < this.columns; i++) {
       for (let j = 0; j < this.rows; j++) {
         this.matrix[i][j].draw()
       }
-
     }
+
   }
 
   //   console() {
@@ -85,6 +84,8 @@ class Tablero extends Dibujable {
       this.matrix[column][i].setJugador(jugador)
       return i
     }
+
+    return -1
 
 
   }
@@ -236,59 +237,6 @@ class Tablero extends Dibujable {
 
   //   return hayGanador
 
-  checkLine(movementX = 0, movementY = 0, iterations = 4, jugador = Ficha) {
-    let positions = [];
-    let x = startX;
-    let y = startY;
-  
-    for (let i = 0; i < iterations; i++) {
-      // Si la posición actual está dentro de los límites de la matriz y coincide con n
-      if (x >= 0 && x < this.columnas && y >= 0 && y < this.filas && this.matriz[x][y]?.jugador.jugador == jugador.jugador) {
-        positions.push(this.matrix[x][y]);  // Almacenar la posición
-      } else {
-        return [];  // Si en cualquier momento la condición falla, devolver un arreglo vacío
-      }
-  
-      x += movementX;  // Avanzar en la dirección especificada por movementX
-      y += movementY;  // Avanzar en la dirección especificada por movementY
-    }
-  
-    return positions;// Retorna true si la cantidad de fichas coincide con iterations
-  }
-
-  checkFichaWin(column = 0, row = 0, jugador = Ficha, fichasToWin = 4){
-    let win
-
-      // Chequear hacia derecha
-  if (win = this.checkLine(n, column, row, 1, 0, fichasToWin))
-    if (win) return win
-  
-  // Chequear hacia izquierda
-  if (win = this.checkLine(n, column, row, -1, 0, fichasToWin))
-    if (win) return win
-  
-  // Chequear hacia abajo
-  if (win = this.checkLine(n, column, row, 0, 1, fichasToWin))
-    if (win) return win
-  
-  // Chequear diagonal izquierda-arriba
-  if (win = this.checkLine(n, column, row, -1, -1, fichasToWin))
-    if (win) return win
-  
-  // Chequear diagonal izquierda-abajo
-  if (win = this.checkLine(n, column, row, -1, 1, fichasToWin))
-    if (win) return win
-  
-  // Chequear diagonal derecha-arriba
-  if (win = this.checkLine(n, column, row, 1, -1, iterations))
-    if (win) return win
-  
-  // Chequear diagonal derecha-abajo
-  if (win = this.checkLine(n, column, row, 1, 1, iterations))
-    if (win) return win
-
-  return false;
-  }
 
 }
 

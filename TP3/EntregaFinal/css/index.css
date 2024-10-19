@@ -20,4 +20,8 @@ body{
   &.grabbing{
     cursor: grabbing;
   }
+
+  &.illegal{
+    cursor: no-drop;
+  }
 }

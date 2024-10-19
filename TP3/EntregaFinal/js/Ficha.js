@@ -1,10 +1,10 @@
 class Ficha extends Dibujable{
-  constructor(image = new Image(), jugador = 0, xPos = 0, yPos = 0 ,ctx = CanvasRenderingContext2D){
+  constructor(image = new Image(), id = 0, xPos = 0, yPos = 0 ,ctx = CanvasRenderingContext2D){
     super(ctx, xPos, yPos)
 
     this._image = image
 
-    this.jugador = jugador
+    this.id = id
     this.size = 54
     this.image = new ResizedImage(image, this.size, this.size, xPos, yPos, ctx)
     this.circle = new Circulo(this.size / 2, this.pos.x + this.size / 2, this.pos.y + this.size / 2, ctx)
