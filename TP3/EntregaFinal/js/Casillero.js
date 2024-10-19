@@ -17,6 +17,6 @@ class Casillero extends Dibujable{
 
     this.jugador.isHovereable = false
 
-    this.jugador.updatePos(this.pos.x + 9, this.pos.y + 9)
+    this.jugador.updatePos(this.pos.x + 8, this.pos.y + 8)
   }
 }

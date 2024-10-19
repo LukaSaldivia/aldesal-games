@@ -5,7 +5,7 @@ class Ficha extends Dibujable{
     this._image = image
 
     this.jugador = jugador
-    this.size = 50
+    this.size = 54
     this.image = new ResizedImage(image, this.size, this.size, xPos, yPos, ctx)
     this.circle = new Circulo(this.size / 2, this.pos.x + this.size / 2, this.pos.y + this.size / 2, ctx)
 
