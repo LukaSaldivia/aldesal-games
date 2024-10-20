@@ -16,18 +16,30 @@ c.height = sizes.height
 
 const imagenRebelde = new Image()
 
-imagenRebelde.src = `./img/juego/ficha_rebeldes.png`
+imagenRebelde.src = `./img/juego/ficha_rebelde.png`
 
 let ficha_rebelde = new Ficha(imagenRebelde, 1, 100, sizes.height - 100, ctx)
 
 const imagenImperial = new Image()
 
-imagenImperial.src = `./img/juego/ficha_imperio.png`
+imagenImperial.src = `./img/juego/ficha_imperial.png`
 
 let ficha_imperial = new Ficha(imagenImperial, 2, sizes.width - 150 , sizes.height - 100, ctx)
 
+const imagenJedi = new Image()
 
-let juego = new Juego([ficha_rebelde, ficha_imperial],ctx, c)
+imagenJedi.src = `./img/juego/ficha_jedi.png`
+
+let ficha_jedi = new Ficha(imagenJedi, 2, 100 , sizes.height - 100, ctx)
+
+const imagenSeparatista = new Image()
+
+imagenSeparatista.src = `./img/juego/ficha_separatista.png`
+
+let ficha_separatista = new Ficha(imagenSeparatista, 2, sizes.width - 150 , sizes.height - 100, ctx)
+
+
+let juego = new Juego([ficha_rebelde, ficha_imperial, ficha_jedi, ficha_separatista],ctx, c)
 juego.newGame(columnas, filas, 4)
 
 

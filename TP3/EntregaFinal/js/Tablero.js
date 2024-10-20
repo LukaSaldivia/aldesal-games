@@ -5,7 +5,7 @@ class Tablero extends Dibujable {
     this.rows = rows
     this.columns = columns
 
-    this.cellSize = 70
+    this.cellSize = 65
 
     this.imgs = imgs
 

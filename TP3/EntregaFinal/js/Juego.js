@@ -6,6 +6,7 @@ class Juego {
     this.fichas = fichas
     this.currentFicha = this.fichas[this.currentTurn]
     this.originalPositions = []
+    this.fichasToWin = 4
 
     fichas.forEach(ficha => {
       this.originalPositions.push([ficha.pos.x, ficha.pos.y])
@@ -13,6 +14,17 @@ class Juego {
 
     this.ctx = ctx;
     this.canvas = canvas;
+
+    this.STATES = {
+      MENU: 'menu',
+      GAME: 'game',
+      STARTING: 'starting',
+      WINNER: 'winner',
+      TIE: 'tie'
+    }
+    this.state = this.STATES.MENU
+
+    this._startTime = 0
 
 
     this.tablero
@@ -33,6 +45,10 @@ class Juego {
   }
 
   newGame(columns = 7, rows = 6, fichasToWin = 4) {
+
+    this.state = this.STATES.STARTING
+
+    this.fichasToWin = fichasToWin
     const imagenesCasilleros = []
     for (let i = 0; i < 3; i++) {
       let img = new Image()
@@ -49,9 +65,45 @@ class Juego {
 
 
 
+
+
   }
 
   update() {
+
+    if (this.state == this.STATES.STARTING) {
+      if (this._startTime == 0) {
+        this._startTime = Date.now() / 1000
+      }
+
+
+      let time = 4
+      if (Date.now() / 1000 - this._startTime < time) {
+        let t = (Date.now() / 1000 - this._startTime) / time
+
+        this.ctx.globalAlpha = t
+
+        let scaleFactor = 2 - t
+        let translateY = 50 * (1 - t)
+
+        let centerX = this.canvas.width / 2
+        let centerY = this.canvas.height / 2
+
+        // Aplica la transformación centrada y escalada
+        this.ctx.translate(centerX, centerY);   // Mueve el origen al centro del canvas
+        this.ctx.setTransform(scaleFactor,0,0,scaleFactor,-centerX * (1-t),(translateY + centerY) * (1-t))
+
+
+
+      } else {
+        this.ctx.setTransform(1, 0, 0, 1, 0, 0);
+        this.ctx.globalAlpha = 1
+      }
+
+
+
+    }
+
     if (this.tablero) this.tablero.draw()
     if (this.currentFicha) this.currentFicha.draw()
   }
@@ -70,12 +122,13 @@ class Juego {
       this.currentFicha.updatePos(this.mouse.x - this.currentFicha.size / 2, this.mouse.y - this.currentFicha.size / 2);
 
 
-      this.canvas.classList.toggle('illegal', (
+      let isOutOfBounds = (
         this.mouse.x >= this.tablero.pos.x &&
         this.mouse.x <= this.tablero.pos.x + this.tablero.columns * this.tablero.cellSize &&
         this.mouse.y > this.tablero.pos.y
+      )
 
-      ))
+      this.canvas.classList.toggle('illegal', isOutOfBounds)
 
 
       let columns = this.tablero.fixedZones;
@@ -104,7 +157,7 @@ class Juego {
   }
 
   mouseUp(e) {
-    if (this.currentColumn >= 0 && this.currentColumn <= columnas) {
+    if (this.currentColumn >= 0 && this.currentColumn <= this.tablero.columns) {
       let row = this.tablero.addFicha(this.currentColumn, this.currentFicha)
       if (row >= 0) {
         this.currentFicha.updatePos(...this.originalPositions[this.currentTurn])
@@ -132,6 +185,9 @@ class Juego {
   }
 
   mouseLeave(e) {
+    if (this.currentFicha.isClicked) {
+      this.currentFicha.updatePos(...this.originalPositions[this.currentTurn])
+    }
     this.currentFicha.isClicked = false
     this.currentFicha.isHover = false
   }

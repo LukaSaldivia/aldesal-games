@@ -5,7 +5,7 @@ class Ficha extends Dibujable{
     this._image = image
 
     this.id = id
-    this.size = 54
+    this.size = 40
     this.image = new ResizedImage(image, this.size, this.size, xPos, yPos, ctx)
     this.circle = new Circulo(this.size / 2, this.pos.x + this.size / 2, this.pos.y + this.size / 2, ctx)
 
@@ -18,7 +18,7 @@ class Ficha extends Dibujable{
     super.draw()
     this.image.draw()
 
-    if (this.isHover && this.isHovereable) {
+    if ((this.isHover || this.isClicked) && this.isHovereable) {
       this.circle.fill = '#0006'
     }else{
       this.circle.fill = '#0000'
@@ -43,7 +43,7 @@ class Ficha extends Dibujable{
   
     let distance = Math.sqrt(dx ** 2 + dy ** 2);
   
-    return distance < (this.size / 2 + 15);
+    return distance < (this.size / 2 + 25);
   }
 
 
