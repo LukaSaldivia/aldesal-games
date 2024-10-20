@@ -22,9 +22,8 @@ class Juego {
       WINNER: 'winner',
       TIE: 'tie'
     }
-    this.state = this.STATES.MENU
 
-    this._startTime = 0
+    this.state = this.STATES.MENU
 
 
     this.tablero
@@ -34,6 +33,27 @@ class Juego {
       y: 0,
       isClicking: false
     }
+
+
+    this.ESCENAS = {}
+
+    this.ESCENAS.INICIA_TABLERO = new Escena(this.ctx, (t) => {
+      this.ctx.globalAlpha = t
+      let scaleFactor = 2 - t
+      let translateY = 50 * (1 - t)
+      let centerX = this.canvas.width / 2
+      let centerY = this.canvas.height / 2
+
+      // Aplica la transformación centrada y escalada
+      this.ctx.translate(centerX, centerY);   // Mueve el origen al centro del canvas
+      this.ctx.setTransform(scaleFactor, 0, 0, scaleFactor, -centerX * (1 - t), (translateY + centerY) * (1 - t))
+
+    }, () => {
+      this.ctx.setTransform(1, 0, 0, 1, 0, 0);
+      this.ctx.globalAlpha = 1
+    })
+
+
 
 
   }
@@ -71,39 +91,7 @@ class Juego {
 
   update() {
 
-    if (this.state == this.STATES.STARTING) {
-      if (this._startTime == 0) {
-        this._startTime = Date.now() / 1000
-      }
-
-
-      let time = 4
-      if (Date.now() / 1000 - this._startTime < time) {
-        let t = (Date.now() / 1000 - this._startTime) / time
-
-        this.ctx.globalAlpha = t
-
-        let scaleFactor = 2 - t
-        let translateY = 50 * (1 - t)
-
-        let centerX = this.canvas.width / 2
-        let centerY = this.canvas.height / 2
-
-        // Aplica la transformación centrada y escalada
-        this.ctx.translate(centerX, centerY);   // Mueve el origen al centro del canvas
-        this.ctx.setTransform(scaleFactor,0,0,scaleFactor,-centerX * (1-t),(translateY + centerY) * (1-t))
-
-
-
-      } else {
-        this.ctx.setTransform(1, 0, 0, 1, 0, 0);
-        this.ctx.globalAlpha = 1
-      }
-
-
-
-    }
-
+    if (this.state == this.STATES.STARTING) this.ESCENAS.INICIA_TABLERO.animate(5)
     if (this.tablero) this.tablero.draw()
     if (this.currentFicha) this.currentFicha.draw()
   }
