@@ -116,7 +116,7 @@ class Juego {
 
     console.log(this.state);
 
-    if (this.state == this.STATES.STARTING) this.ESCENAS.INICIA_TABLERO.animate(0)
+    if (this.state == this.STATES.STARTING) this.ESCENAS.INICIA_TABLERO.animate(5)
     if (this.state == this.STATES.FICHA_DROP) this.ESCENAS.FICHA_DROP.animate(2)
     if (this.currentFicha) this.currentFicha.draw()
     if (this.tablero) this.tablero.draw()
