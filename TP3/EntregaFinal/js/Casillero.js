@@ -3,12 +3,15 @@ class Casillero extends Dibujable{
     super(ctx, xPos, yPos)
     this.img = img
     this.jugador = null
-    
+    this.endedFall = false
+    this.offset = 12.5
   }
 
   draw(){
     super.draw()
-    this.jugador?.draw()
+    if (this.endedFall) {
+      this.jugador?.draw()
+    }
     this.img.draw()
     
   }
@@ -18,6 +21,6 @@ class Casillero extends Dibujable{
 
     this.jugador.isHovereable = false
 
-    this.jugador.updatePos(this.pos.x + 12.5, this.pos.y + 12.5)
+    this.jugador.updatePos(this.pos.x + this.offset, this.pos.y + this.offset)
   }
 }

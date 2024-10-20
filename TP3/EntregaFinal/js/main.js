@@ -30,16 +30,16 @@ const imagenJedi = new Image()
 
 imagenJedi.src = `./img/juego/ficha_jedi.png`
 
-let ficha_jedi = new Ficha(imagenJedi, 2, 100 , sizes.height - 100, ctx)
+let ficha_jedi = new Ficha(imagenJedi, 3, 100 , sizes.height - 100, ctx)
 
 const imagenSeparatista = new Image()
 
 imagenSeparatista.src = `./img/juego/ficha_separatista.png`
 
-let ficha_separatista = new Ficha(imagenSeparatista, 2, sizes.width - 150 , sizes.height - 100, ctx)
+let ficha_separatista = new Ficha(imagenSeparatista, 4, sizes.width - 150 , sizes.height - 100, ctx)
 
 
-let juego = new Juego([ficha_rebelde, ficha_imperial, ficha_jedi, ficha_separatista],ctx, c)
+let juego = new Juego([ficha_rebelde, ficha_imperial],ctx, c)
 juego.newGame(columnas, filas, 4)
 
 

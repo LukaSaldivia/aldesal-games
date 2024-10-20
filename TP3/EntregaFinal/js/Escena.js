@@ -12,13 +12,11 @@ class Escena{
     }
 
     if (Date.now() / 1000 - this.startTime < duration) {
-      let normalized = (Date.now() / 1000 - this.startTime) / duration
-
-      console.log(normalized);
-      
+      let normalized = (Date.now() / 1000 - this.startTime) / duration      
       this.callback(normalized)
     }else{
       this.end()
+      this.startTime = -1
     }
   }
 }

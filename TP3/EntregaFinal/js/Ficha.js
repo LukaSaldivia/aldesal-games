@@ -32,6 +32,12 @@ class Ficha extends Dibujable{
     this.image.updatePos(x,y)
     this.circle.updatePos(x + this.size / 2, y + this.size / 2)
   }
+  
+  addPos(x = 0, y = 0){
+    super.addPos(x,y)
+    this.image.addPos(x,y)
+    this.circle.addPos(x + this.size / 2, y + this.size / 2)
+  }
 
   hasMouseOver(x = 0, y = 0){
     

@@ -74,6 +74,10 @@ class Tablero extends Dibujable {
 
   //   }
 
+  getCasillero(column = 0, row = 0){
+    return this.matrix[column][row]
+  }
+
   addFicha(column = 0, jugador = Ficha) {
     let i = this.rows - 1;
     while (i >= 0 && this.matrix[column][i].jugador) {

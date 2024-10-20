@@ -13,4 +13,9 @@ class Dibujable{
     this.pos.x = x
     this.pos.y = y
   }
+
+  addPos(x = 0, y = 0){
+    this.pos.x += x
+    this.pos.y += y
+  }
 }
