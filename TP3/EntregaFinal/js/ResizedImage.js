@@ -20,14 +20,15 @@ class ResizedImage extends Dibujable {
 
   draw() {
     super.draw();
-
-    // Dibujar en el canvas propio
-    this.offscreenCtx.clearRect(0, 0, this.width, this.height);  // Limpiar el canvas propio
-    this.offscreenCtx.globalAlpha = this.opacity;  // Aplicar opacidad
-    this.offscreenCtx.drawImage(this.img, 0, 0, this.width, this.height);  // Dibujar imagen en canvas propio
-
-    // Luego, dibujar el canvas propio en el canvas original
-    this.ctx.drawImage(this.offscreenCanvas, this.pos.x, this.pos.y, this.width, this.height);
+    if (this.img.complete) {
+      // Dibujar en el canvas propio
+      this.offscreenCtx.clearRect(0, 0, this.width, this.height);  // Limpiar el canvas propio
+      this.offscreenCtx.globalAlpha = this.opacity;  // Aplicar opacidad
+      this.offscreenCtx.drawImage(this.img, 0, 0, this.width, this.height);  // Dibujar imagen en canvas propio
+        
+      // Luego, dibujar el canvas propio en el canvas original
+      this.ctx.drawImage(this.offscreenCanvas, this.pos.x, this.pos.y, this.width, this.height);
+    }
 
   }
 }

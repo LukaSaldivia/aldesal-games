@@ -5,10 +5,24 @@ class Juego {
     this.currentColumn = undefined
     this.currentCasillero = undefined
     this.fichas = fichas
-    this.currentFicha = this.fichas[this.currentTurn]
+    this.currentFicha = null
     this.targetY = 0
     this.originalPositions = []
     this.fichasToWin = 4
+
+    this._imagenMenu = new Image()
+    this._imagenMenu.src = './img/juego/menu.jpg'
+    this.MENU = new UIElement(new ResizedImage(this._imagenMenu, 1300, 500, 0, 0, ctx), null, 0, 0, ctx) 
+
+    this._clicParaEmpezarImagenes = {
+      default: new Image(),
+      hover : new Image()
+    }
+
+    this._clicParaEmpezarImagenes.default.src = './img/juego/clic_para_empezar.png'
+    this._clicParaEmpezarImagenes.hover.src = './img/juego/clic_para_empezar_hover.png'
+
+
 
     fichas.forEach(ficha => {
       this.originalPositions.push([ficha.pos.x, ficha.pos.y])
@@ -23,10 +37,21 @@ class Juego {
       STARTING: 'starting',
       WINNER: 'winner',
       TIE: 'tie',
-      FICHA_DROP: 'ficha drop'
+      FICHA_DROP: 'ficha drop',
+      MENU_TO_STARTING : 'menu to starting'
     }
 
     this.state = this.STATES.MENU
+
+    this.CLICPARAEMPEZAR = new UIElement(
+      new ResizedImage(this._clicParaEmpezarImagenes.default, 350, 54, undefined, undefined, ctx),
+      new ResizedImage(this._clicParaEmpezarImagenes.hover, 350, 54, undefined, undefined, ctx),
+      canvas.width / 2 - 175, canvas.height - 120, ctx
+    )
+
+    this.CLICPARAEMPEZAR.onClick = () => {
+     this.state = this.STATES.MENU_TO_STARTING
+    }
 
 
     this.tablero
@@ -61,7 +86,7 @@ class Juego {
       this.currentFicha.isHovereable = false
       let targetY = this.currentCasillero.pos.y + this.tablero.cellSize - this.currentFicha.size
       if (this.currentFicha.pos.y + this.currentFicha.size / 2 < targetY) {
-        this.currentFicha.addPos(0, 20)
+        this.currentFicha.addPos(0, 10)
       } else {
         this.currentFicha.updatePos(this.currentCasillero.pos.x + this.currentCasillero.offset, this.currentCasillero.pos.y + this.currentCasillero.offset)
       }
@@ -75,9 +100,52 @@ class Juego {
 
     })
 
+    this.ESCENAS.ANIMATE_CLICPARAEMPEZAR = new Escena(this.ctx, (t) => {
+      this.CLICPARAEMPEZAR.img_default.opacity = 1 - t
+    })
+
+    this.ESCENAS.TRANSITION_MENU = new Escena(this.ctx, (t) => {          
+      this.MENU.img_default.opacity = 1 - t
+      this.CLICPARAEMPEZAR.img_default.opacity = 0
+      this.CLICPARAEMPEZAR.img_hover.opacity = 0
+      
+    }, () => {
+      this.newGame(7,6,4)
+      this.currentFicha = this.fichas[this.currentTurn]
+      this.state = this.STATES.STARTING
+    })
 
 
 
+
+  }
+
+  update() {
+
+
+    console.log(this.state);
+    
+    this.ctx.fillStyle = '#000'
+    this.ctx.fillRect(0,0,this.canvas.width, this.canvas.height)
+    
+
+
+    if (this.state == this.STATES.MENU) {      
+      this.MENU.draw()
+      this.CLICPARAEMPEZAR.draw()
+      this.ESCENAS.ANIMATE_CLICPARAEMPEZAR.animate(1)
+    }
+
+    if (this.state == this.STATES.MENU_TO_STARTING) {
+      this.MENU.draw()
+      this.CLICPARAEMPEZAR.draw()
+      this.ESCENAS.TRANSITION_MENU.animate(2)
+    }
+
+    if (this.state == this.STATES.STARTING) this.ESCENAS.INICIA_TABLERO.animate(5)
+    if (this.state == this.STATES.FICHA_DROP) this.ESCENAS.FICHA_DROP.animate(1)
+    if (this.currentFicha) this.currentFicha.draw()
+    if (this.tablero) this.tablero.draw()
   }
 
   switchTurn() {
@@ -112,15 +180,7 @@ class Juego {
 
   }
 
-  update() {
 
-    console.log(this.state);
-
-    if (this.state == this.STATES.STARTING) this.ESCENAS.INICIA_TABLERO.animate(5)
-    if (this.state == this.STATES.FICHA_DROP) this.ESCENAS.FICHA_DROP.animate(2)
-    if (this.currentFicha) this.currentFicha.draw()
-    if (this.tablero) this.tablero.draw()
-  }
 
   mouseMove({ layerX = 0, layerY = 0 }) {
     let { x: canvasXOffset, y: canvasYOffset } = this.canvas.getBoundingClientRect();
@@ -128,88 +188,108 @@ class Juego {
     this.mouse.x = Math.floor(layerX - canvasXOffset);
     this.mouse.y = Math.floor(layerY - canvasYOffset);
 
-    const isMouseOver = this.currentFicha.hasMouseOver(this.mouse.x, this.mouse.y) && this.currentFicha.isHovereable;
-    this.currentFicha.isHover = isMouseOver;
-    this.canvas.classList.toggle('hover', isMouseOver);
-
-    if (this.currentFicha.isClicked) {
-      this.currentFicha.updatePos(this.mouse.x - this.currentFicha.size / 2, this.mouse.y - this.currentFicha.size / 2);
-
-
-      let isOutOfBounds = (
-        this.mouse.x >= this.tablero.pos.x &&
-        this.mouse.x <= this.tablero.pos.x + this.tablero.columns * this.tablero.cellSize &&
-        this.mouse.y > this.tablero.pos.y
-      )
-
-      this.canvas.classList.toggle('illegal', isOutOfBounds)
-
-
-      let columns = this.tablero.fixedZones;
-      let column;
-
-      let isInsideColumn = columns.some((coord, i) => {
-        this.currentColumn = i;
-        column = coord;
-        return (
-          this.mouse.x > coord.x.start &&
-          this.mouse.x <= coord.x.end &&
-          this.mouse.y <= coord.y.end &&
-          this.mouse.y > coord.y.start
-        );
-      });
-
-      if (isInsideColumn) {
-        this.currentFicha.updatePos(
-          (column.x.start + column.x.end) / 2 - this.currentFicha.size / 2,
-          column.y.end - this.currentFicha.size - 10
-        );
-      } else {
-        this.currentColumn = undefined;
-      }
+    if (this.state == this.STATES.MENU) {
+      this.CLICPARAEMPEZAR.mouseHover(this.mouse.x, this.mouse.y)
     }
+
+    if (this.state == this.STATES.GAME) {
+      
+      const isMouseOver = this.currentFicha.hasMouseOver(this.mouse.x, this.mouse.y) && this.currentFicha.isHovereable;
+      this.currentFicha.isHover = isMouseOver;
+      this.canvas.classList.toggle('hover', isMouseOver);
+  
+      if (this.currentFicha.isClicked) {
+        this.currentFicha.updatePos(this.mouse.x - this.currentFicha.size / 2, this.mouse.y - this.currentFicha.size / 2);
+  
+  
+        let isOutOfBounds = (
+          this.mouse.x >= this.tablero.pos.x &&
+          this.mouse.x <= this.tablero.pos.x + this.tablero.columns * this.tablero.cellSize &&
+          this.mouse.y > this.tablero.pos.y
+        )
+  
+        this.canvas.classList.toggle('illegal', isOutOfBounds)
+  
+  
+        let columns = this.tablero.fixedZones;
+        let column;
+  
+        let isInsideColumn = columns.some((coord, i) => {
+          this.currentColumn = i;
+          column = coord;
+          return (
+            this.mouse.x > coord.x.start &&
+            this.mouse.x <= coord.x.end &&
+            this.mouse.y <= coord.y.end &&
+            this.mouse.y > coord.y.start
+          );
+        });
+  
+        if (isInsideColumn) {
+          this.currentFicha.updatePos(
+            (column.x.start + column.x.end) / 2 - this.currentFicha.size / 2,
+            column.y.end - this.currentFicha.size - 10
+          );
+        } else {
+          this.currentColumn = undefined;
+        }
+      }
+
+    }
+
+
   }
 
   mouseUp(e) {
-    if (this.currentColumn >= 0 && this.currentColumn <= this.tablero.columns) {
-      let row = this.tablero.addFicha(this.currentColumn, this.currentFicha)
-      if (row >= 0) {
 
-        this.currentCasillero = this.tablero.getCasillero(this.currentColumn, row)
-
-        // this.targetY = this.tablero.pos.y + this.tablero.cellSize * (row + 1);
-        // this.ESCENAS.FICHA_DROP.callback = () => {this.currentFicha.addPos(0, 10); console.log(this.currentFicha.id);}
-        this.state = this.STATES.FICHA_DROP
-        // this.currentFicha.updatePos(...this.originalPositions[this.currentTurn])
-        // this.switchTurn()
+    if (this.state == this.STATES.GAME) {
+      
+      if (this.currentColumn >= 0 && this.currentColumn <= this.tablero.columns) {
+        let row = this.tablero.addFicha(this.currentColumn, this.currentFicha)
+        if (row >= 0) {
+  
+          this.currentCasillero = this.tablero.getCasillero(this.currentColumn, row)
+          this.state = this.STATES.FICHA_DROP
+        }
+        this.currentColumn = undefined
       }
-      this.currentColumn = undefined
-    }
+  
+      if (this.canvas.classList.contains('illegal')) {
+        this.currentFicha.updatePos(...this.originalPositions[this.currentTurn])
+        this.canvas.classList.remove('illegal')
+      }
+  
+      this.currentFicha.isClicked = false
+      this.mouse.isClicking = false
+      this.canvas.classList.remove('grabbing')
 
-    if (this.canvas.classList.contains('illegal')) {
-      this.currentFicha.updatePos(...this.originalPositions[this.currentTurn])
-      this.canvas.classList.remove('illegal')
     }
-
-    this.currentFicha.isClicked = false
-    this.mouse.isClicking = false
-    this.canvas.classList.remove('grabbing')
+    
   }
 
   mouseDown(e) {
-    if (this.currentFicha.isHover && this.currentFicha.isHovereable) {
-      this.currentFicha.isClicked = true
-      this.canvas.classList.add('grabbing')
+
+    if (this.state == this.STATES.MENU) {
+      this.CLICPARAEMPEZAR.mouseClick()
+    }
+
+    if (this.state == this.STATES.GAME) {      
+      if (this.currentFicha.isHover && this.currentFicha.isHovereable) {
+        this.currentFicha.isClicked = true
+        this.canvas.classList.add('grabbing')
+      }
     }
 
   }
 
   mouseLeave(e) {
-    if (this.currentFicha.isClicked) {
-      this.currentFicha.updatePos(...this.originalPositions[this.currentTurn])
+    if (this.state == this.STATES.GAME) {      
+      if (this.currentFicha.isClicked) {
+        this.currentFicha.updatePos(...this.originalPositions[this.currentTurn])
+      }
+      this.currentFicha.isClicked = false
+      this.currentFicha.isHover = false
     }
-    this.currentFicha.isClicked = false
-    this.currentFicha.isHover = false
   }
 
   // 

@@ -40,7 +40,8 @@ let ficha_separatista = new Ficha(imagenSeparatista, 4, sizes.width - 150 , size
 
 
 let juego = new Juego([ficha_rebelde, ficha_imperial],ctx, c)
-juego.newGame(columnas, filas, 4)
+// juego.newGame(columnas, filas, 4)
+
 
 
 
@@ -48,8 +49,8 @@ juego.newGame(columnas, filas, 4)
 
 
 function loop() {
-  ctx.fillStyle = '#050505'
-  ctx.fillRect(0, 0, sizes.width, sizes.height)
+  // ctx.fillStyle = '#050505'
+  // ctx.fillRect(0, 0, sizes.width, sizes.height)
   juego.update()
   requestAnimationFrame(loop)
 }
