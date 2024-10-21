@@ -11,7 +11,10 @@ class UIElement extends Dibujable{
     this.height = this.img_default.height
 
     this.isHover = false
+    this.isHovereable = true
     this.onClick = () => {}
+    this.onHover = () => {}
+    this.onHoverLeave = () => {}
   }
 
   updatePos(x = 0, y = 0){
@@ -33,11 +36,24 @@ class UIElement extends Dibujable{
       y > this.pos.y &&
       y < this.pos.y + this.height
     )
+
+    if (this.isHover && this.isHovereable) {
+      this.onHover()
+    }else{
+      this.onHoverLeave()
+    }
   }
 
   mouseClick(){
-    if (this.isHover) {
+    if (this.isHover && this.isHovereable) {
       this.onClick()
+    }
+  }
+
+  setOpacity(amount = 1, hoverImgToo = false){
+    this.img_default.opacity = amount
+    if (this.img_hover && hoverImgToo) {
+      this.img_hover.opacity = amount
     }
   }
 

@@ -21,6 +21,10 @@ body{
     cursor: grabbing;
   }
 
+  &.pointer{
+    cursor: pointer;
+  }
+
   &.illegal{
     cursor: no-drop;
   }
