@@ -30,7 +30,7 @@ const imagenSeparatista = new Image()
 imagenSeparatista.src = `./img/juego/ficha_separatista.png`
 let ficha_separatista = new Ficha(imagenSeparatista, 4, sizes.width - 150 , sizes.height - 100, ctx)
 
-let juego = new Juego([ficha_rebelde, ficha_imperial],ctx, c)
+let juego = new Juego(ctx, c)
 
 
 

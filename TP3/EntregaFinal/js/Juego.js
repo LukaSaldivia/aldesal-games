@@ -1,43 +1,55 @@
 class Juego {
-  constructor(fichas = [Ficha], ctx = CanvasRenderingContext2D, canvas = HTMLCanvasElement) {
+  constructor(ctx = CanvasRenderingContext2D, canvas = HTMLCanvasElement) {
 
     this.ctx = ctx;
     this.canvas = canvas;
+
+    this.gameSettings = {
+      columnas: 7,
+      rows: 6,
+      fichasToWin: 4,
+      duration: 0
+    }
 
 
     this.currentTurn = 0
     this.counter = 1
     this.currentColumn = undefined
     this.currentCasillero = undefined
-    this.fichas = fichas
+    this.fichas = []
     this.currentFicha = null
     this.targetY = 0
     this.originalPositions = []
-    this.fichasToWin = 4
 
     this.IMGS = {
-      MENU : getImage('./img/juego/menu.jpg'),
-      CLICPARAEMPEZAR : {
-        default : getImage('./img/juego/clic_para_empezar.png'),
-        hover : getImage('./img/juego/clic_para_empezar_hover.png')
+      MENU: getImage('./img/juego/menu.jpg'),
+      CLICPARAEMPEZAR: {
+        default: getImage('./img/juego/clic_para_empezar.png'),
+        hover: getImage('./img/juego/clic_para_empezar_hover.png')
       },
-      SELECTMODE : {
-        4 : {
-          empty : getImage('./img/juego/select-4-empty.png'),
-          filled : getImage('./img/juego/select-4-filled.png')
+      SELECTMODE: {
+        4: {
+          empty: getImage('./img/juego/select-4-empty.png'),
+          filled: getImage('./img/juego/select-4-filled.png')
         },
-        5 : {
-          empty : getImage('./img/juego/select-5-empty.png'),
-          filled : getImage('./img/juego/select-5-filled.png')
+        5: {
+          empty: getImage('./img/juego/select-5-empty.png'),
+          filled: getImage('./img/juego/select-5-filled.png')
         },
-        6 : {
-          empty : getImage('./img/juego/select-6-empty.png'),
-          filled : getImage('./img/juego/select-6-filled.png')
+        6: {
+          empty: getImage('./img/juego/select-6-empty.png'),
+          filled: getImage('./img/juego/select-6-filled.png')
         },
-        7 : {
-          empty : getImage('./img/juego/select-7-empty.png'),
-          filled : getImage('./img/juego/select-7-filled.png')
+        7: {
+          empty: getImage('./img/juego/select-7-empty.png'),
+          filled: getImage('./img/juego/select-7-filled.png')
         }
+      },
+      FICHAS: {
+        REBELDE: getImage('./img/juego/ficha_rebelde.png'),
+        IMPERIAL: getImage('./img/juego/ficha_imperial.png'),
+        SEPARATISTA: getImage('./img/juego/ficha_separatista.png'),
+        JEDI: getImage('./img/juego/ficha_jedi.png')
       }
     }
 
@@ -46,17 +58,15 @@ class Juego {
 
     this.UI.MENU = new UIElement(new ResizedImage(this.IMGS.MENU, 1300, 500, 0, 0, ctx), null, 0, 0, ctx)
 
-    fichas.forEach(ficha => {
-      this.originalPositions.push([ficha.pos.x, ficha.pos.y])
-    })
+
 
 
 
     this.STATES = {
       MENU: 'menu',
-      SELECT_MODE : 'select mode',
-      SELECT_FICHA : 'select ficha',
-      TRANSITION_SELECT_FICHA_STARTING : 'transition select ficha to starting',
+      SELECT_MODE: 'select mode',
+      SELECT_FICHA: 'select ficha',
+      TRANSITION_SELECT_FICHA_STARTING: 'transition select ficha to starting',
       GAME: 'game',
       STARTING: 'starting',
       WINNER: 'winner',
@@ -85,40 +95,40 @@ class Juego {
     }
 
     this.UI.SELECTMODE = {
-      4 : new UIElement(new ResizedImage(this.IMGS.SELECTMODE[4].empty, 395, 100, undefined, undefined, this.ctx), new ResizedImage(this.IMGS.SELECTMODE[4].filled, 395, 100, undefined, undefined, this.ctx), canvas.width / 2 - 686/2, canvas.height / 2 - 100/2, this.ctx),
-      5 : new UIElement(new ResizedImage(this.IMGS.SELECTMODE[5].empty, 486, 100, undefined, undefined, this.ctx), new ResizedImage(this.IMGS.SELECTMODE[5].filled, 486, 100, undefined, undefined, this.ctx), canvas.width / 2 - 686/2, canvas.height / 2 - 100/2, this.ctx),
-      6 : new UIElement(new ResizedImage(this.IMGS.SELECTMODE[6].empty, 575, 100, undefined, undefined, this.ctx), new ResizedImage(this.IMGS.SELECTMODE[6].filled, 575, 100, undefined, undefined, this.ctx), canvas.width / 2 - 686/2, canvas.height / 2 - 100/2, this.ctx),
-      7 : new UIElement(new ResizedImage(this.IMGS.SELECTMODE[7].empty, 686, 100, undefined, undefined, this.ctx), new ResizedImage(this.IMGS.SELECTMODE[7].filled, 686, 100, undefined, undefined, this.ctx), canvas.width / 2 - 686/2, canvas.height / 2 - 100/2, this.ctx),
+      4: new UIElement(new ResizedImage(this.IMGS.SELECTMODE[4].empty, 198, 50, undefined, undefined, this.ctx), new ResizedImage(this.IMGS.SELECTMODE[4].filled, 198, 50, undefined, undefined, this.ctx), canvas.width / 2 - 343 / 2, canvas.height / 2 - 50 / 2, this.ctx),
+      5: new UIElement(new ResizedImage(this.IMGS.SELECTMODE[5].empty, 243, 50, undefined, undefined, this.ctx), new ResizedImage(this.IMGS.SELECTMODE[5].filled, 243, 50, undefined, undefined, this.ctx), canvas.width / 2 - 343 / 2, canvas.height / 2 - 50 / 2, this.ctx),
+      6: new UIElement(new ResizedImage(this.IMGS.SELECTMODE[6].empty, 288, 50, undefined, undefined, this.ctx), new ResizedImage(this.IMGS.SELECTMODE[6].filled, 288, 50, undefined, undefined, this.ctx), canvas.width / 2 - 343 / 2, canvas.height / 2 - 50 / 2, this.ctx),
+      7: new UIElement(new ResizedImage(this.IMGS.SELECTMODE[7].empty, 343, 50, undefined, undefined, this.ctx), new ResizedImage(this.IMGS.SELECTMODE[7].filled, 343, 50, undefined, undefined, this.ctx), canvas.width / 2 - 343 / 2, canvas.height / 2 - 50 / 2, this.ctx),
     }
 
     this.UI.SELECTMODE[5].clickableArea = {
-      x : {
-        start : this.UI.SELECTMODE[4].pos.x + this.UI.SELECTMODE[4].width,
-        end : this.UI.SELECTMODE[5].pos.x + this.UI.SELECTMODE[5].width
+      x: {
+        start: this.UI.SELECTMODE[4].pos.x + this.UI.SELECTMODE[4].width,
+        end: this.UI.SELECTMODE[5].pos.x + this.UI.SELECTMODE[5].width
       },
-      y : {
-        start : this.UI.SELECTMODE[5].pos.y,
-        end : this.UI.SELECTMODE[5].pos.y + this.UI.SELECTMODE[5].height
+      y: {
+        start: this.UI.SELECTMODE[5].pos.y,
+        end: this.UI.SELECTMODE[5].pos.y + this.UI.SELECTMODE[5].height
       }
     }
     this.UI.SELECTMODE[6].clickableArea = {
-      x : {
-        start : this.UI.SELECTMODE[5].pos.x + this.UI.SELECTMODE[5].width,
-        end : this.UI.SELECTMODE[6].pos.x + this.UI.SELECTMODE[6].width
+      x: {
+        start: this.UI.SELECTMODE[5].pos.x + this.UI.SELECTMODE[5].width,
+        end: this.UI.SELECTMODE[6].pos.x + this.UI.SELECTMODE[6].width
       },
-      y : {
-        start : this.UI.SELECTMODE[6].pos.y,
-        end : this.UI.SELECTMODE[6].pos.y + this.UI.SELECTMODE[6].height
+      y: {
+        start: this.UI.SELECTMODE[6].pos.y,
+        end: this.UI.SELECTMODE[6].pos.y + this.UI.SELECTMODE[6].height
       }
     }
     this.UI.SELECTMODE[7].clickableArea = {
-      x : {
-        start : this.UI.SELECTMODE[6].pos.x + this.UI.SELECTMODE[6].width,
-        end : this.UI.SELECTMODE[7].pos.x + this.UI.SELECTMODE[7].width
+      x: {
+        start: this.UI.SELECTMODE[6].pos.x + this.UI.SELECTMODE[6].width,
+        end: this.UI.SELECTMODE[7].pos.x + this.UI.SELECTMODE[7].width
       },
-      y : {
-        start : this.UI.SELECTMODE[7].pos.y,
-        end : this.UI.SELECTMODE[7].pos.y + this.UI.SELECTMODE[7].height
+      y: {
+        start: this.UI.SELECTMODE[7].pos.y,
+        end: this.UI.SELECTMODE[7].pos.y + this.UI.SELECTMODE[7].height
       }
     }
 
@@ -161,20 +171,35 @@ class Juego {
       this.UI.SELECTMODE[4].isHovereable = true
       this.UI.SELECTMODE[5].isHovereable = true
       this.UI.SELECTMODE[6].isHovereable = true
-    }    
+    }
     this.UI.SELECTMODE[4].onClick = () => {
-      console.log('4');
-      
+      this.gameSettings.fichasToWin = 4
+      this.gameSettings.columnas = 7
+      this.gameSettings.duration = this.gameSettings.columnas * this.gameSettings.rows * 10
+
+      this.state = this.STATES.SELECT_FICHA
     }
     this.UI.SELECTMODE[5].onClick = () => {
-      console.log('5');
+      this.gameSettings.fichasToWin = 5
+      this.gameSettings.columnas = 8
+      this.gameSettings.duration = this.gameSettings.columnas * this.gameSettings.rows * 10
+
+      this.state = this.STATES.SELECT_FICHA
     }
     this.UI.SELECTMODE[6].onClick = () => {
-      console.log('6');
+      this.gameSettings.fichasToWin = 6
+      this.gameSettings.columnas = 9
+      this.gameSettings.duration = this.gameSettings.columnas * this.gameSettings.rows * 10
+
+      this.state = this.STATES.SELECT_FICHA
     }
     this.UI.SELECTMODE[7].onClick = () => {
-      console.log('7');
-    }    
+      this.gameSettings.fichasToWin = 7
+      this.gameSettings.columnas = 10
+      this.gameSettings.duration = this.gameSettings.columnas * this.gameSettings.rows * 10
+
+      this.state = this.STATES.SELECT_FICHA
+    }
 
 
 
@@ -246,7 +271,7 @@ class Juego {
 
 
     console.log(this.state);
-    
+
 
     this.ctx.fillStyle = '#000'
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
@@ -266,11 +291,32 @@ class Juego {
       this.UI.SELECTMODE[7].draw()
     }
 
+    if (this.state == this.STATES.SELECT_FICHA) {
+      this.newGame(this.gameSettings.columnas, this.gameSettings.rows, 'REBELDE', 'IMPERIAL')
+      this.state = this.STATES.STARTING
+    }
 
-    if (this.state == this.STATES.STARTING) this.ESCENAS.INICIA_TABLERO.animate(5)
-    if (this.state == this.STATES.FICHA_DROP) this.ESCENAS.FICHA_DROP.animate(1)
-    if (this.currentFicha) this.currentFicha.draw()
-    if (this.tablero) this.tablero.draw()
+
+    if (this.state == this.STATES.STARTING) {
+      this.tablero.draw()
+      this.ESCENAS.INICIA_TABLERO.animate(5)
+    }
+    if (this.state == this.STATES.FICHA_DROP){
+      this.currentFicha.draw()
+      this.tablero.draw()
+      this.ESCENAS.FICHA_DROP.animate(1)
+    }
+    if (this.state == this.STATES.GAME) {
+      this.currentFicha.draw()
+      this.tablero.draw()
+    }
+  }
+
+  updateOriginalPositions() {
+    this.originalPositions = []
+    this.fichas.forEach(ficha => {
+      this.originalPositions.push([ficha.pos.x, ficha.pos.y])
+    })
   }
 
   switchTurn() {
@@ -278,13 +324,23 @@ class Juego {
     this.currentFicha = this.fichas[this.currentTurn]
     this.counter++
     this.currentFicha.isHovereable = true
+
   }
 
-  newGame(columns = 7, rows = 6, fichasToWin = 4) {
+  newGame(columns = 7, rows = 6, ...players) {
+
+    this.fichas = []
+
+    players.forEach((team, i) => {
+      this.fichas.push(new Ficha(this.IMGS.FICHAS[team], i + 1, i % 2 == 0 ? 100 : this.canvas.width - 140, this.canvas.height - 100, this.ctx))
+    })
+
+    this.currentFicha = this.fichas[0]
+    this.updateOriginalPositions()
+
 
     this.state = this.STATES.STARTING
 
-    this.fichasToWin = fichasToWin
     const imagenesCasilleros = []
     for (let i = 0; i < 3; i++) {
       let img = new Image()
