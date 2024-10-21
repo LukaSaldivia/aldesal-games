@@ -74,7 +74,7 @@ class Juego {
 
       // Aplica la transformación centrada y escalada
       this.ctx.translate(centerX, centerY);   // Mueve el origen al centro del canvas
-      this.ctx.setTransform(scaleFactor, 0, 0, scaleFactor, -centerX * (1 - t) + (Math.cos(Math.PI * 1 / t) * 5) * (1 - t), (translateY + centerY) * (1 - t))
+      this.ctx.setTransform(scaleFactor, 0, 0, scaleFactor, -centerX * (1 - t) + (Math.cos(Math.PI * 1 / t * 50) * 20) * (1 - t), (translateY + centerY) * (1 - t))
 
     }, () => {
       this.ctx.setTransform(1, 0, 0, 1, 0, 0);
