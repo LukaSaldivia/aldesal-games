@@ -11,14 +11,17 @@ class Juego {
       duration: 0
     }
 
+    this.fichaBehaviour = {
+      currentTurn : 0,
+      counter : 1,
+      currentColumn : undefined,
+      currentCasillero : undefined,
+      targetY : 0
+    }
 
-    this.currentTurn = 0
-    this.counter = 1
-    this.currentColumn = undefined
-    this.currentCasillero = undefined
+
     this.fichas = []
     this.currentFicha = null
-    this.targetY = 0
     this.originalPositions = []
 
     this.IMGS = {
@@ -56,14 +59,14 @@ class Juego {
 
     this.UI = {}
 
-    this.UI.MENU = new UIElement(new ResizedImage(this.IMGS.MENU, 1300, 500, 0, 0, ctx), null, 0, 0, ctx)
-
-
-
-
-
+    
+    
+    
+    
+    
     this.STATES = {
       MENU: 'menu',
+      TRANSITION_MENU_SELECT_MODE : 'transition menu to select ficha',
       SELECT_MODE: 'select mode',
       SELECT_FICHA: 'select ficha',
       TRANSITION_SELECT_FICHA_STARTING: 'transition select ficha to starting',
@@ -73,9 +76,12 @@ class Juego {
       TIE: 'tie',
       FICHA_DROP: 'ficha drop',
     }
-
+    
     this.state = this.STATES.MENU
 
+
+    this.UI.MENU = new UIElement(new ResizedImage(this.IMGS.MENU, 1300, 500, 0, 0, ctx), null, 0, 0, ctx)
+    
     this.UI.CLICPARAEMPEZAR = new UIElement(
       new ResizedImage(this.IMGS.CLICPARAEMPEZAR.default, 350, 54, undefined, undefined, ctx),
       new ResizedImage(this.IMGS.CLICPARAEMPEZAR.hover, 350, 54, undefined, undefined, ctx),
@@ -83,10 +89,10 @@ class Juego {
     )
 
     this.UI.CLICPARAEMPEZAR.onClick = () => {
-      this.state = this.STATES.SELECT_MODE
+      this.state = this.STATES.TRANSITION_MENU_SELECT_MODE
       this.canvas.classList.remove('pointer')
     }
-
+    
     this.UI.CLICPARAEMPEZAR.onHover = () => {
       this.canvas.classList.add('pointer')
     }
@@ -95,9 +101,9 @@ class Juego {
     }
 
     this.UI.SELECTMODE = {
-      4: new UIElement(new ResizedImage(this.IMGS.SELECTMODE[4].empty, 198, 50, undefined, undefined, this.ctx), new ResizedImage(this.IMGS.SELECTMODE[4].filled, 198, 50, undefined, undefined, this.ctx), canvas.width / 2 - 343 / 2, canvas.height / 2 - 50 / 2, this.ctx),
+      4: new UIElement(new ResizedImage(this.IMGS.SELECTMODE[4].empty, 197, 50, undefined, undefined, this.ctx), new ResizedImage(this.IMGS.SELECTMODE[4].filled, 197, 50, undefined, undefined, this.ctx), canvas.width / 2 - 343 / 2, canvas.height / 2 - 50 / 2, this.ctx),
       5: new UIElement(new ResizedImage(this.IMGS.SELECTMODE[5].empty, 243, 50, undefined, undefined, this.ctx), new ResizedImage(this.IMGS.SELECTMODE[5].filled, 243, 50, undefined, undefined, this.ctx), canvas.width / 2 - 343 / 2, canvas.height / 2 - 50 / 2, this.ctx),
-      6: new UIElement(new ResizedImage(this.IMGS.SELECTMODE[6].empty, 288, 50, undefined, undefined, this.ctx), new ResizedImage(this.IMGS.SELECTMODE[6].filled, 288, 50, undefined, undefined, this.ctx), canvas.width / 2 - 343 / 2, canvas.height / 2 - 50 / 2, this.ctx),
+      6: new UIElement(new ResizedImage(this.IMGS.SELECTMODE[6].empty, 290, 50, undefined, undefined, this.ctx), new ResizedImage(this.IMGS.SELECTMODE[6].filled, 290, 50, undefined, undefined, this.ctx), canvas.width / 2 - 343 / 2, canvas.height / 2 - 50 / 2, this.ctx),
       7: new UIElement(new ResizedImage(this.IMGS.SELECTMODE[7].empty, 343, 50, undefined, undefined, this.ctx), new ResizedImage(this.IMGS.SELECTMODE[7].filled, 343, 50, undefined, undefined, this.ctx), canvas.width / 2 - 343 / 2, canvas.height / 2 - 50 / 2, this.ctx),
     }
 
@@ -234,18 +240,18 @@ class Juego {
     this.ESCENAS.FICHA_DROP = new Escena(this.ctx, (t) => {
       this.canvas.classList.remove('hover')
       this.currentFicha.isHovereable = false
-      let targetY = this.currentCasillero.pos.y + this.tablero.cellSize - this.currentFicha.size
-      if (this.currentFicha.pos.y + this.currentFicha.size / 2 < targetY) {
+      this.fichaBehaviour.targetY = this.fichaBehaviour.currentCasillero.pos.y + this.tablero.cellSize - this.currentFicha.size
+      if (this.currentFicha.pos.y + this.currentFicha.size / 2 < this.fichaBehaviour.targetY) {
         this.currentFicha.addPos(0, 10)
       } else {
-        this.currentFicha.updatePos(this.currentCasillero.pos.x + this.currentCasillero.offset, this.currentCasillero.pos.y + this.currentCasillero.offset)
+        this.currentFicha.updatePos(this.fichaBehaviour.currentCasillero.pos.x + this.fichaBehaviour.currentCasillero.offset, this.fichaBehaviour.currentCasillero.pos.y + this.fichaBehaviour.currentCasillero.offset)
       }
 
 
     }, () => {
-      this.currentCasillero.endedFall = true
+      this.fichaBehaviour.currentCasillero.endedFall = true
       this.state = this.STATES.GAME
-      this.currentFicha.updatePos(...this.originalPositions[this.currentTurn])
+      this.currentFicha.updatePos(...this.originalPositions[this.fichaBehaviour.currentTurn])
       this.switchTurn()
 
     })
@@ -258,8 +264,14 @@ class Juego {
       this.UI.MENU.setOpacity(1 - t)
     }, () => {
       this.newGame(7, 6, 4)
-      this.currentFicha = this.fichas[this.currentTurn]
+      this.currentFicha = this.fichas[this.fichaBehaviour.currentTurn]
       this.state = this.STATES.STARTING
+    })
+
+    this.ESCENAS.TRANSITION_MENU_SELECT_MODE = new Escena(this.ctx, (t => {
+      this.UI.MENU.setOpacity(1 - t)
+    }), () => {
+      this.state = this.STATES.SELECT_MODE
     })
 
 
@@ -270,9 +282,9 @@ class Juego {
   update() {
 
 
+    
+    
     console.log(this.state);
-
-
     this.ctx.fillStyle = '#000'
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
 
@@ -281,7 +293,16 @@ class Juego {
     if (this.state == this.STATES.MENU) {
       this.UI.MENU.draw()
       this.UI.CLICPARAEMPEZAR.draw()
-      this.ESCENAS.ANIMATE_CLICPARAEMPEZAR.animate(1)
+      this.ESCENAS.ANIMATE_CLICPARAEMPEZAR.animate(1.5)
+    }
+    
+    if (this.state == this.STATES.TRANSITION_MENU_SELECT_MODE) {
+      this.UI.SELECTMODE[4].draw()
+      this.UI.SELECTMODE[5].draw()
+      this.UI.SELECTMODE[6].draw()
+      this.UI.SELECTMODE[7].draw()
+      this.UI.MENU.draw()
+      this.ESCENAS.TRANSITION_MENU_SELECT_MODE.animate(.2)
     }
 
     if (this.state == this.STATES.SELECT_MODE) {
@@ -292,7 +313,7 @@ class Juego {
     }
 
     if (this.state == this.STATES.SELECT_FICHA) {
-      this.newGame(this.gameSettings.columnas, this.gameSettings.rows, 'REBELDE', 'IMPERIAL')
+      this.newGame(this.gameSettings.columnas, this.gameSettings.rows, 'REBELDE', 'IMPERIAL', 'JEDI', 'SEPARATISTA')
       this.state = this.STATES.STARTING
     }
 
@@ -320,9 +341,9 @@ class Juego {
   }
 
   switchTurn() {
-    this.currentTurn = this.counter % this.fichas.length
-    this.currentFicha = this.fichas[this.currentTurn]
-    this.counter++
+    this.fichaBehaviour.currentTurn = this.fichaBehaviour.counter % this.fichas.length
+    this.currentFicha = this.fichas[this.fichaBehaviour.currentTurn]
+    this.fichaBehaviour.counter++
     this.currentFicha.isHovereable = true
 
   }
@@ -403,7 +424,7 @@ class Juego {
         let column;
 
         let isInsideColumn = columns.some((coord, i) => {
-          this.currentColumn = i;
+          this.fichaBehaviour.currentColumn = i;
           column = coord;
           return (
             this.mouse.x > coord.x.start &&
@@ -419,7 +440,7 @@ class Juego {
             column.y.end - this.currentFicha.size - 10
           );
         } else {
-          this.currentColumn = undefined;
+          this.fichaBehaviour.currentColumn = undefined;
         }
       }
 
@@ -432,18 +453,18 @@ class Juego {
 
     if (this.state == this.STATES.GAME) {
 
-      if (this.currentColumn >= 0 && this.currentColumn <= this.tablero.columns) {
-        let row = this.tablero.addFicha(this.currentColumn, this.currentFicha)
+      if (this.fichaBehaviour.currentColumn >= 0 && this.fichaBehaviour.currentColumn <= this.tablero.columns) {
+        let row = this.tablero.addFicha(this.fichaBehaviour.currentColumn, this.currentFicha)
         if (row >= 0) {
 
-          this.currentCasillero = this.tablero.getCasillero(this.currentColumn, row)
+          this.fichaBehaviour.currentCasillero = this.tablero.getCasillero(this.fichaBehaviour.currentColumn, row)
           this.state = this.STATES.FICHA_DROP
         }
-        this.currentColumn = undefined
+        this.fichaBehaviour.currentColumn = undefined
       }
 
       if (this.canvas.classList.contains('illegal')) {
-        this.currentFicha.updatePos(...this.originalPositions[this.currentTurn])
+        this.currentFicha.updatePos(...this.originalPositions[this.fichaBehaviour.currentTurn])
         this.canvas.classList.remove('illegal')
       }
 
@@ -480,7 +501,7 @@ class Juego {
   mouseLeave(e) {
     if (this.state == this.STATES.GAME) {
       if (this.currentFicha.isClicked) {
-        this.currentFicha.updatePos(...this.originalPositions[this.currentTurn])
+        this.currentFicha.updatePos(...this.originalPositions[this.fichaBehaviour.currentTurn])
       }
       this.currentFicha.isClicked = false
       this.currentFicha.isHover = false

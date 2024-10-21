@@ -32,13 +32,13 @@ class UIElement extends Dibujable{
   updatePos(x = 0, y = 0){
     super.updatePos(x,y)
     this.img_default.updatePos(x,y)
-    this.img_hover.updatePos(x,y)
+    this.img_hover?.updatePos(x,y)
   }
 
   addPos(x = 0, y = 0){
     super.addPos(x,y)
     this.img_default.addPos(x,y)
-    this.img_hover.addPos(x,y)
+    this.img_hover?.addPos(x,y)
   }
 
   mouseHover(x = 0, y = 0){
