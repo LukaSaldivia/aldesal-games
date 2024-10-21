@@ -7,8 +7,20 @@ class UIElement extends Dibujable{
     img_default.updatePos(this.pos.x, this.pos.y)
     img_hover?.updatePos(this.pos.x, this.pos.y)
 
+    
     this.width = this.img_default.width
     this.height = this.img_default.height
+
+    this.clickableArea = {
+      x : {
+        start : this.pos.x,
+        end : this.pos.x + this.width
+      },
+      y : {
+        start : this.pos.y,
+        end : this.pos.y + this.height
+      }
+    }
 
     this.isHover = false
     this.isHovereable = true
@@ -31,10 +43,10 @@ class UIElement extends Dibujable{
 
   mouseHover(x = 0, y = 0){
     this.isHover = (      
-      x > this.pos.x &&
-      x < this.pos.x + this.width &&
-      y > this.pos.y &&
-      y < this.pos.y + this.height
+      x > this.clickableArea.x.start &&
+      x < this.clickableArea.x.end &&
+      y > this.clickableArea.y.start &&
+      y < this.clickableArea.y.end
     )
 
     if (this.isHover && this.isHovereable) {
@@ -60,7 +72,7 @@ class UIElement extends Dibujable{
   draw(){
     super.draw()
     this.img_default.draw()
-    if (this.img_hover != null && this.isHover) {
+    if (this.img_hover != null && this.isHover && this.isHovereable) {
       this.img_hover.draw()
     }
   }
