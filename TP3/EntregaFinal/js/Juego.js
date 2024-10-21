@@ -53,7 +53,8 @@ class Juego {
         IMPERIAL: getImage('./img/juego/ficha_imperial.png'),
         SEPARATISTA: getImage('./img/juego/ficha_separatista.png'),
         JEDI: getImage('./img/juego/ficha_jedi.png')
-      }
+      },
+      HACEMUCHOTIEMPO: getImage('./img/juego/hace_mucho_tiempo.jpg')
     }
 
 
@@ -81,6 +82,8 @@ class Juego {
 
 
     this.UI.MENU = new UIElement(new ResizedImage(this.IMGS.MENU, 1300, 500, 0, 0, ctx), null, 0, 0, ctx)
+
+    this.UI.HACEMUCHOTIEMPO = new UIElement(new ResizedImage(this.IMGS.HACEMUCHOTIEMPO, 1300, 500, 0, 0, this.ctx), null, 0, 0, this.ctx)
     
     this.UI.CLICPARAEMPEZAR = new UIElement(
       new ResizedImage(this.IMGS.CLICPARAEMPEZAR.default, 350, 54, undefined, undefined, ctx),
@@ -101,10 +104,10 @@ class Juego {
     }
 
     this.UI.SELECTMODE = {
-      4: new UIElement(new ResizedImage(this.IMGS.SELECTMODE[4].empty, 197, 50, undefined, undefined, this.ctx), new ResizedImage(this.IMGS.SELECTMODE[4].filled, 197, 50, undefined, undefined, this.ctx), canvas.width / 2 - 343 / 2, canvas.height / 2 - 50 / 2, this.ctx),
-      5: new UIElement(new ResizedImage(this.IMGS.SELECTMODE[5].empty, 243, 50, undefined, undefined, this.ctx), new ResizedImage(this.IMGS.SELECTMODE[5].filled, 243, 50, undefined, undefined, this.ctx), canvas.width / 2 - 343 / 2, canvas.height / 2 - 50 / 2, this.ctx),
-      6: new UIElement(new ResizedImage(this.IMGS.SELECTMODE[6].empty, 290, 50, undefined, undefined, this.ctx), new ResizedImage(this.IMGS.SELECTMODE[6].filled, 290, 50, undefined, undefined, this.ctx), canvas.width / 2 - 343 / 2, canvas.height / 2 - 50 / 2, this.ctx),
-      7: new UIElement(new ResizedImage(this.IMGS.SELECTMODE[7].empty, 343, 50, undefined, undefined, this.ctx), new ResizedImage(this.IMGS.SELECTMODE[7].filled, 343, 50, undefined, undefined, this.ctx), canvas.width / 2 - 343 / 2, canvas.height / 2 - 50 / 2, this.ctx),
+      4: new UIElement(new ResizedImage(this.IMGS.SELECTMODE[4].empty, 197, 50, undefined, undefined, this.ctx), new ResizedImage(this.IMGS.SELECTMODE[4].filled, 197, 50, undefined, undefined, this.ctx), canvas.width / 2 - 343 / 2, (canvas.height / 2 - 50 / 2) * 4, this.ctx),
+      5: new UIElement(new ResizedImage(this.IMGS.SELECTMODE[5].empty, 243, 50, undefined, undefined, this.ctx), new ResizedImage(this.IMGS.SELECTMODE[5].filled, 243, 50, undefined, undefined, this.ctx), canvas.width / 2 - 343 / 2, (canvas.height / 2 - 50 / 2) * 4, this.ctx),
+      6: new UIElement(new ResizedImage(this.IMGS.SELECTMODE[6].empty, 290, 50, undefined, undefined, this.ctx), new ResizedImage(this.IMGS.SELECTMODE[6].filled, 290, 50, undefined, undefined, this.ctx), canvas.width / 2 - 343 / 2, (canvas.height / 2 - 50 / 2) * 4, this.ctx),
+      7: new UIElement(new ResizedImage(this.IMGS.SELECTMODE[7].empty, 343, 50, undefined, undefined, this.ctx), new ResizedImage(this.IMGS.SELECTMODE[7].filled, 343, 50, undefined, undefined, this.ctx), canvas.width / 2 - 343 / 2, (canvas.height / 2 - 50 / 2) * 4, this.ctx),
     }
 
     this.UI.SELECTMODE[5].clickableArea = {
@@ -269,9 +272,57 @@ class Juego {
     })
 
     this.ESCENAS.TRANSITION_MENU_SELECT_MODE = new Escena(this.ctx, (t => {
-      this.UI.MENU.setOpacity(1 - t)
+      this.UI.SELECTMODE[4].updatePos(this.canvas.width / 2 - 343 / 2 ,(canvas.height / 2 - 50 / 2) * t)
+      this.UI.SELECTMODE[5].updatePos(this.canvas.width / 2 - 343 / 2 ,(canvas.height / 2 - 50 / 2) * t)
+      this.UI.SELECTMODE[6].updatePos(this.canvas.width / 2 - 343 / 2 ,(canvas.height / 2 - 50 / 2) * t)
+      this.UI.SELECTMODE[7].updatePos(this.canvas.width / 2 - 343 / 2 ,(canvas.height / 2 - 50 / 2) * t)
+      // this.UI.MENU.updatePos(0 , this.canvas.height * t * 2)
+      this.UI.MENU.setOpacity(1 - t * 1.5)
+
+      
+
     }), () => {
       this.state = this.STATES.SELECT_MODE
+      this.UI.SELECTMODE[4].clickableArea = {
+        x: {
+          start: this.UI.SELECTMODE[4].pos.x,
+          end: this.UI.SELECTMODE[4].pos.x + this.UI.SELECTMODE[4].width
+        },
+        y: {
+          start: this.UI.SELECTMODE[4].pos.y,
+          end: this.UI.SELECTMODE[4].pos.y + this.UI.SELECTMODE[4].height
+        }
+      }
+      this.UI.SELECTMODE[5].clickableArea = {
+        x: {
+          start: this.UI.SELECTMODE[4].pos.x + this.UI.SELECTMODE[4].width,
+          end: this.UI.SELECTMODE[5].pos.x + this.UI.SELECTMODE[5].width
+        },
+        y: {
+          start: this.UI.SELECTMODE[5].pos.y,
+          end: this.UI.SELECTMODE[5].pos.y + this.UI.SELECTMODE[5].height
+        }
+      }
+      this.UI.SELECTMODE[6].clickableArea = {
+        x: {
+          start: this.UI.SELECTMODE[5].pos.x + this.UI.SELECTMODE[5].width,
+          end: this.UI.SELECTMODE[6].pos.x + this.UI.SELECTMODE[6].width
+        },
+        y: {
+          start: this.UI.SELECTMODE[6].pos.y,
+          end: this.UI.SELECTMODE[6].pos.y + this.UI.SELECTMODE[6].height
+        }
+      }
+      this.UI.SELECTMODE[7].clickableArea = {
+        x: {
+          start: this.UI.SELECTMODE[6].pos.x + this.UI.SELECTMODE[6].width,
+          end: this.UI.SELECTMODE[7].pos.x + this.UI.SELECTMODE[7].width
+        },
+        y: {
+          start: this.UI.SELECTMODE[7].pos.y,
+          end: this.UI.SELECTMODE[7].pos.y + this.UI.SELECTMODE[7].height
+        }
+      }
     })
 
 
@@ -302,7 +353,7 @@ class Juego {
       this.UI.SELECTMODE[6].draw()
       this.UI.SELECTMODE[7].draw()
       this.UI.MENU.draw()
-      this.ESCENAS.TRANSITION_MENU_SELECT_MODE.animate(.2)
+      this.ESCENAS.TRANSITION_MENU_SELECT_MODE.animate(2)
     }
 
     if (this.state == this.STATES.SELECT_MODE) {
@@ -313,7 +364,7 @@ class Juego {
     }
 
     if (this.state == this.STATES.SELECT_FICHA) {
-      this.newGame(this.gameSettings.columnas, this.gameSettings.rows, 'REBELDE', 'IMPERIAL', 'JEDI', 'SEPARATISTA')
+      this.newGame(this.gameSettings.columnas, this.gameSettings.rows, 'REBELDE', 'IMPERIAL')
       this.state = this.STATES.STARTING
     }
 
