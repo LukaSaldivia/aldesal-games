@@ -14,6 +14,8 @@ class Tablero extends Dibujable {
 
     this.fixedZones = []
 
+    this.hints = []
+
 
 
     this.setMatrix()
@@ -29,6 +31,7 @@ class Tablero extends Dibujable {
     }
 
     this.fixedZones = []
+    this.hints = []
 
     for (let i = 0; i < this.columns; i++) {
 
@@ -46,6 +49,10 @@ class Tablero extends Dibujable {
         }
       )
 
+      this.hints.push(new Circulo(20,this.fixedZones[i].x.start + (this.fixedZones[i].x.end - this.fixedZones[i].x.start )/2,this.fixedZones[i].y.end - 30, this.ctx))
+      this.hints[i].fill = "#0000"
+
+
     }
   }
 
@@ -56,6 +63,12 @@ class Tablero extends Dibujable {
         this.matrix[i][j].draw()
       }
     }
+
+    this.hints.forEach(hint => {
+      console.log(hint);
+      
+      hint.draw()
+    })
 
   }
 
@@ -272,6 +285,12 @@ class Tablero extends Dibujable {
   //   }
 
   //   return hayGanador
+
+  setHintColor(color = "#fff8"){
+    this.hints.map(circle => {
+      circle.fill = color
+    })
+  }
 
 
 }

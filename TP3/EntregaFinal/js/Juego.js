@@ -332,6 +332,10 @@ class Juego {
       this.currentFicha?.setOverFill("#0008")
     }))
 
+    this.ESCENAS.ANIMATE_HINTS = new Escena(this.ctx, (t => {
+      this.tablero.setHintColor(`rgba(255,255,255,${(1 - t) **2 - .5})`)
+    }))
+
 
 
 
@@ -408,6 +412,7 @@ class Juego {
     if (this.state == this.STATES.GAME) {
       
       this.tablero.draw()
+      this.ESCENAS.ANIMATE_HINTS.animate(1)
       this.EQUIPOS_EN_JUEGO.forEach(equipo => {
         this.FICHAS_EN_JUEGO[equipo].forEach(ficha => {
           if (!ficha.isClicked) {
@@ -558,6 +563,7 @@ class Juego {
 
     if (this.state == this.STATES.GAME) {
 
+      this.tablero.setHintColor('#0000')
       this.state = this.STATES.DISPLAY_CURRENT_FICHAS
 
       if (this.currentFicha != null) {
@@ -571,7 +577,6 @@ class Juego {
           this.state = this.STATES.FICHA_DROP
         }
         this.fichaBehaviour.currentColumn = undefined
-        // this.fichaBehaviour.currentFichaIndex = -1
       }
 
       if (this.canvas.classList.contains('illegal')) {
