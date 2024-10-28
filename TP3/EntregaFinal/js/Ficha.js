@@ -1,28 +1,32 @@
 class Ficha extends Dibujable{
-  constructor(image = new Image(), id = 0, xPos = 0, yPos = 0 ,ctx = CanvasRenderingContext2D){
+  
+
+  static size = 40
+
+  constructor(equipo = "", xPos = 0, yPos = 0 ,ctx = CanvasRenderingContext2D){
     super(ctx, xPos, yPos)
 
-    this._image = image
+    this.equipo = equipo
 
-    this.id = id
-    this.size = 40
-    this.image = new ResizedImage(image, this.size, this.size, xPos, yPos, ctx)
+
+    this.size = Ficha.size
+    this.image = getResizedImage(`./img/juego/ficha_${this.equipo}.png`, this.size, this.size, this.pos.x, this.pos.y, this.ctx)
+    
     this.circle = new Circulo(this.size / 2, this.pos.x + this.size / 2, this.pos.y + this.size / 2, ctx)
 
     this.isHover = false
     this.isClicked = false
     this.isHovereable = true
+
+    this.originalPosition = {
+      x : xPos,
+      y : yPos
+    }
   }
 
   draw(){
     super.draw()
     this.image.draw()
-
-    if ((this.isHover || this.isClicked) && this.isHovereable) {
-      this.circle.fill = '#0006'
-    }else{
-      this.circle.fill = '#0000'
-    }
     this.circle.draw()
 
   }
@@ -49,7 +53,18 @@ class Ficha extends Dibujable{
   
     let distance = Math.sqrt(dx ** 2 + dy ** 2);
   
-    return distance < (this.size / 2 + 25);
+    return distance < (this.size / 2 + 3);
+  }
+
+  setOverFill(fill = "#0000"){
+    this.circle.fill = fill
+  }
+
+  updateOriginalPosition(){
+    this.originalPosition = {
+      x : this.pos.x,
+      y : this.pos.y
+    }
   }
 
 

@@ -4,6 +4,12 @@ class Juego {
     this.ctx = ctx;
     this.canvas = canvas;
 
+    this.EQUIPOS_EN_JUEGO = []
+
+    this.FICHAS_EN_JUEGO = {}
+
+    this.currentEquipo = ''
+
     this.gameSettings = {
       columnas: 7,
       rows: 6,
@@ -12,18 +18,15 @@ class Juego {
     }
 
     this.fichaBehaviour = {
-      currentTurn : 0,
-      counter : 1,
-      currentColumn : undefined,
-      currentCasillero : undefined,
-      targetY : 0
+      currentTurn: 0,
+      counter: 0,
+      currentColumn: undefined,
+      currentFichaIndex : -1,
+      currentCasillero: undefined,
+      targetY: 0
     }
 
-
-    this.fichas = []
     this.currentFicha = null
-    this.originalPositions = []
-
     this.IMGS = {
       MENU: getImage('./img/juego/menu.jpg'),
       CLICPARAEMPEZAR: {
@@ -48,43 +51,32 @@ class Juego {
           filled: getImage('./img/juego/select-7-filled.png')
         }
       },
-      FICHAS: {
-        REBELDE: getImage('./img/juego/ficha_rebelde.png'),
-        IMPERIAL: getImage('./img/juego/ficha_imperial.png'),
-        SEPARATISTA: getImage('./img/juego/ficha_separatista.png'),
-        JEDI: getImage('./img/juego/ficha_jedi.png')
-      },
       HACEMUCHOTIEMPO: getImage('./img/juego/hace_mucho_tiempo.jpg')
     }
 
 
-    this.UI = {}
-
-    
-    
-    
-    
-    
     this.STATES = {
       MENU: 'menu',
-      TRANSITION_MENU_SELECT_MODE : 'transition menu to select ficha',
+      TRANSITION_MENU_SELECT_MODE: 'transition menu to select ficha',
       SELECT_MODE: 'select mode',
       SELECT_FICHA: 'select ficha',
       TRANSITION_SELECT_FICHA_STARTING: 'transition select ficha to starting',
+      DISPLAY_CURRENT_FICHAS : 'display current fichas',
       GAME: 'game',
       STARTING: 'starting',
       WINNER: 'winner',
       TIE: 'tie',
       FICHA_DROP: 'ficha drop',
     }
-    
+
     this.state = this.STATES.MENU
 
+    this.UI = {}
 
-    this.UI.MENU = new UIElement(new ResizedImage(this.IMGS.MENU, 1300, 500, 0, 0, ctx), null, 0, 0, ctx)
+    this.UI.MENU = new UIElement(new ResizedImage(this.IMGS.MENU, 1300, 500, 0, 0, ctx), null, 0, 0, this.ctx)
 
     this.UI.HACEMUCHOTIEMPO = new UIElement(new ResizedImage(this.IMGS.HACEMUCHOTIEMPO, 1300, 500, 0, 0, this.ctx), null, 0, 0, this.ctx)
-    
+
     this.UI.CLICPARAEMPEZAR = new UIElement(
       new ResizedImage(this.IMGS.CLICPARAEMPEZAR.default, 350, 54, undefined, undefined, ctx),
       new ResizedImage(this.IMGS.CLICPARAEMPEZAR.hover, 350, 54, undefined, undefined, ctx),
@@ -95,7 +87,7 @@ class Juego {
       this.state = this.STATES.TRANSITION_MENU_SELECT_MODE
       this.canvas.classList.remove('pointer')
     }
-    
+
     this.UI.CLICPARAEMPEZAR.onHover = () => {
       this.canvas.classList.add('pointer')
     }
@@ -217,7 +209,6 @@ class Juego {
     this.mouse = {
       x: 0,
       y: 0,
-      isClicking: false
     }
 
 
@@ -232,29 +223,44 @@ class Juego {
 
       // Aplica la transformación centrada y escalada
       this.ctx.translate(centerX, centerY);   // Mueve el origen al centro del canvas
-      this.ctx.setTransform(scaleFactor, 0, 0, scaleFactor, -centerX * (1 - t) + (Math.cos(Math.PI * 1 / t * 50) * 20) * (1 - t), (translateY + centerY) * (1 - t))
+      this.ctx.setTransform(scaleFactor, 0, 0, scaleFactor, -centerX * (1 - t) + (Math.cos(Math.PI * 1 / t * 500) * 20) * (1 - t), (translateY + centerY) * (1 - t))
 
     }, () => {
       this.ctx.setTransform(1, 0, 0, 1, 0, 0);
       this.ctx.globalAlpha = 1
-      this.state = this.STATES.GAME
+      this.state = this.STATES.DISPLAY_CURRENT_FICHAS
     })
 
     this.ESCENAS.FICHA_DROP = new Escena(this.ctx, (t) => {
+      this.currentFicha.setOverFill("#0000")
       this.canvas.classList.remove('hover')
       this.currentFicha.isHovereable = false
       this.fichaBehaviour.targetY = this.fichaBehaviour.currentCasillero.pos.y + this.tablero.cellSize - this.currentFicha.size
       if (this.currentFicha.pos.y + this.currentFicha.size / 2 < this.fichaBehaviour.targetY) {
-        this.currentFicha.addPos(0, 10)
+        this.currentFicha.addPos(0, 15)
       } else {
         this.currentFicha.updatePos(this.fichaBehaviour.currentCasillero.pos.x + this.fichaBehaviour.currentCasillero.offset, this.fichaBehaviour.currentCasillero.pos.y + this.fichaBehaviour.currentCasillero.offset)
       }
 
 
+      
+
+      
+      
+      this.FICHAS_EN_JUEGO[this.currentEquipo].forEach((ficha, i) => {
+        if (this.fichaBehaviour.currentFichaIndex > i) {
+          ficha.updatePos(ficha.pos.x, ficha.originalPosition.y - (15 * t))
+        }
+      })
+
+      
+      
     }, () => {
       this.fichaBehaviour.currentCasillero.endedFall = true
-      this.state = this.STATES.GAME
-      this.currentFicha.updatePos(...this.originalPositions[this.fichaBehaviour.currentTurn])
+      this.state = this.STATES.DISPLAY_CURRENT_FICHAS
+      this.FICHAS_EN_JUEGO[this.currentEquipo].splice(this.fichaBehaviour.currentFichaIndex,1)
+      this.FICHAS_EN_JUEGO[this.currentEquipo].forEach(ficha => ficha.updateOriginalPosition())
+      this.currentFicha = null
       this.switchTurn()
 
     })
@@ -263,26 +269,19 @@ class Juego {
       this.UI.CLICPARAEMPEZAR.setOpacity(1 - t)
     })
 
-    this.ESCENAS.TRANSITION_MENU = new Escena(this.ctx, (t) => {
-      this.UI.MENU.setOpacity(1 - t)
-    }, () => {
-      this.newGame(7, 6, 4)
-      this.currentFicha = this.fichas[this.fichaBehaviour.currentTurn]
-      this.state = this.STATES.STARTING
-    })
 
     this.ESCENAS.TRANSITION_MENU_SELECT_MODE = new Escena(this.ctx, (t => {
-      this.UI.SELECTMODE[4].updatePos(this.canvas.width / 2 - 343 / 2 ,(canvas.height / 2 - 50 / 2) * t)
-      this.UI.SELECTMODE[5].updatePos(this.canvas.width / 2 - 343 / 2 ,(canvas.height / 2 - 50 / 2) * t)
-      this.UI.SELECTMODE[6].updatePos(this.canvas.width / 2 - 343 / 2 ,(canvas.height / 2 - 50 / 2) * t)
-      this.UI.SELECTMODE[7].updatePos(this.canvas.width / 2 - 343 / 2 ,(canvas.height / 2 - 50 / 2) * t)
-      // this.UI.MENU.updatePos(0 , this.canvas.height * t * 2)
-      this.UI.MENU.setOpacity(1 - t * 1.5)
-
-      
-
+      this.UI.SELECTMODE[4].updatePos(this.canvas.width / 2 - 343 / 2, (canvas.height / 2 - 50 / 2) * t)
+      this.UI.SELECTMODE[5].updatePos(this.canvas.width / 2 - 343 / 2, (canvas.height / 2 - 50 / 2) * t)
+      this.UI.SELECTMODE[6].updatePos(this.canvas.width / 2 - 343 / 2, (canvas.height / 2 - 50 / 2) * t)
+      this.UI.SELECTMODE[7].updatePos(this.canvas.width / 2 - 343 / 2, (canvas.height / 2 - 50 / 2) * t)
+      this.UI.MENU.setOpacity(1 - t * 4)
     }), () => {
       this.state = this.STATES.SELECT_MODE
+      this.UI.SELECTMODE[4].updatePos(this.canvas.width / 2 - 343 / 2, (canvas.height / 2 - 50 / 2))
+      this.UI.SELECTMODE[5].updatePos(this.canvas.width / 2 - 343 / 2, (canvas.height / 2 - 50 / 2))
+      this.UI.SELECTMODE[6].updatePos(this.canvas.width / 2 - 343 / 2, (canvas.height / 2 - 50 / 2))
+      this.UI.SELECTMODE[7].updatePos(this.canvas.width / 2 - 343 / 2, (canvas.height / 2 - 50 / 2))
       this.UI.SELECTMODE[4].clickableArea = {
         x: {
           start: this.UI.SELECTMODE[4].pos.x,
@@ -325,6 +324,14 @@ class Juego {
       }
     })
 
+    this.ESCENAS.DISPLAY_CURRENT_FICHAS = new Escena(this.ctx, (t => {
+      this.FICHAS_EN_JUEGO[this.currentEquipo].map( ficha => {
+        ficha.setOverFill(`rgba(255,255,255, ${(1 - t) **2 - .5})`)
+      })
+
+      this.currentFicha?.setOverFill("#0008")
+    }))
+
 
 
 
@@ -333,9 +340,6 @@ class Juego {
   update() {
 
 
-    
-    
-    console.log(this.state);
     this.ctx.fillStyle = '#000'
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
 
@@ -348,11 +352,11 @@ class Juego {
     }
     
     if (this.state == this.STATES.TRANSITION_MENU_SELECT_MODE) {
+      this.UI.MENU.draw()
       this.UI.SELECTMODE[4].draw()
       this.UI.SELECTMODE[5].draw()
       this.UI.SELECTMODE[6].draw()
       this.UI.SELECTMODE[7].draw()
-      this.UI.MENU.draw()
       this.ESCENAS.TRANSITION_MENU_SELECT_MODE.animate(2)
     }
 
@@ -364,51 +368,86 @@ class Juego {
     }
 
     if (this.state == this.STATES.SELECT_FICHA) {
-      this.newGame(this.gameSettings.columnas, this.gameSettings.rows, 'REBELDE', 'IMPERIAL')
+      this.newGame(this.gameSettings.columnas, this.gameSettings.rows, 'REBELDE', 'IMPERIO')
       this.state = this.STATES.STARTING
     }
 
 
     if (this.state == this.STATES.STARTING) {
       this.tablero.draw()
+      this.EQUIPOS_EN_JUEGO.forEach(equipo => {
+        this.FICHAS_EN_JUEGO[equipo].forEach(ficha => {
+          ficha.draw()
+        })
+      })
       this.ESCENAS.INICIA_TABLERO.animate(5)
     }
-    if (this.state == this.STATES.FICHA_DROP){
+    if (this.state == this.STATES.FICHA_DROP) {
       this.currentFicha.draw()
+      this.EQUIPOS_EN_JUEGO.forEach(equipo => {
+        this.FICHAS_EN_JUEGO[equipo].forEach(ficha => {
+          ficha.draw()
+        })
+      })
       this.tablero.draw()
-      this.ESCENAS.FICHA_DROP.animate(1)
+      this.ESCENAS.FICHA_DROP.animate(.5)
     }
+
+    if (this.state == this.STATES.DISPLAY_CURRENT_FICHAS) {            
+      this.tablero.draw()
+      this.EQUIPOS_EN_JUEGO.forEach(equipo => {
+        this.FICHAS_EN_JUEGO[equipo].forEach(ficha => {
+          ficha.draw()
+        })
+      })
+
+      this.ESCENAS.DISPLAY_CURRENT_FICHAS.animate(.5)
+      
+    }
+
     if (this.state == this.STATES.GAME) {
-      this.currentFicha.draw()
+      
       this.tablero.draw()
-    }
+      this.EQUIPOS_EN_JUEGO.forEach(equipo => {
+        this.FICHAS_EN_JUEGO[equipo].forEach(ficha => {
+          if (!ficha.isClicked) {
+            ficha.setOverFill('#0000')
+          }
+          ficha.draw()
+        })
+      })
+
+    }    
+
   }
 
-  updateOriginalPositions() {
-    this.originalPositions = []
-    this.fichas.forEach(ficha => {
-      this.originalPositions.push([ficha.pos.x, ficha.pos.y])
-    })
-  }
 
   switchTurn() {
-    this.fichaBehaviour.currentTurn = this.fichaBehaviour.counter % this.fichas.length
-    this.currentFicha = this.fichas[this.fichaBehaviour.currentTurn]
+    this.fichaBehaviour.currentTurn = this.fichaBehaviour.counter % this.EQUIPOS_EN_JUEGO.length
+    this.currentEquipo = this.EQUIPOS_EN_JUEGO[this.fichaBehaviour.currentTurn]
+    this.FICHAS_EN_JUEGO[this.currentEquipo].map(ficha => { ficha.isHovereable = true })
+
     this.fichaBehaviour.counter++
-    this.currentFicha.isHovereable = true
 
   }
 
-  newGame(columns = 7, rows = 6, ...players) {
+  newGame(columns = 7, rows = 6, ...teams) {
 
-    this.fichas = []
 
-    players.forEach((team, i) => {
-      this.fichas.push(new Ficha(this.IMGS.FICHAS[team], i + 1, i % 2 == 0 ? 100 : this.canvas.width - 140, this.canvas.height - 100, this.ctx))
-    })
+    this.EQUIPOS_EN_JUEGO = []
+    this.EQUIPOS_EN_JUEGO.push(teams[0])
+    this.EQUIPOS_EN_JUEGO.push(teams[1])
 
-    this.currentFicha = this.fichas[0]
-    this.updateOriginalPositions()
+    this.FICHAS_EN_JUEGO[this.EQUIPOS_EN_JUEGO[0]] = []
+    this.FICHAS_EN_JUEGO[this.EQUIPOS_EN_JUEGO[1]] = []
+
+    for (let i = columns * rows; i > 0; i--) {
+      this.FICHAS_EN_JUEGO[this.EQUIPOS_EN_JUEGO[0]].push(new Ficha(this.EQUIPOS_EN_JUEGO[0], 100, this.canvas.height - 200 + (i * 15), this.ctx))
+      this.FICHAS_EN_JUEGO[this.EQUIPOS_EN_JUEGO[1]].push(new Ficha(this.EQUIPOS_EN_JUEGO[1], this.canvas.width - 100 - Ficha.size, this.canvas.height - 200 + (i * 15), this.ctx))
+    }
+
+    this.switchTurn()
+
 
 
     this.state = this.STATES.STARTING
@@ -421,10 +460,7 @@ class Juego {
 
     }
     this.tablero = new Tablero(columns, rows, imagenesCasilleros, undefined, undefined, this.ctx)
-
-
-    this.tablero.pos.x = sizes.width / 2 - (this.tablero.columns * this.tablero.cellSize / 2)
-    this.tablero.pos.y = sizes.height - (this.tablero.rows * this.tablero.cellSize)
+    this.tablero.centerOnScreen(this.canvas.width, this.canvas.height)
     this.tablero.setMatrix()
 
 
@@ -452,50 +488,68 @@ class Juego {
       this.UI.SELECTMODE[7].mouseHover(this.mouse.x, this.mouse.y)
     }
 
+    if (this.state == this.STATES.DISPLAY_CURRENT_FICHAS) {
+
+      for (let i = this.FICHAS_EN_JUEGO[this.currentEquipo].length - 1; i > 0; i--) {
+        let ficha = this.FICHAS_EN_JUEGO[this.currentEquipo][i]
+        const isMouseOver = ficha.hasMouseOver(this.mouse.x, this.mouse.y)
+        ficha.isHover = isMouseOver
+        if (isMouseOver) {
+          this.canvas.classList.add('hover');
+          this.currentFicha = ficha
+          this.currentFicha.isHover = true
+          this.fichaBehaviour.currentFichaIndex = i
+          break;
+        } else {
+          if (this.currentFicha) {
+            this.currentFicha.isHover = false
+          }
+          this.fichaBehaviour.currentFichaIndex = -1
+          this.canvas.classList.remove('hover');
+          this.currentFicha = null
+        }
+      }
+
+      
+    }
+
     if (this.state == this.STATES.GAME) {
-
-      const isMouseOver = this.currentFicha.hasMouseOver(this.mouse.x, this.mouse.y) && this.currentFicha.isHovereable;
-      this.currentFicha.isHover = isMouseOver;
-      this.canvas.classList.toggle('hover', isMouseOver);
-
-      if (this.currentFicha.isClicked) {
+      if (this.currentFicha && this.currentFicha.isClicked) {
+        this.currentFicha.setOverFill("#0008")
         this.currentFicha.updatePos(this.mouse.x - this.currentFicha.size / 2, this.mouse.y - this.currentFicha.size / 2);
 
-
-        let isOutOfBounds = (
-          this.mouse.x >= this.tablero.pos.x &&
-          this.mouse.x <= this.tablero.pos.x + this.tablero.columns * this.tablero.cellSize &&
+        let isEnteringFromLeftOrRight = (
+          this.mouse.x + this.currentFicha.size/2 >= this.tablero.pos.x &&
+          this.mouse.x - this.currentFicha.size/2 <= this.tablero.pos.x + this.tablero.columns * this.tablero.cellSize &&
           this.mouse.y > this.tablero.pos.y
         )
 
-        this.canvas.classList.toggle('illegal', isOutOfBounds)
+        this.canvas.classList.toggle('illegal', isEnteringFromLeftOrRight)
 
+        if (isEnteringFromLeftOrRight) {
+          this.currentFicha.updatePos(this.mouse.x < this.canvas.width / 2 ? this.mouse.x - (this.mouse.x - this.tablero.pos.x + this.currentFicha.size) : this.tablero.getEndPos().x, this.currentFicha.pos.y)
+        }
 
-        let columns = this.tablero.fixedZones;
-        let column;
+        let [column, zone] = this.tablero.isInsideColumn(this.mouse.x, this.mouse.y)
 
-        let isInsideColumn = columns.some((coord, i) => {
-          this.fichaBehaviour.currentColumn = i;
-          column = coord;
-          return (
-            this.mouse.x > coord.x.start &&
-            this.mouse.x <= coord.x.end &&
-            this.mouse.y <= coord.y.end &&
-            this.mouse.y > coord.y.start
-          );
-        });
-
-        if (isInsideColumn) {
+        if (column >= 0) {
+          this.fichaBehaviour.currentColumn = column
+          this.currentFicha.setOverFill('#0008')
           this.currentFicha.updatePos(
-            (column.x.start + column.x.end) / 2 - this.currentFicha.size / 2,
-            column.y.end - this.currentFicha.size - 10
+            (zone.x.start + zone.x.end) / 2 - this.currentFicha.size / 2,
+            zone.y.end - this.currentFicha.size - 10
           );
         } else {
           this.fichaBehaviour.currentColumn = undefined;
         }
-      }
 
+
+
+
+      }
     }
+
+
 
 
   }
@@ -504,6 +558,11 @@ class Juego {
 
     if (this.state == this.STATES.GAME) {
 
+      this.state = this.STATES.DISPLAY_CURRENT_FICHAS
+
+      if (this.currentFicha != null) {
+        this.currentFicha.isClicked = false
+      }
       if (this.fichaBehaviour.currentColumn >= 0 && this.fichaBehaviour.currentColumn <= this.tablero.columns) {
         let row = this.tablero.addFicha(this.fichaBehaviour.currentColumn, this.currentFicha)
         if (row >= 0) {
@@ -512,15 +571,14 @@ class Juego {
           this.state = this.STATES.FICHA_DROP
         }
         this.fichaBehaviour.currentColumn = undefined
+        // this.fichaBehaviour.currentFichaIndex = -1
       }
 
       if (this.canvas.classList.contains('illegal')) {
-        this.currentFicha.updatePos(...this.originalPositions[this.fichaBehaviour.currentTurn])
+        // this.currentFicha.updatePos()
         this.canvas.classList.remove('illegal')
       }
 
-      this.currentFicha.isClicked = false
-      this.mouse.isClicking = false
       this.canvas.classList.remove('grabbing')
 
     }
@@ -540,10 +598,12 @@ class Juego {
       this.UI.SELECTMODE[7].mouseClick()
     }
 
-    if (this.state == this.STATES.GAME) {
-      if (this.currentFicha.isHover && this.currentFicha.isHovereable) {
+    if (this.state == this.STATES.DISPLAY_CURRENT_FICHAS) {
+
+      if (this.currentFicha && this.currentFicha.isHover && this.currentFicha.isHovereable) {        
         this.currentFicha.isClicked = true
         this.canvas.classList.add('grabbing')
+        this.state = this.STATES.GAME
       }
     }
 
@@ -551,16 +611,8 @@ class Juego {
 
   mouseLeave(e) {
     if (this.state == this.STATES.GAME) {
-      if (this.currentFicha.isClicked) {
-        this.currentFicha.updatePos(...this.originalPositions[this.fichaBehaviour.currentTurn])
-      }
       this.currentFicha.isClicked = false
       this.currentFicha.isHover = false
     }
   }
-
-  // 
-
-
-
 }

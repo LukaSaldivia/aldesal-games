@@ -9,11 +9,11 @@ class Circulo extends Dibujable{
   draw(){
     super.draw()
 
-    this.ctx.fillStyle = this.fill
-    this.ctx.beginPath()
-    this.ctx.arc(this.pos.x, this.pos.y, this.radius, 0, 2 * Math.PI)
-    this.ctx.closePath()
-    this.ctx.fill()
+      this.ctx.fillStyle = this.fill
+      this.ctx.beginPath()
+      this.ctx.arc(this.pos.x, this.pos.y, this.radius, 0, 2 * Math.PI)
+      this.ctx.closePath()
+      this.ctx.fill()
     
   }
 }

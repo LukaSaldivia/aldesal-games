@@ -59,6 +59,30 @@ class Tablero extends Dibujable {
 
   }
 
+  centerOnScreen(width = 0, height = 0) {
+    super.updatePos(width / 2 - (this.columns * this.cellSize / 2), height - (this.rows * this.cellSize))
+  }
+
+  isInsideColumn(x = 0, y = 0) {
+    let zone, column;
+
+    if (this.fixedZones.some((coord, i) => {
+      column = i;
+      zone = coord;
+      return (
+        x > coord.x.start &&
+        x <= coord.x.end &&
+        y <= coord.y.end &&
+        y > coord.y.start
+      );
+    })) {
+      return [column, zone]
+    } else {
+      return [-1, null]
+    }
+
+  }
+
   //   console() {
 
   //     let res = ''
@@ -74,8 +98,15 @@ class Tablero extends Dibujable {
 
   //   }
 
-  getCasillero(column = 0, row = 0){
+  getCasillero(column = 0, row = 0) {
     return this.matrix[column][row]
+  }
+
+  getEndPos(){
+    return {
+      x : this.pos.x + this.columns * this.cellSize,
+      y : this.pos.y + this.rows * this.cellSize
+    }
   }
 
   addFicha(column = 0, jugador = Ficha) {
@@ -93,6 +124,7 @@ class Tablero extends Dibujable {
 
 
   }
+
 
   //   checkMatriz(n = 0){
   //     for (let i = 0; i < this.columnas; i++) {
