@@ -64,9 +64,7 @@ class Tablero extends Dibujable {
       }
     }
 
-    this.hints.forEach(hint => {
-      console.log(hint);
-      
+    this.hints.forEach(hint => {      
       hint.draw()
     })
 
@@ -138,153 +136,49 @@ class Tablero extends Dibujable {
 
   }
 
+  hasWinner(equipo = "", column = 0, row = 0, fichasToWin = 4){    
 
-  //   checkMatriz(n = 0){
-  //     for (let i = 0; i < this.columnas; i++) {
-  //       for (let j = 0; j < this.filas; j++) {
-  //         if (this.matriz[i][j] != 0)
-  //           if(this.checkWin(n, i, j))
-  //             return true
-  //       };
+    let verticales = this.countConsecutives(column, -1, equipo, 0, 1, fichasToWin);
+    if (verticales.length == fichasToWin) {
+      return verticales
+    }
+    
+    let horizontales = this.countConsecutives(-1, row, equipo, 1, 0, fichasToWin); 
+    if (horizontales.length == fichasToWin) {
+      return horizontales
+    }
+    // diagonales
 
-  //     }
+    return []
+    
+  }
 
-  //     return false
-  //   }
+  countConsecutives(initialCol = 0, initialRow = 0, equipo = "", dx = 0, dy = 0, goal = 0){
 
+    let counter = 0
+    let casilleros = []
+    while (initialCol < this.columns && initialRow < this.rows) {
+      initialCol += 1*dx
+      initialRow += 1*dy                  
 
-  //   checkWin(columna = 0, fila = 0, jugador = new Ficha(), fichasNecesarias = 4) {
+      if (initialCol < this.columns && initialRow < this.rows) {
+        let casillero = this.matrix[initialCol][initialRow]          
+        if (casillero.jugador?.equipo == equipo) {
+          counter++
+          casilleros.push(casillero)
+        }else{
+          counter=0
+          casilleros = []
+        }
+        if (counter == goal) break;
+        
+      }
 
+    }
 
-  //     // // chequear hacia derecha    
-
-  //     // if (columna + fichasNecesarias - 1 < this.columnas &&
-  //     //   this.matriz[columna + fichasNecesarias - 1][fila] == n) {
-
-  //     //   let i = columna + fichasNecesarias - 2;
-  //     //   while (i > columna && this.matriz[i][fila] == n) {
-  //     //     i--;
-  //     //   }
-
-  //     //   if (i == columna) {
-  //     //     return ['der', true];
-  //     //   }
-  //     // }
-
-
-  //     // // chequear hacia izquierda       
-
-  //     // if (columna - fichasNecesarias + 1 >= 0 &&
-  //     //   this.matriz[columna - fichasNecesarias + 1][fila] == n) {
-  //     //   let i = columna - fichasNecesarias + 2;
-  //     //   while (i < columna && this.matriz[i][fila] == n) {
-  //     //     i++;
-  //     //   }
-
-  //     //   if (i == columna) {
-  //     //     return ['izq', true];
-  //     //   }
-  //     // }
-
-
-  //     // // chequear hacia abajo
-  //     // if (fila + fichasNecesarias - 1 < this.filas &&
-  //     //   this.matriz[columna][fila + fichasNecesarias - 1] == n) {
-  //     //   let i = fila + fichasNecesarias - 2
-  //     //   while (i > fila && this.matriz[columna][i] == n) {
-  //     //     i--;
-  //     //   }
-
-  //     //   if (i == fila) {
-  //     //     return ['aba', true]
-  //     //   }
-  //     // }
-
-
-  //     // // chequear hacia izquierda-arriba
-
-  //     // if (columna - fichasNecesarias + 1 >= 0 && fila - fichasNecesarias + 1 >= 0 &&
-  //     //   this.matriz[columna - fichasNecesarias + 1][fila - fichasNecesarias + 1] == n) {
-  //     //   let i = 1;
-  //     //   while (columna - i >= 0 && fila - i >= 0 && this.matriz[columna - i][fila - i] == n) {
-  //     //     i++;
-  //     //   }
-
-  //     //   if (i == fichasNecesarias) {
-  //     //     return ['izq-arr', true];
-  //     //   }
-  //     // }
-
-
-  //     // // chequear hacia izquierda-abajo
-
-  //     // if (columna - fichasNecesarias + 1 >= 0 && fila + fichasNecesarias - 1 < this.filas &&
-  //     //   this.matriz[columna - fichasNecesarias + 1][fila + fichasNecesarias - 1] == n) {
-  //     //   let i = 1;
-  //     //   while (columna - i >= 0 && fila + i < this.filas && this.matriz[columna - i][fila + i] == n) {
-  //     //     i++;
-  //     //   }
-
-  //     //   if (i == fichasNecesarias) {
-  //     //     return ['izq-aba', true];
-  //     //   }
-  //     // }
-
-
-  //     // // chequear hacia derecha-arriba
-
-  //     // if (columna + fichasNecesarias - 1 < this.columnas && fila - fichasNecesarias + 1 >= 0 &&
-  //     //   this.matriz[columna + fichasNecesarias - 1][fila - fichasNecesarias + 1] == n) {
-  //     //   let i = 1;
-  //     //   while (columna + i < this.columnas && fila - i >= 0 && this.matriz[columna + i][fila - i] == n) {
-  //     //     i++;
-  //     //   }
-
-  //     //   if (i == fichasNecesarias) {
-  //     //     return ['der-arr', true];
-  //     //   }
-  //     // }
-
-
-  //     // // chequear hacia derecha-abajo
-
-  //     // if (columna + fichasNecesarias - 1 < this.columnas && fila + fichasNecesarias - 1 < this.filas &&
-  //     //   this.matriz[columna + fichasNecesarias - 1][fila + fichasNecesarias - 1] == n) {
-  //     //   let i = 1;
-  //     //   while (columna + i < this.columnas && fila + i < this.filas && this.matriz[columna + i][fila + i] == n) {
-  //     //     i++;
-  //     //   }
-
-  //     //   if (i == fichasNecesarias) {
-  //     //     return ['der-aba', true];
-  //     //   }
-  //     // }
-
-  //     // return false
-  //   }
-
-  //   draw(){
-
-  //     for (let i = 0; i < this.columnas; i++) {
-  //       for (let j = 0; j < this.filas; j++) {
-  //         this.ctx.drawImage(this.image, this.xPos + (this.cellSize * i), this.yPos + (this.cellSize * j))
-  //       }
-
-  //     }
-  //   }
-  // }
-
-
-  // function addFicha(tablero = new Tablero(), column = 0, n = 0) {
-  //   let hayGanador = false
-
-  //   if (!hayGanador) {
-  //     tablero.addFicha(column, n)
-  //     tablero.console()
-  //     hayGanador = tablero.checkMatriz(n)
-  //   }
-
-  //   return hayGanador
+    // return [counter, casilleros]
+    return casilleros
+  }
 
   setHintColor(color = "#fff8"){
     this.hints.map(circle => {

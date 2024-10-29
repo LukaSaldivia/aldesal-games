@@ -11,3 +11,12 @@ function getResizedImage(path = '', width = 0, height = 0, xPos = 0, yPos = 0, c
 
   return resized
 }
+
+// let row = 4, col = 3
+
+// while (row != 0 && col != 0) {
+//   row--
+//   col--
+// }
+
+// console.log(col, row);

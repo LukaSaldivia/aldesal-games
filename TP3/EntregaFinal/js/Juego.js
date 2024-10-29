@@ -8,6 +8,8 @@ class Juego {
 
     this.FICHAS_EN_JUEGO = {}
 
+    this.FICHAS_GANADORAS = []
+
     this.currentEquipo = ''
 
     this.gameSettings = {
@@ -22,6 +24,7 @@ class Juego {
       counter: 0,
       currentColumn: undefined,
       currentFichaIndex : -1,
+      currentRow : -1,
       currentCasillero: undefined,
       targetY: 0
     }
@@ -241,12 +244,6 @@ class Juego {
       } else {
         this.currentFicha.updatePos(this.fichaBehaviour.currentCasillero.pos.x + this.fichaBehaviour.currentCasillero.offset, this.fichaBehaviour.currentCasillero.pos.y + this.fichaBehaviour.currentCasillero.offset)
       }
-
-
-      
-
-      
-      
       this.FICHAS_EN_JUEGO[this.currentEquipo].forEach((ficha, i) => {
         if (this.fichaBehaviour.currentFichaIndex > i) {
           ficha.updatePos(ficha.pos.x, ficha.originalPosition.y - (15 * t))
@@ -260,8 +257,14 @@ class Juego {
       this.state = this.STATES.DISPLAY_CURRENT_FICHAS
       this.FICHAS_EN_JUEGO[this.currentEquipo].splice(this.fichaBehaviour.currentFichaIndex,1)
       this.FICHAS_EN_JUEGO[this.currentEquipo].forEach(ficha => ficha.updateOriginalPosition())
-      this.currentFicha = null
+      
+      let winnerArray = this.tablero.hasWinner(this.currentEquipo, this.fichaBehaviour.currentColumn, this.fichaBehaviour.currentRow, this.gameSettings.fichasToWin)
+      if (winnerArray.length == this.gameSettings.fichasToWin) {
+        this.FICHAS_GANADORAS = winnerArray
+        return this.state = this.STATES.WINNER
+      }
       this.switchTurn()
+      this.currentFicha = null
 
     })
 
@@ -326,7 +329,7 @@ class Juego {
 
     this.ESCENAS.DISPLAY_CURRENT_FICHAS = new Escena(this.ctx, (t => {
       this.FICHAS_EN_JUEGO[this.currentEquipo].map( ficha => {
-        ficha.setOverFill(`rgba(255,255,255, ${(1 - t) **2 - .5})`)
+        ficha.setOverFill(`rgba(255,255,255, ${(1 - t) **2 - .7})`)
       })
 
       this.currentFicha?.setOverFill("#0008")
@@ -361,7 +364,8 @@ class Juego {
       this.UI.SELECTMODE[5].draw()
       this.UI.SELECTMODE[6].draw()
       this.UI.SELECTMODE[7].draw()
-      this.ESCENAS.TRANSITION_MENU_SELECT_MODE.animate(2)
+      // this.ESCENAS.TRANSITION_MENU_SELECT_MODE.animate(2)
+      this.ESCENAS.TRANSITION_MENU_SELECT_MODE.animate(0)
     }
 
     if (this.state == this.STATES.SELECT_MODE) {
@@ -384,7 +388,8 @@ class Juego {
           ficha.draw()
         })
       })
-      this.ESCENAS.INICIA_TABLERO.animate(5)
+      // this.ESCENAS.INICIA_TABLERO.animate(5)
+      this.ESCENAS.INICIA_TABLERO.animate(0)
     }
     if (this.state == this.STATES.FICHA_DROP) {
       this.currentFicha.draw()
@@ -423,6 +428,22 @@ class Juego {
       })
 
     }    
+
+    if (this.state == this.STATES.WINNER) {
+
+
+      this.tablero.matrix.forEach(col => {
+        col.forEach(casillero => casillero?.jugador?.setOverFill("#000a"))
+      })
+      
+      this.tablero.draw()
+
+      this.FICHAS_GANADORAS.forEach(ficha => {
+        ficha.jugador.setOverFill("#0000")
+        ficha.draw()
+      })
+      
+    }
 
   }
 
@@ -572,11 +593,12 @@ class Juego {
       if (this.fichaBehaviour.currentColumn >= 0 && this.fichaBehaviour.currentColumn <= this.tablero.columns) {
         let row = this.tablero.addFicha(this.fichaBehaviour.currentColumn, this.currentFicha)
         if (row >= 0) {
-
+          this.fichaBehaviour.currentRow = row
           this.fichaBehaviour.currentCasillero = this.tablero.getCasillero(this.fichaBehaviour.currentColumn, row)
           this.state = this.STATES.FICHA_DROP
+
         }
-        this.fichaBehaviour.currentColumn = undefined
+        // this.fichaBehaviour.currentColumn = undefined
       }
 
       if (this.canvas.classList.contains('illegal')) {
