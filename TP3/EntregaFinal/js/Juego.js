@@ -23,8 +23,8 @@ class Juego {
       currentTurn: 0,
       counter: 0,
       currentColumn: undefined,
-      currentFichaIndex : -1,
-      currentRow : -1,
+      currentFichaIndex: -1,
+      currentRow: -1,
       currentCasillero: undefined,
       targetY: 0
     }
@@ -64,7 +64,7 @@ class Juego {
       SELECT_MODE: 'select mode',
       SELECT_FICHA: 'select ficha',
       TRANSITION_SELECT_FICHA_STARTING: 'transition select ficha to starting',
-      DISPLAY_CURRENT_FICHAS : 'display current fichas',
+      DISPLAY_CURRENT_FICHAS: 'display current fichas',
       GAME: 'game',
       STARTING: 'starting',
       WINNER: 'winner',
@@ -97,6 +97,16 @@ class Juego {
     this.UI.CLICPARAEMPEZAR.onHoverLeave = () => {
       this.canvas.classList.remove('pointer')
     }
+
+    this.UI.MODE_SELECTED = new UIText('Selecciona un modo de juego', 0, this.canvas.height - 120, this.ctx)
+    this.UI.MODE_SELECTED.fontSize = 26
+    this.UI.MODE_SELECTED.pos.x = canvas.width / 2 - this.UI.MODE_SELECTED.getPixelWidth() / 2
+    this.UI.MODE_SELECTED.color = "#eee"
+    
+    this.UI.TABLERO_SIZE_INDICATOR = new UIText('', 0, this.canvas.height - 90, this.ctx)
+    this.UI.TABLERO_SIZE_INDICATOR.fontSize = 18
+    this.UI.TABLERO_SIZE_INDICATOR.pos.x = canvas.width / 2 - this.UI.TABLERO_SIZE_INDICATOR.getPixelWidth() / 2
+    this.UI.TABLERO_SIZE_INDICATOR.color = "#888"
 
     this.UI.SELECTMODE = {
       4: new UIElement(new ResizedImage(this.IMGS.SELECTMODE[4].empty, 197, 50, undefined, undefined, this.ctx), new ResizedImage(this.IMGS.SELECTMODE[4].filled, 197, 50, undefined, undefined, this.ctx), canvas.width / 2 - 343 / 2, (canvas.height / 2 - 50 / 2) * 4, this.ctx),
@@ -140,36 +150,64 @@ class Juego {
       this.UI.SELECTMODE[5].isHovereable = false
       this.UI.SELECTMODE[6].isHovereable = false
       this.UI.SELECTMODE[7].isHovereable = false
+
+      this.UI.MODE_SELECTED.text = '4 en línea'
+      this.UI.MODE_SELECTED.pos.x = canvas.width / 2 - this.UI.MODE_SELECTED.getPixelWidth() / 2
+      this.UI.TABLERO_SIZE_INDICATOR.text = 'Columnas: 7, Filas: 6'
+      this.UI.TABLERO_SIZE_INDICATOR.pos.x = canvas.width / 2 - this.UI.TABLERO_SIZE_INDICATOR.getPixelWidth() / 2
     }
     this.UI.SELECTMODE[5].onHover = () => {
       this.UI.SELECTMODE[4].isHovereable = false
       this.UI.SELECTMODE[6].isHovereable = false
       this.UI.SELECTMODE[7].isHovereable = false
+
+      this.UI.MODE_SELECTED.text = '5 en línea'
+      this.UI.MODE_SELECTED.pos.x = canvas.width / 2 - this.UI.MODE_SELECTED.getPixelWidth() / 2
+      this.UI.TABLERO_SIZE_INDICATOR.text = 'Columnas: 8, Filas: 6'
+      this.UI.TABLERO_SIZE_INDICATOR.pos.x = canvas.width / 2 - this.UI.TABLERO_SIZE_INDICATOR.getPixelWidth() / 2
+
     }
     this.UI.SELECTMODE[6].onHover = () => {
       this.UI.SELECTMODE[4].isHovereable = false
       this.UI.SELECTMODE[5].isHovereable = false
       this.UI.SELECTMODE[7].isHovereable = false
+
+      this.UI.MODE_SELECTED.text = '6 en línea'
+      this.UI.MODE_SELECTED.pos.x = canvas.width / 2 - this.UI.MODE_SELECTED.getPixelWidth() / 2
+      this.UI.TABLERO_SIZE_INDICATOR.text = 'Columnas: 9, Filas: 6'
+      this.UI.TABLERO_SIZE_INDICATOR.pos.x = canvas.width / 2 - this.UI.TABLERO_SIZE_INDICATOR.getPixelWidth() / 2
+
     }
     this.UI.SELECTMODE[7].onHover = () => {
       this.UI.SELECTMODE[4].isHovereable = false
       this.UI.SELECTMODE[6].isHovereable = false
       this.UI.SELECTMODE[5].isHovereable = false
+
+
+      this.UI.MODE_SELECTED.text = '7 en línea'
+      this.UI.MODE_SELECTED.pos.x = canvas.width / 2 - this.UI.MODE_SELECTED.getPixelWidth() / 2
+      this.UI.TABLERO_SIZE_INDICATOR.text = 'Columnas: 10, Filas: 6'
+      this.UI.TABLERO_SIZE_INDICATOR.pos.x = canvas.width / 2 - this.UI.TABLERO_SIZE_INDICATOR.getPixelWidth() / 2
+
     }
     this.UI.SELECTMODE[4].onHoverLeave = () => {
       this.UI.SELECTMODE[5].isHovereable = true
       this.UI.SELECTMODE[6].isHovereable = true
       this.UI.SELECTMODE[7].isHovereable = true
+
+      
     }
     this.UI.SELECTMODE[5].onHoverLeave = () => {
       this.UI.SELECTMODE[4].isHovereable = true
       this.UI.SELECTMODE[6].isHovereable = true
       this.UI.SELECTMODE[7].isHovereable = true
+
     }
     this.UI.SELECTMODE[6].onHoverLeave = () => {
       this.UI.SELECTMODE[4].isHovereable = true
       this.UI.SELECTMODE[5].isHovereable = true
       this.UI.SELECTMODE[7].isHovereable = true
+
     }
     this.UI.SELECTMODE[7].onHoverLeave = () => {
       this.UI.SELECTMODE[4].isHovereable = true
@@ -204,6 +242,8 @@ class Juego {
 
       this.state = this.STATES.SELECT_FICHA
     }
+
+
 
 
 
@@ -250,14 +290,14 @@ class Juego {
         }
       })
 
-      
-      
+
+
     }, () => {
       this.fichaBehaviour.currentCasillero.endedFall = true
       this.state = this.STATES.DISPLAY_CURRENT_FICHAS
-      this.FICHAS_EN_JUEGO[this.currentEquipo].splice(this.fichaBehaviour.currentFichaIndex,1)
+      this.FICHAS_EN_JUEGO[this.currentEquipo].splice(this.fichaBehaviour.currentFichaIndex, 1)
       this.FICHAS_EN_JUEGO[this.currentEquipo].forEach(ficha => ficha.updateOriginalPosition())
-      
+
       let winnerArray = this.tablero.hasWinner(this.currentEquipo, this.fichaBehaviour.currentColumn, this.fichaBehaviour.currentRow, this.gameSettings.fichasToWin)
       if (winnerArray.length == this.gameSettings.fichasToWin) {
         this.FICHAS_GANADORAS = winnerArray
@@ -328,16 +368,31 @@ class Juego {
     })
 
     this.ESCENAS.DISPLAY_CURRENT_FICHAS = new Escena(this.ctx, (t => {
-      this.FICHAS_EN_JUEGO[this.currentEquipo].map( ficha => {
-        ficha.setOverFill(`rgba(255,255,255, ${(1 - t) **2 - .7})`)
+      this.FICHAS_EN_JUEGO[this.currentEquipo].map(ficha => {
+        ficha.setOverFill(`rgba(255,255,255, ${(1 - t) ** 2 - .7})`)
       })
 
       this.currentFicha?.setOverFill("#0008")
     }))
 
     this.ESCENAS.ANIMATE_HINTS = new Escena(this.ctx, (t => {
-      this.tablero.setHintColor(`rgba(255,255,255,${(1 - t) **2 - .5})`)
+      this.tablero.setHintColor(`rgba(255,255,255,${(1 - t) ** 2 - .5})`)
     }))
+
+    this.ESCENAS.WINNER = new Escena(this.ctx, (t => {
+      this.tablero.matrix.forEach(col => {
+        col.forEach(casillero => casillero?.jugador?.setOverFill(`rgba(0,0,0,${t})`))
+      })
+      this.tablero.setOpacity(1 - t)
+
+      this.FICHAS_GANADORAS.forEach(ficha => {
+        ficha.setOverFill("#0000")
+        ficha.draw()
+      })
+    }), () => {
+      this.state = this.STATES.SELECT_MODE
+      // this.switchTurn()
+    })
 
 
 
@@ -357,15 +412,15 @@ class Juego {
       this.UI.CLICPARAEMPEZAR.draw()
       this.ESCENAS.ANIMATE_CLICPARAEMPEZAR.animate(1.5)
     }
-    
+
     if (this.state == this.STATES.TRANSITION_MENU_SELECT_MODE) {
       this.UI.MENU.draw()
       this.UI.SELECTMODE[4].draw()
       this.UI.SELECTMODE[5].draw()
       this.UI.SELECTMODE[6].draw()
       this.UI.SELECTMODE[7].draw()
-      // this.ESCENAS.TRANSITION_MENU_SELECT_MODE.animate(2)
-      this.ESCENAS.TRANSITION_MENU_SELECT_MODE.animate(0)
+      this.ESCENAS.TRANSITION_MENU_SELECT_MODE.animate(2)
+      // this.ESCENAS.TRANSITION_MENU_SELECT_MODE.animate(0)
     }
 
     if (this.state == this.STATES.SELECT_MODE) {
@@ -373,6 +428,17 @@ class Juego {
       this.UI.SELECTMODE[5].draw()
       this.UI.SELECTMODE[6].draw()
       this.UI.SELECTMODE[7].draw()
+      if (Object.values(this.UI.SELECTMODE).every(select => !select.isHover)) {
+        this.UI.MODE_SELECTED.text = 'Selecciona un modo de juego'
+        this.UI.MODE_SELECTED.pos.x = this.canvas.width / 2 - this.UI.MODE_SELECTED.getPixelWidth() / 2
+        this.UI.TABLERO_SIZE_INDICATOR.text = ''
+  
+      }
+      
+      
+
+      this.UI.MODE_SELECTED.draw()
+      this.UI.TABLERO_SIZE_INDICATOR.draw()
     }
 
     if (this.state == this.STATES.SELECT_FICHA) {
@@ -388,8 +454,8 @@ class Juego {
           ficha.draw()
         })
       })
-      // this.ESCENAS.INICIA_TABLERO.animate(5)
-      this.ESCENAS.INICIA_TABLERO.animate(0)
+      this.ESCENAS.INICIA_TABLERO.animate(5)
+      // this.ESCENAS.INICIA_TABLERO.animate(0)
     }
     if (this.state == this.STATES.FICHA_DROP) {
       this.currentFicha.draw()
@@ -402,7 +468,7 @@ class Juego {
       this.ESCENAS.FICHA_DROP.animate(.5)
     }
 
-    if (this.state == this.STATES.DISPLAY_CURRENT_FICHAS) {            
+    if (this.state == this.STATES.DISPLAY_CURRENT_FICHAS) {
       this.tablero.draw()
       this.EQUIPOS_EN_JUEGO.forEach(equipo => {
         this.FICHAS_EN_JUEGO[equipo].forEach(ficha => {
@@ -411,11 +477,11 @@ class Juego {
       })
 
       this.ESCENAS.DISPLAY_CURRENT_FICHAS.animate(.5)
-      
+
     }
 
     if (this.state == this.STATES.GAME) {
-      
+
       this.tablero.draw()
       this.ESCENAS.ANIMATE_HINTS.animate(1)
       this.EQUIPOS_EN_JUEGO.forEach(equipo => {
@@ -427,22 +493,14 @@ class Juego {
         })
       })
 
-    }    
+    }
 
     if (this.state == this.STATES.WINNER) {
 
-
-      this.tablero.matrix.forEach(col => {
-        col.forEach(casillero => casillero?.jugador?.setOverFill("#000a"))
-      })
-      
       this.tablero.draw()
+      this.ESCENAS.WINNER.animate(2)
 
-      this.FICHAS_GANADORAS.forEach(ficha => {
-        ficha.jugador.setOverFill("#0000")
-        ficha.draw()
-      })
-      
+
     }
 
   }
@@ -536,7 +594,7 @@ class Juego {
         }
       }
 
-      
+
     }
 
     if (this.state == this.STATES.GAME) {
@@ -545,8 +603,8 @@ class Juego {
         this.currentFicha.updatePos(this.mouse.x - this.currentFicha.size / 2, this.mouse.y - this.currentFicha.size / 2);
 
         let isEnteringFromLeftOrRight = (
-          this.mouse.x + this.currentFicha.size/2 >= this.tablero.pos.x &&
-          this.mouse.x - this.currentFicha.size/2 <= this.tablero.pos.x + this.tablero.columns * this.tablero.cellSize &&
+          this.mouse.x + this.currentFicha.size / 2 >= this.tablero.pos.x &&
+          this.mouse.x - this.currentFicha.size / 2 <= this.tablero.pos.x + this.tablero.columns * this.tablero.cellSize &&
           this.mouse.y > this.tablero.pos.y
         )
 
@@ -627,7 +685,7 @@ class Juego {
 
     if (this.state == this.STATES.DISPLAY_CURRENT_FICHAS) {
 
-      if (this.currentFicha && this.currentFicha.isHover && this.currentFicha.isHovereable) {        
+      if (this.currentFicha && this.currentFicha.isHover && this.currentFicha.isHovereable) {
         this.currentFicha.isClicked = true
         this.canvas.classList.add('grabbing')
         this.state = this.STATES.GAME

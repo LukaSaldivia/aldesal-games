@@ -165,7 +165,7 @@ class Tablero extends Dibujable {
         let casillero = this.matrix[initialCol][initialRow]          
         if (casillero.jugador?.equipo == equipo) {
           counter++
-          casilleros.push(casillero)
+          casilleros.push(casillero.jugador)
         }else{
           counter=0
           casilleros = []
@@ -184,6 +184,17 @@ class Tablero extends Dibujable {
     this.hints.map(circle => {
       circle.fill = color
     })
+  }
+
+  setOpacity(opacity = 1){
+    for (let i = 0; i < this.columns; i++) {
+      for (let j = 0; j < this.rows; j++) {
+        console.log(this.matrix[i][j]);
+        
+        this.matrix[i][j].img.opacity = opacity
+      }
+      
+    }
   }
 
 
