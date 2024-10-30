@@ -66,6 +66,8 @@ class Juego {
       MENU: 'menu',
       TRANSITION_MENU_SELECT_MODE: 'transition menu to select ficha',
       SELECT_MODE: 'select mode',
+      TRANSITION_SELECT_MODE_SELECT_FICHA: 'transition select mode to select ficha',
+      TRANSITION_SELECT_FICHA_SELECT_MODE: 'transition select ficha to select mode',
       SELECT_FICHA: 'select ficha',
       TRANSITION_SELECT_FICHA_STARTING: 'transition select ficha to starting',
       DISPLAY_CURRENT_FICHAS: 'display current fichas',
@@ -113,7 +115,7 @@ class Juego {
     this.UI.TABLERO_SIZE_INDICATOR.pos.x = canvas.width / 2 - this.UI.TABLERO_SIZE_INDICATOR.getPixelWidth() / 2
     this.UI.TABLERO_SIZE_INDICATOR.color = "#888"
 
-    this.UI.WINNER_TEXT = new UIText('Ganó el equipo: ', 0, 100, this.ctx)
+    this.UI.WINNER_TEXT = new UIText('Ganó el equipo: ', 0, 50, this.ctx)
     this.UI.WINNER_TEXT.color = "#ddd"
     
     this.UI.TIMER = new UIText(200,0,50, this.ctx)
