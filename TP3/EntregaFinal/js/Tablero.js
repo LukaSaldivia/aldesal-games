@@ -94,21 +94,6 @@ class Tablero extends Dibujable {
 
   }
 
-  //   console() {
-
-  //     let res = ''
-  //     for (let i = 0; i < this.columnas; i++) {
-  //       for (let j = 0; j < this.filas; j++) {
-  //         res += (this.matriz[i][j] == 0 ? '-' : this.matriz[i][j]) + " "
-  //       }
-  //       console.log(res)
-  //       res = ""
-  //     }
-
-  //     console.log();
-
-  //   }
-
   getCasillero(column = 0, row = 0) {
     return this.matrix[column][row]
   }
@@ -138,16 +123,40 @@ class Tablero extends Dibujable {
 
   hasWinner(equipo = "", column = 0, row = 0, fichasToWin = 4){    
 
-    let verticales = this.countConsecutives(column, -1, equipo, 0, 1, fichasToWin);
-    if (verticales.length == fichasToWin) {
-      return verticales
+    let vertical = this.countConsecutives(column, -1, equipo, 0, 1, fichasToWin);
+    if (vertical.length == fichasToWin) {
+      return vertical
     }
     
-    let horizontales = this.countConsecutives(-1, row, equipo, 1, 0, fichasToWin); 
-    if (horizontales.length == fichasToWin) {
-      return horizontales
+    let horizontal = this.countConsecutives(-1, row, equipo, 1, 0, fichasToWin); 
+    if (horizontal.length == fichasToWin) {
+      return horizontal
     }
     // diagonales
+    let punta_izquierda = { column, row }
+
+    while (punta_izquierda.column != 0 && punta_izquierda.row != 0) {
+      punta_izquierda.column--
+      punta_izquierda.row--
+    }
+
+    let diagonal_derecha = this.countConsecutives(punta_izquierda.column, punta_izquierda.row, equipo, 1, 1, fichasToWin)
+    if (diagonal_derecha.length == fichasToWin) {
+      return diagonal_derecha
+    }
+
+    let punta_derecha = { column, row }    
+
+    while (punta_derecha.column != this.columns - 1 && punta_derecha.row != 0) {
+      punta_derecha.column++
+      punta_derecha.row--
+    }
+  
+    let diagonal_izquierda = this.countConsecutives(punta_derecha.column, punta_derecha.row, equipo, -1, 1, fichasToWin)
+    
+    if (diagonal_izquierda.length == fichasToWin) {
+      return diagonal_izquierda
+    }
 
     return []
     
@@ -157,11 +166,12 @@ class Tablero extends Dibujable {
 
     let counter = 0
     let casilleros = []
-    while (initialCol < this.columns && initialRow < this.rows) {
+    while (initialCol < this.columns && initialCol >= 0 && initialRow < this.rows && initialRow >= 0) {
       initialCol += 1*dx
-      initialRow += 1*dy                  
+      initialRow += 1*dy           
 
-      if (initialCol < this.columns && initialRow < this.rows) {
+      if (initialCol < this.columns && initialCol >= 0 && initialRow < this.rows && initialRow >= 0) {
+
         let casillero = this.matrix[initialCol][initialRow]          
         if (casillero.jugador?.equipo == equipo) {
           counter++
@@ -175,8 +185,6 @@ class Tablero extends Dibujable {
       }
 
     }
-
-    // return [counter, casilleros]
     return casilleros
   }
 
@@ -188,9 +196,7 @@ class Tablero extends Dibujable {
 
   setOpacity(opacity = 1){
     for (let i = 0; i < this.columns; i++) {
-      for (let j = 0; j < this.rows; j++) {
-        console.log(this.matrix[i][j]);
-        
+      for (let j = 0; j < this.rows; j++) {        
         this.matrix[i][j].img.opacity = opacity
       }
       

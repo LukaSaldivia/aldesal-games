@@ -68,6 +68,7 @@ class Juego {
       GAME: 'game',
       STARTING: 'starting',
       WINNER: 'winner',
+      WINNER_END: 'winner end',
       TIE: 'tie',
       FICHA_DROP: 'ficha drop',
     }
@@ -107,6 +108,11 @@ class Juego {
     this.UI.TABLERO_SIZE_INDICATOR.fontSize = 18
     this.UI.TABLERO_SIZE_INDICATOR.pos.x = canvas.width / 2 - this.UI.TABLERO_SIZE_INDICATOR.getPixelWidth() / 2
     this.UI.TABLERO_SIZE_INDICATOR.color = "#888"
+
+    this.UI.WINNER_TEXT = new UIText('Ganó el equipo: ', 0, 100, this.ctx)
+    this.UI.WINNER_TEXT.pos.x = canvas.width / 2 - this.UI.WINNER_TEXT.getPixelWidth() / 2
+    this.UI.WINNER_TEXT.color = "#ddd"
+
 
     this.UI.SELECTMODE = {
       4: new UIElement(new ResizedImage(this.IMGS.SELECTMODE[4].empty, 197, 50, undefined, undefined, this.ctx), new ResizedImage(this.IMGS.SELECTMODE[4].filled, 197, 50, undefined, undefined, this.ctx), canvas.width / 2 - 343 / 2, (canvas.height / 2 - 50 / 2) * 4, this.ctx),
@@ -390,7 +396,7 @@ class Juego {
         ficha.draw()
       })
     }), () => {
-      this.state = this.STATES.SELECT_MODE
+      this.state = this.STATES.WINNER_END
       // this.switchTurn()
     })
 
@@ -503,6 +509,10 @@ class Juego {
 
     }
 
+    if (this.state == this.STATES.WINNER_END) {
+      this.FICHAS_GANADORAS.forEach(ficha => ficha.draw())
+    }
+
   }
 
 
@@ -525,7 +535,7 @@ class Juego {
     this.FICHAS_EN_JUEGO[this.EQUIPOS_EN_JUEGO[0]] = []
     this.FICHAS_EN_JUEGO[this.EQUIPOS_EN_JUEGO[1]] = []
 
-    for (let i = columns * rows; i > 0; i--) {
+    for (let i = columns * rows / 2; i > 0; i--) {
       this.FICHAS_EN_JUEGO[this.EQUIPOS_EN_JUEGO[0]].push(new Ficha(this.EQUIPOS_EN_JUEGO[0], 100, this.canvas.height - 200 + (i * 15), this.ctx))
       this.FICHAS_EN_JUEGO[this.EQUIPOS_EN_JUEGO[1]].push(new Ficha(this.EQUIPOS_EN_JUEGO[1], this.canvas.width - 100 - Ficha.size, this.canvas.height - 200 + (i * 15), this.ctx))
     }
