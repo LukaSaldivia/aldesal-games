@@ -123,13 +123,14 @@ class Tablero extends Dibujable {
 
   hasWinner(equipo = "", column = 0, row = 0, fichasToWin = 4){    
 
-    let vertical = this.countConsecutives(column, -1, equipo, 0, 1, fichasToWin);
+    let vertical = this.countConsecutives(column, 0, equipo, 0, 1, fichasToWin);
     if (vertical.length == fichasToWin) {
       return vertical
     }
     
-    let horizontal = this.countConsecutives(-1, row, equipo, 1, 0, fichasToWin); 
-    if (horizontal.length == fichasToWin) {
+    let horizontal = this.countConsecutives(0, row, equipo, 1, 0, fichasToWin); 
+    
+    if (horizontal.length == fichasToWin) {      
       return horizontal
     }
     // diagonales
@@ -166,6 +167,14 @@ class Tablero extends Dibujable {
 
     let counter = 0
     let casilleros = []
+
+    let casillero = this.matrix[initialCol][initialRow]
+
+    if (casillero.jugador?.equipo == equipo) {
+      counter++
+      casilleros.push(casillero.jugador)
+    }
+
     while (initialCol < this.columns && initialCol >= 0 && initialRow < this.rows && initialRow >= 0) {
       initialCol += 1*dx
       initialRow += 1*dy           

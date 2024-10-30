@@ -12,6 +12,10 @@ class Juego {
 
     this.currentEquipo = ''
 
+    this.hasWinner = false
+
+    this.gameTime = 200
+
     this.gameSettings = {
       columnas: 7,
       rows: 6,
@@ -110,8 +114,11 @@ class Juego {
     this.UI.TABLERO_SIZE_INDICATOR.color = "#888"
 
     this.UI.WINNER_TEXT = new UIText('Ganó el equipo: ', 0, 100, this.ctx)
-    this.UI.WINNER_TEXT.pos.x = canvas.width / 2 - this.UI.WINNER_TEXT.getPixelWidth() / 2
     this.UI.WINNER_TEXT.color = "#ddd"
+    
+    this.UI.TIMER = new UIText(200,0,50, this.ctx)
+    this.UI.TIMER.color = "#aaa"
+
 
 
     this.UI.SELECTMODE = {
@@ -263,12 +270,12 @@ class Juego {
 
     this.ESCENAS = {}
 
-    this.ESCENAS.INICIA_TABLERO = new Escena(this.ctx, (t) => {
+    this.ESCENAS.INICIA_TABLERO = new Escena(this.ctx, (t,s) => {
       this.ctx.globalAlpha = t
       let scaleFactor = 2 - t
       let translateY = 50 * (1 - t)
       let centerX = this.canvas.width / 2
-      let centerY = this.canvas.height / 2
+      let centerY = this.canvas.height / 2      
 
       // Aplica la transformación centrada y escalada
       this.ctx.translate(centerX, centerY);   // Mueve el origen al centro del canvas
@@ -306,6 +313,7 @@ class Juego {
 
       let winnerArray = this.tablero.hasWinner(this.currentEquipo, this.fichaBehaviour.currentColumn, this.fichaBehaviour.currentRow, this.gameSettings.fichasToWin)
       if (winnerArray.length == this.gameSettings.fichasToWin) {
+        this.hasWinner = true
         this.FICHAS_GANADORAS = winnerArray
         return this.state = this.STATES.WINNER
       }
@@ -324,7 +332,7 @@ class Juego {
       this.UI.SELECTMODE[5].updatePos(this.canvas.width / 2 - 343 / 2, (canvas.height / 2 - 50 / 2) * t)
       this.UI.SELECTMODE[6].updatePos(this.canvas.width / 2 - 343 / 2, (canvas.height / 2 - 50 / 2) * t)
       this.UI.SELECTMODE[7].updatePos(this.canvas.width / 2 - 343 / 2, (canvas.height / 2 - 50 / 2) * t)
-      this.UI.MENU.setOpacity(1 - t * 4)
+      this.UI.MENU.setOpacity(1 - t * 4 - .2)
     }), () => {
       this.state = this.STATES.SELECT_MODE
       this.UI.SELECTMODE[4].updatePos(this.canvas.width / 2 - 343 / 2, (canvas.height / 2 - 50 / 2))
@@ -387,17 +395,33 @@ class Juego {
 
     this.ESCENAS.WINNER = new Escena(this.ctx, (t => {
       this.tablero.matrix.forEach(col => {
-        col.forEach(casillero => casillero?.jugador?.setOverFill(`rgba(0,0,0,${t})`))
+        col.forEach(casillero => casillero?.jugador?.setOverFill(`rgba(0,0,0,${t - .2})`))
       })
-      this.tablero.setOpacity(1 - t)
+      this.tablero.setOpacity(1 - t + .2)
 
       this.FICHAS_GANADORAS.forEach(ficha => {
         ficha.setOverFill("#0000")
         ficha.draw()
       })
     }), () => {
+      let display_equipo = this.currentEquipo.toLowerCase().split('')
+      
+      display_equipo[0] = display_equipo[0].toUpperCase()
+      this.UI.WINNER_TEXT.text += display_equipo.join('')
+      this.UI.WINNER_TEXT.pos.x = canvas.width / 2 - this.UI.WINNER_TEXT.getPixelWidth() / 2
       this.state = this.STATES.WINNER_END
       // this.switchTurn()
+    })
+
+    this.ESCENAS.TIMER_COUNT = new Escena(this.ctx, (t,s) => {
+      this.UI.TIMER.text = this.gameTime - s + 1
+      console.log(this.UI.TIMER.text);
+      
+      this.UI.TIMER.pos.x = this.canvas.width / 2 - this.UI.TIMER.getPixelWidth() / 2
+    }, ()=> {
+      if (!this.hasWinner) {
+        this.state = this.STATES.TIE
+      }
     })
 
 
@@ -425,7 +449,7 @@ class Juego {
       this.UI.SELECTMODE[5].draw()
       this.UI.SELECTMODE[6].draw()
       this.UI.SELECTMODE[7].draw()
-      this.ESCENAS.TRANSITION_MENU_SELECT_MODE.animate(2)
+      this.ESCENAS.TRANSITION_MENU_SELECT_MODE.animate(.5)
       // this.ESCENAS.TRANSITION_MENU_SELECT_MODE.animate(0)
     }
 
@@ -461,9 +485,11 @@ class Juego {
         })
       })
       this.ESCENAS.INICIA_TABLERO.animate(5)
-      // this.ESCENAS.INICIA_TABLERO.animate(0)
     }
     if (this.state == this.STATES.FICHA_DROP) {
+      this.UI.TIMER.draw()
+      this.ESCENAS.TIMER_COUNT.animate(this.gameTime)
+
       this.currentFicha.draw()
       this.EQUIPOS_EN_JUEGO.forEach(equipo => {
         this.FICHAS_EN_JUEGO[equipo].forEach(ficha => {
@@ -483,10 +509,16 @@ class Juego {
       })
 
       this.ESCENAS.DISPLAY_CURRENT_FICHAS.animate(.5)
+      this.UI.TIMER.draw()
+      this.ESCENAS.TIMER_COUNT.animate(this.gameTime)
+
 
     }
 
     if (this.state == this.STATES.GAME) {
+
+      this.UI.TIMER.draw()
+      this.ESCENAS.TIMER_COUNT.animate(this.gameTime)
 
       this.tablero.draw()
       this.ESCENAS.ANIMATE_HINTS.animate(1)
@@ -510,7 +542,10 @@ class Juego {
     }
 
     if (this.state == this.STATES.WINNER_END) {
+      this.tablero.draw()
       this.FICHAS_GANADORAS.forEach(ficha => ficha.draw())
+      this.UI.WINNER_TEXT.draw()
+      
     }
 
   }
