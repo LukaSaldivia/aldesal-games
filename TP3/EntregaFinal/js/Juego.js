@@ -14,8 +14,6 @@ class Juego {
 
     this.hasWinner = false
 
-    this.gameTime = 200
-
     this.gameSettings = {
       columnas: 7,
       rows: 6,
@@ -391,7 +389,8 @@ class Juego {
     })
 
     this.ESCENAS.ANIMATE_CLICPARAEMPEZAR = new Escena(this.ctx, (t) => {
-      this.UI.CLICPARAEMPEZAR.setOpacity(1 - t)
+      this.UI.CLICPARAEMPEZAR.setOpacity(Math.floor(t*10) % 2 == 0 ? 0 : 1)
+      // this.UI.CLICPARAEMPEZAR.setOpacity(1 - t)
     })
 
 
@@ -404,6 +403,8 @@ class Juego {
       this.UI.SELECTMODE[7].updatePos(this.canvas.width / 2 - 343 / 2, canvas.height + (canvas.height / 2 - 55 / 2) - 500 * t)
     }), () => {
       this.state = this.STATES.SELECT_MODE
+      this.EQUIPOS_EN_JUEGO = []
+
       this.UI.SELECTMODE[4].updatePos(this.canvas.width / 2 - 343 / 2, (canvas.height / 2 - 55 / 2))
       this.UI.SELECTMODE[5].updatePos(this.canvas.width / 2 - 343 / 2, (canvas.height / 2 - 55 / 2))
       this.UI.SELECTMODE[6].updatePos(this.canvas.width / 2 - 343 / 2, (canvas.height / 2 - 55 / 2))
@@ -507,7 +508,7 @@ class Juego {
     })
 
     this.ESCENAS.TIMER_COUNT = new Escena(this.ctx, (t, s) => {
-      this.UI.TIMER.text = this.gameTime - s + 1
+      this.UI.TIMER.text = this.gameSettings.duration - s + 1
       this.UI.TIMER.pos.x = this.canvas.width / 2 - this.UI.TIMER.getPixelWidth() / 2
     }, () => {
       if (!this.hasWinner) {
@@ -550,7 +551,7 @@ class Juego {
       this.UI.GAME_TITLE.draw()
       this.UI.CLICPARAEMPEZAR.draw()
 
-      this.ESCENAS.ANIMATE_CLICPARAEMPEZAR.animate(1.5)
+      this.ESCENAS.ANIMATE_CLICPARAEMPEZAR.animate(4)
 
     }
 
@@ -620,7 +621,7 @@ class Juego {
 
       if (this.EQUIPOS_EN_JUEGO.length == 2) {
 
-        this.newGame(this.gameSettings.columnas, this.gameSettings.rows, ...this.EQUIPOS_EN_JUEGO)
+        this.newGame(this.gameSettings.columnas, this.gameSettings.rows)
         this.state = this.STATES.TRANSITION_MUCHO_TIEMPO_IN
       }
     }
@@ -659,7 +660,7 @@ class Juego {
     if (this.state == this.STATES.FICHA_DROP) {
       this.UI.SPACE_BACKGROUND.draw()
       this.UI.TIMER.draw()
-      this.ESCENAS.TIMER_COUNT.animate(this.gameTime)
+      this.ESCENAS.TIMER_COUNT.animate(this.gameSettings.duration)
 
       this.currentFicha.draw()
       this.EQUIPOS_EN_JUEGO.forEach(equipo => {
@@ -682,7 +683,7 @@ class Juego {
 
       this.ESCENAS.DISPLAY_CURRENT_FICHAS.animate(.5)
       this.UI.TIMER.draw()
-      this.ESCENAS.TIMER_COUNT.animate(this.gameTime)
+      this.ESCENAS.TIMER_COUNT.animate(this.gameSettings.duration)
 
 
     }
@@ -690,7 +691,7 @@ class Juego {
     if (this.state == this.STATES.GAME) {
       this.UI.SPACE_BACKGROUND.draw()
       this.UI.TIMER.draw()
-      this.ESCENAS.TIMER_COUNT.animate(this.gameTime)
+      this.ESCENAS.TIMER_COUNT.animate(this.gameSettings.duration)
 
       this.tablero.draw()
       this.ESCENAS.ANIMATE_HINTS.animate(1)
@@ -733,12 +734,7 @@ class Juego {
 
   }
 
-  newGame(columns = 7, rows = 6, ...teams) {
-
-
-    this.EQUIPOS_EN_JUEGO = []
-    this.EQUIPOS_EN_JUEGO.push(teams[0])
-    this.EQUIPOS_EN_JUEGO.push(teams[1])
+  newGame(columns = 7, rows = 6) {
 
     this.FICHAS_EN_JUEGO[this.EQUIPOS_EN_JUEGO[0]] = []
     this.FICHAS_EN_JUEGO[this.EQUIPOS_EN_JUEGO[1]] = []
@@ -801,7 +797,7 @@ class Juego {
 
     if (this.state == this.STATES.DISPLAY_CURRENT_FICHAS) {
 
-      for (let i = this.FICHAS_EN_JUEGO[this.currentEquipo].length - 1; i > 0; i--) {
+      for (let i = this.FICHAS_EN_JUEGO[this.currentEquipo].length - 1; i >= 0; i--) {        
         let ficha = this.FICHAS_EN_JUEGO[this.currentEquipo][i]
         const isMouseOver = ficha.hasMouseOver(this.mouse.x, this.mouse.y)
         ficha.isHover = isMouseOver
@@ -899,6 +895,7 @@ class Juego {
 
   mouseDown(e) {
 
+
     if (this.state == this.STATES.MENU) {
       this.UI.CLICPARAEMPEZAR.mouseClick()
     }
@@ -925,6 +922,24 @@ class Juego {
         this.canvas.classList.add('grabbing')
         this.state = this.STATES.GAME
       }
+    }
+
+        // Skips
+
+    if (this.state == this.STATES.STARTING) {
+      this.ESCENAS.INICIA_TABLERO.end()
+    }
+
+    if (this.state == this.STATES.TRANSITION_MUCHO_TIEMPO_IN) {
+      this.ESCENAS.TRANSITION_MUCHO_TIEMPO_IN.end()
+    }
+
+    if (this.state == this.STATES.TRANSITION_MUCHO_TIEMPO_OUT) {
+      this.ESCENAS.TRANSITION_MUCHO_TIEMPO_OUT.end()
+    }
+
+    if (this.state == this.STATES.TRANSITION_MENU_SELECT_MODE) {
+      // this.ESCENAS.TRANSITION_MENU_SELECT_MODE.end()
     }
 
   }

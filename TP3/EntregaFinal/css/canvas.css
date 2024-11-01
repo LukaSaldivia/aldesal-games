@@ -1,4 +1,7 @@
 #c{
+
+  cursor: url('../img/juego/arrow-back.png');
+
   &.hover{
     cursor: grab;
   }
