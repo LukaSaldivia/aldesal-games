@@ -1,0 +1,17 @@
+#c{
+  &.hover{
+    cursor: grab;
+  }
+
+  &.grabbing{
+    cursor: grabbing;
+  }
+
+  &.pointer{
+    cursor: pointer;
+  }
+
+  &.illegal{
+    cursor: no-drop;
+  }
+}

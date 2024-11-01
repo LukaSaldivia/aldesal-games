@@ -1,0 +1,16 @@
+.avatar{
+  width: 30px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  box-sizing: border-box;
+
+  object-fit: cover;
+
+  &.primary{
+    border: 3px solid var(--clr-primary);
+  }
+
+  &.secondary{
+    border: 1.5px solid var(--clr-secondary-dark-3);
+  }
+}

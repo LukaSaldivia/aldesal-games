@@ -1,0 +1,49 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+
+:root {
+
+
+  --clr-primary-light-3: #FD8255;
+  --clr-primary-light-2: #EE6446;
+  --clr-primary-light-1: #DF4637;
+  --clr-primary: #D02828;
+  --clr-primary-dark-1: #B20A19;
+  --clr-primary-dark-2: #94000A;
+  --clr-primary-dark-3: #760000;
+
+  --clr-secondary-light-3: #FFFFA8;
+  --clr-secondary-light-2: #FFFF99;
+  --clr-secondary-light-1: #F1E98A;
+  --clr-secondary: #E2CB7B;
+  --clr-secondary-dark-1: #C4AD6C;
+  --clr-secondary-dark-2: #A68F5D;
+  --clr-secondary-dark-3: #88714E;
+
+  --clr-accent: #008492;
+
+
+
+  --clr-black: #012622;
+  --clr-white: #FBFCF8;
+
+  --clr-grey: #b1b1b1;
+
+  --clr-trend: #FF8204;
+
+  --clr-green: #0a8834;
+
+  --fs-min: clamp(0.625rem, 0.6036rem + 0.1071vw, 0.7rem);
+  --fs-body: clamp(0.75rem, 0.7143rem + 0.1786vw, 0.875rem);
+  --fs-h5: clamp(0.9375rem, 0.8929rem + 0.2232vw, 1.09375rem);
+  --fs-h4: clamp(1.0625rem, 0.9754rem + 0.4357vw, 1.3675rem);
+  --fs-h3: clamp(1.1875rem, 1.0384rem + 0.7455vw, 1.709375rem);
+  --fs-h2: clamp(1.3125rem, 1.077rem + 1.1777vw, 2.136875rem);
+  --fs-h1: clamp(1.5625rem, 1.2457rem + 1.5839vw, 2.67125rem);
+
+  --ff: 'Montserrat', system-ui;
+
+  --fw-bold: 700;
+  --fw-black: 900;
+
+}
