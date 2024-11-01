@@ -773,11 +773,11 @@ class Juego {
 
 
 
-  mouseMove({ layerX = 0, layerY = 0 }) {
-    let { x: canvasXOffset, y: canvasYOffset } = this.canvas.getBoundingClientRect();
+  mouseMove({ clientX = 0, clientY = 0 }) {
+    let { x: canvasXOffset, y: canvasYOffset } = this.canvas.getBoundingClientRect();    
 
-    this.mouse.x = Math.floor(layerX - canvasXOffset);
-    this.mouse.y = Math.floor(layerY - canvasYOffset);
+    this.mouse.x = Math.floor(clientX - canvasXOffset);
+    this.mouse.y = Math.floor(clientY - canvasYOffset);
 
     if (this.state == this.STATES.MENU) {
       this.UI.CLICPARAEMPEZAR.mouseHover(this.mouse.x, this.mouse.y)

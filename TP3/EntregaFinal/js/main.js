@@ -1,6 +1,20 @@
 const c = document.querySelector('#c')
 const ctx = c.getContext('2d')
 
+let game_started = false
+
+const btn = document.querySelector('#jugar')
+const portrait = document.querySelector('#portrait')
+const game_title = document.querySelector('.game-title')
+
+btn.addEventListener('click', ()=> {
+  game_started = true
+  portrait.setAttribute('style','display:none')
+  game_title.setAttribute('style','display:none')
+})
+
+
+
 const sizes = {
   width: 1300,
   height: 500
@@ -21,7 +35,9 @@ let juego = new Juego(ctx, c)
 
 
 function loop() {
-  juego.update()
+  if (game_started) {
+    juego.update()
+  }
   requestAnimationFrame(loop)
 }
 
