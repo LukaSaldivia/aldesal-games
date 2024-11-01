@@ -69,6 +69,8 @@ class Juego {
       TRANSITION_SELECT_MODE_SELECT_FICHA: 'transition select mode to select ficha',
       TRANSITION_SELECT_FICHA_SELECT_MODE: 'transition select ficha to select mode',
       SELECT_FICHA: 'select ficha',
+      TRANSITION_MUCHO_TIEMPO_IN : 'transition hace mucho tiempo in',
+      TRANSITION_MUCHO_TIEMPO_OUT : 'transition hace mucho tiempo out',
       TRANSITION_SELECT_FICHA_STARTING: 'transition select ficha to starting',
       DISPLAY_CURRENT_FICHAS: 'display current fichas',
       GAME: 'game',
@@ -83,7 +85,6 @@ class Juego {
 
     this.UI = {}
 
-    this.UI.MENU = new UIElement(new ResizedImage(this.IMGS.MENU, 1300, 500, 0, 0, ctx), null, 0, 0, this.ctx)
 
     this.UI.HACEMUCHOTIEMPO = new UIElement(new ResizedImage(this.IMGS.HACEMUCHOTIEMPO, 1300, 500, 0, 0, this.ctx), null, 0, 0, this.ctx)
 
@@ -113,13 +114,17 @@ class Juego {
     this.UI.TABLERO_SIZE_INDICATOR = new UIText('', 0, this.canvas.height - 90, this.ctx)
     this.UI.TABLERO_SIZE_INDICATOR.fontSize = 18
     this.UI.TABLERO_SIZE_INDICATOR.pos.x = canvas.width / 2 - this.UI.TABLERO_SIZE_INDICATOR.getPixelWidth() / 2
-    this.UI.TABLERO_SIZE_INDICATOR.color = "#888"
+    this.UI.TABLERO_SIZE_INDICATOR.color = "#bbb"
 
     this.UI.WINNER_TEXT = new UIText('Ganó el equipo: ', 0, 50, this.ctx)
     this.UI.WINNER_TEXT.color = "#ddd"
     
     this.UI.TIMER = new UIText(200,0,50, this.ctx)
     this.UI.TIMER.color = "#aaa"
+
+    this.UI.GAME_TITLE = new UIElement(getResizedImage('./img/juego/title_1500x800.png',1500/2.5, 800/2.5, 0, 0, ctx), null, canvas.width / 2 - 1500 /2.5  / 2, 50, ctx)
+
+    this.UI.SPACE_BACKGROUND = new UIElement(getResizedImage('./img/juego/space_1300x1500.jpg', 1300, 1500, 0,0, ctx), null, 0, 0 , ctx)
 
 
 
@@ -234,29 +239,32 @@ class Juego {
       this.gameSettings.columnas = 7
       this.gameSettings.duration = this.gameSettings.columnas * this.gameSettings.rows * 10
 
-      this.state = this.STATES.SELECT_FICHA
+      this.state = this.STATES.TRANSITION_SELECT_MODE_SELECT_FICHA
     }
     this.UI.SELECTMODE[5].onClick = () => {
       this.gameSettings.fichasToWin = 5
       this.gameSettings.columnas = 8
       this.gameSettings.duration = this.gameSettings.columnas * this.gameSettings.rows * 10
 
-      this.state = this.STATES.SELECT_FICHA
+      this.state = this.STATES.TRANSITION_SELECT_MODE_SELECT_FICHA
     }
     this.UI.SELECTMODE[6].onClick = () => {
       this.gameSettings.fichasToWin = 6
       this.gameSettings.columnas = 9
       this.gameSettings.duration = this.gameSettings.columnas * this.gameSettings.rows * 10
 
-      this.state = this.STATES.SELECT_FICHA
+      this.state = this.STATES.TRANSITION_SELECT_MODE_SELECT_FICHA
     }
     this.UI.SELECTMODE[7].onClick = () => {
       this.gameSettings.fichasToWin = 7
       this.gameSettings.columnas = 10
       this.gameSettings.duration = this.gameSettings.columnas * this.gameSettings.rows * 10
 
-      this.state = this.STATES.SELECT_FICHA
+      this.state = this.STATES.TRANSITION_SELECT_MODE_SELECT_FICHA
     }
+
+    this.UI.GO_BACK = new UIElement(getResizedImage('./img/juego/arrow-back.png', 20, 20, 50, canvas.height - 50, ctx), null, 50, canvas.height - 50, ctx)
+    
 
 
 
@@ -330,17 +338,18 @@ class Juego {
 
 
     this.ESCENAS.TRANSITION_MENU_SELECT_MODE = new Escena(this.ctx, (t => {
-      this.UI.SELECTMODE[4].updatePos(this.canvas.width / 2 - 343 / 2, (canvas.height / 2 - 50 / 2) * t)
-      this.UI.SELECTMODE[5].updatePos(this.canvas.width / 2 - 343 / 2, (canvas.height / 2 - 50 / 2) * t)
-      this.UI.SELECTMODE[6].updatePos(this.canvas.width / 2 - 343 / 2, (canvas.height / 2 - 50 / 2) * t)
-      this.UI.SELECTMODE[7].updatePos(this.canvas.width / 2 - 343 / 2, (canvas.height / 2 - 50 / 2) * t)
-      this.UI.MENU.setOpacity(1 - t * 4 - .2)
+      this.UI.GAME_TITLE.updatePos(canvas.width/2 - 1500/2.5/2, 60 - 500 * t - 500 * 0)
+      this.UI.SPACE_BACKGROUND.updatePos(0, -500 * t)
+      this.UI.SELECTMODE[4].updatePos(this.canvas.width / 2 - 343 / 2, canvas.height + (canvas.height / 2 - 55 / 2) - 500 * t)
+      this.UI.SELECTMODE[5].updatePos(this.canvas.width / 2 - 343 / 2, canvas.height + (canvas.height / 2 - 55 / 2) - 500 * t)
+      this.UI.SELECTMODE[6].updatePos(this.canvas.width / 2 - 343 / 2, canvas.height + (canvas.height / 2 - 55 / 2) - 500 * t)
+      this.UI.SELECTMODE[7].updatePos(this.canvas.width / 2 - 343 / 2, canvas.height + (canvas.height / 2 - 55 / 2) - 500 * t)
     }), () => {
       this.state = this.STATES.SELECT_MODE
-      this.UI.SELECTMODE[4].updatePos(this.canvas.width / 2 - 343 / 2, (canvas.height / 2 - 50 / 2))
-      this.UI.SELECTMODE[5].updatePos(this.canvas.width / 2 - 343 / 2, (canvas.height / 2 - 50 / 2))
-      this.UI.SELECTMODE[6].updatePos(this.canvas.width / 2 - 343 / 2, (canvas.height / 2 - 50 / 2))
-      this.UI.SELECTMODE[7].updatePos(this.canvas.width / 2 - 343 / 2, (canvas.height / 2 - 50 / 2))
+      this.UI.SELECTMODE[4].updatePos(this.canvas.width / 2 - 343 / 2, (canvas.height / 2 - 55 / 2))
+      this.UI.SELECTMODE[5].updatePos(this.canvas.width / 2 - 343 / 2, (canvas.height / 2 - 55 / 2))
+      this.UI.SELECTMODE[6].updatePos(this.canvas.width / 2 - 343 / 2, (canvas.height / 2 - 55 / 2))
+      this.UI.SELECTMODE[7].updatePos(this.canvas.width / 2 - 343 / 2, (canvas.height / 2 - 55 / 2))
       this.UI.SELECTMODE[4].clickableArea = {
         x: {
           start: this.UI.SELECTMODE[4].pos.x,
@@ -381,6 +390,16 @@ class Juego {
           end: this.UI.SELECTMODE[7].pos.y + this.UI.SELECTMODE[7].height
         }
       }
+    })
+
+    this.ESCENAS.TRANSITION_SELECT_MODE_SELECT_FICHA = new Escena(this.ctx, (t => {
+      this.UI.SPACE_BACKGROUND.updatePos(0, -500 * t - 500)      
+      this.UI.SELECTMODE[4].updatePos(this.canvas.width / 2 - 343 / 2, (canvas.height / 2 - 55 / 2) - 500 * t)
+      this.UI.SELECTMODE[5].updatePos(this.canvas.width / 2 - 343 / 2, (canvas.height / 2 - 55 / 2) - 500 * t)
+      this.UI.SELECTMODE[6].updatePos(this.canvas.width / 2 - 343 / 2, (canvas.height / 2 - 55 / 2) - 500 * t)
+      this.UI.SELECTMODE[7].updatePos(this.canvas.width / 2 - 343 / 2, (canvas.height / 2 - 55 / 2) - 500 * t)
+    }) ,() => {
+      this.state = this.STATES.SELECT_FICHA
     })
 
     this.ESCENAS.DISPLAY_CURRENT_FICHAS = new Escena(this.ctx, (t => {
@@ -440,22 +459,27 @@ class Juego {
 
 
     if (this.state == this.STATES.MENU) {
-      this.UI.MENU.draw()
+      this.UI.SPACE_BACKGROUND.draw()
+      this.UI.GAME_TITLE.draw()
       this.UI.CLICPARAEMPEZAR.draw()
+      
       this.ESCENAS.ANIMATE_CLICPARAEMPEZAR.animate(1.5)
+      
     }
-
+    
     if (this.state == this.STATES.TRANSITION_MENU_SELECT_MODE) {
-      this.UI.MENU.draw()
+      this.UI.SPACE_BACKGROUND.draw()
+      this.UI.GAME_TITLE.draw()
       this.UI.SELECTMODE[4].draw()
       this.UI.SELECTMODE[5].draw()
       this.UI.SELECTMODE[6].draw()
       this.UI.SELECTMODE[7].draw()
-      this.ESCENAS.TRANSITION_MENU_SELECT_MODE.animate(.5)
+      this.ESCENAS.TRANSITION_MENU_SELECT_MODE.animate(1)
       // this.ESCENAS.TRANSITION_MENU_SELECT_MODE.animate(0)
     }
-
+    
     if (this.state == this.STATES.SELECT_MODE) {
+      this.UI.SPACE_BACKGROUND.draw()
       this.UI.SELECTMODE[4].draw()
       this.UI.SELECTMODE[5].draw()
       this.UI.SELECTMODE[6].draw()
@@ -473,9 +497,19 @@ class Juego {
       this.UI.TABLERO_SIZE_INDICATOR.draw()
     }
 
+    if (this.state == this.STATES.TRANSITION_SELECT_MODE_SELECT_FICHA) {
+      this.UI.SPACE_BACKGROUND.draw()
+      this.UI.SELECTMODE[4].draw()
+      this.UI.SELECTMODE[5].draw()
+      this.UI.SELECTMODE[6].draw()
+      this.UI.SELECTMODE[7].draw()
+
+      this.ESCENAS.TRANSITION_SELECT_MODE_SELECT_FICHA.animate(1)
+    }
+
     if (this.state == this.STATES.SELECT_FICHA) {
-      this.newGame(this.gameSettings.columnas, this.gameSettings.rows, 'REBELDE', 'IMPERIO')
-      this.state = this.STATES.STARTING
+      // this.newGame(this.gameSettings.columnas, this.gameSettings.rows, 'JEDI', 'SEPARATISTA')
+      // this.state = this.STATES.STARTING
     }
 
 
