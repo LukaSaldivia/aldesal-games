@@ -76,4 +76,17 @@ class UIElement extends Dibujable {
       this.img_hover.draw()
   }
 
+  resetClickableArea(){
+    this.clickableArea = {
+      x: {
+        start: this.pos.x,
+        end: this.pos.x + this.width
+      },
+      y: {
+        start: this.pos.y,
+        end: this.pos.y + this.height
+      }
+    }
+  }
+
 }
