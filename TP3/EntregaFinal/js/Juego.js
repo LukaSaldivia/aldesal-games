@@ -340,6 +340,19 @@ class Juego {
       this.state = this.STATES.MENU
       this.UI.MENU_BACKGROUND.updatePos(0,0)
       this.UI.GAME_TITLE.updatePos(canvas.width / 2 - 1500 / 2.5 / 2,0)
+      this.fichaBehaviour = {
+        currentTurn: 0,
+        counter: 0,
+        currentColumn: undefined,
+        currentFichaIndex: -1,
+        currentRow: -1,
+        currentCasillero: undefined,
+        targetY: 0
+      }
+      this.ESCENAS.TIMER_COUNT.startTime = -1
+      this.ESCENAS.INICIA_TABLERO.startTime = -1
+      this.ESCENAS.TRANSITION_MUCHO_TIEMPO_IN.startTime = -1
+      this.ESCENAS.TRANSITION_MUCHO_TIEMPO_OUT.startTime = -1
     }
 
     this.UI.BTN_JUGAR_DE_NUEVO.onClick = () => {
@@ -826,7 +839,7 @@ class Juego {
       this.FICHAS_EN_JUEGO[this.EQUIPOS_EN_JUEGO[0]].push(new Ficha(this.EQUIPOS_EN_JUEGO[0], 100, this.canvas.height - 200 + (i * 15), this.ctx))
       this.FICHAS_EN_JUEGO[this.EQUIPOS_EN_JUEGO[1]].push(new Ficha(this.EQUIPOS_EN_JUEGO[1], this.canvas.width - 100 - this.gameSettings.fichaSize, this.canvas.height - 200 + (i * 15), this.ctx))
     }
-    
+
     this.FICHAS_EN_JUEGO[this.EQUIPOS_EN_JUEGO[0]].forEach(ficha => {
       ficha.setSize(this.gameSettings.fichaSize)
     })
