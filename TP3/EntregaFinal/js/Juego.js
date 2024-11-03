@@ -12,7 +12,7 @@ class Juego {
 
     this.currentEquipo = ''
 
-    this.hasWinner = false
+    this.stopCounting = false
 
     this.gameSettings = {
       columnas: 7,
@@ -132,25 +132,25 @@ class Juego {
     this.UI.FICHAS_SELECCIONABLES.REBELDE.OPTION.onClick = () => {
       this.EQUIPOS_EN_JUEGO.push('REBELDE')
       this.UI.FICHAS_SELECCIONABLES.REBELDE.OPTION.isHovereable = false
-      this.UI.FICHAS_SELECCIONABLES.JEDI.OPTION.updatePos(-1000, -1000)
+      this.UI.FICHAS_SELECCIONABLES.JEDI.OPTION.updatePos(-9999, -9999)
     }
 
     this.UI.FICHAS_SELECCIONABLES.JEDI.OPTION.onClick = () => {
       this.EQUIPOS_EN_JUEGO.push('JEDI')
       this.UI.FICHAS_SELECCIONABLES.JEDI.OPTION.isHovereable = false
-      this.UI.FICHAS_SELECCIONABLES.REBELDE.OPTION.updatePos(-1000, -1000)
+      this.UI.FICHAS_SELECCIONABLES.REBELDE.OPTION.updatePos(-9999, -9999)
     }
 
     this.UI.FICHAS_SELECCIONABLES.IMPERIAL.OPTION.onClick = () => {
       this.EQUIPOS_EN_JUEGO.push('IMPERIAL')
       this.UI.FICHAS_SELECCIONABLES.IMPERIAL.OPTION.isHovereable = false
-      this.UI.FICHAS_SELECCIONABLES.SEPARATISTA.OPTION.updatePos(-1000, -1000)
+      this.UI.FICHAS_SELECCIONABLES.SEPARATISTA.OPTION.updatePos(-9999, -9999)
     }
 
     this.UI.FICHAS_SELECCIONABLES.SEPARATISTA.OPTION.onClick = () => {
       this.EQUIPOS_EN_JUEGO.push('SEPARATISTA')
       this.UI.FICHAS_SELECCIONABLES.SEPARATISTA.OPTION.isHovereable = false
-      this.UI.FICHAS_SELECCIONABLES.IMPERIAL.OPTION.updatePos(-1000, -1000)
+      this.UI.FICHAS_SELECCIONABLES.IMPERIAL.OPTION.updatePos(-9999, -9999)
     }
 
 
@@ -177,7 +177,7 @@ class Juego {
     this.UI.TIMER = new UIText('', 0, 50, this.ctx)
     this.UI.TIMER.color = "#aaa"
 
-    this.UI.GAME_TITLE = new UIElement(getResizedImage('./img/juego/title_1500x800.png', 1500 / 2.5, 800 / 2.5, 0, 0, ctx), null, canvas.width / 2 - 1500 / 2.5 / 2, 50, ctx)
+    this.UI.GAME_TITLE = new UIElement(getResizedImage('./img/juego/title_1500x800.png', 1500 / 2.5, 800 / 2.5, 0, 0, ctx), null, canvas.width / 2 - 1500 / 2.5 / 2, 0, ctx)
 
     this.UI.MENU_BACKGROUND = new UIElement(getResizedImage('./img/juego/menu_background.jpg', 1300, 1500, 0, 0, ctx), null, 0, 0, ctx)
     this.UI.GAME_BACKGROUND = new UIElement(getResizedImage('./img/juego/game_background.jpg', 1300, 500, 0, 0, ctx), null, 0, 0, ctx)
@@ -332,9 +332,30 @@ class Juego {
     this.UI.GO_BACK = new UIElement(getResizedImage('./img/juego/arrow-back.png', 20, 20, 50, canvas.height - 50, ctx), null, 50, canvas.height - 50, ctx)
 
 
-    this.UI.BTN_VOLVER_AL_MENU = new UIElement(getResizedImage('./img/juego/btn_VOLVER_AL_MENU.png',400,62, canvas.width / 2 - 400 / 2,600,ctx), getResizedImage('./img/juego/btn_VOLVER_AL_MENU_hover.png',400,62, canvas.width / 2 - 400 / 2,600,ctx), canvas.width / 2 - 400 / 2, 600, ctx )
-    this.UI.BTN_JUGAR_DE_NUEVO = new UIElement(getResizedImage('./img/juego/btn_JUGAR_DE_NUEVO.png',400,62, canvas.width / 2 - 400 / 2,600,ctx), getResizedImage('./img/juego/btn_JUGAR_DE_NUEVO_hover.png',400,62, canvas.width / 2 - 400 / 2,600,ctx), canvas.width / 2 - 400 / 2, 600, ctx )
+    this.UI.BTN_VOLVER_AL_MENU = new UIElement(getResizedImage('./img/juego/btn_VOLVER_AL_MENU.png',400,62, undefined, undefined, ctx), getResizedImage('./img/juego/btn_VOLVER_AL_MENU_hover.png',400,62, undefined , undefined,ctx) , canvas.width / 2 - 400 / 2, canvas.height-200, ctx )
+    this.UI.BTN_JUGAR_DE_NUEVO = new UIElement(getResizedImage('./img/juego/btn_JUGAR_DE_NUEVO.png',400,62, undefined, undefined,ctx), getResizedImage('./img/juego/btn_JUGAR_DE_NUEVO_hover.png',400,62, undefined , undefined,ctx), canvas.width / 2 - 400 / 2, canvas.height-300, ctx )
 
+    
+    this.UI.BTN_VOLVER_AL_MENU.onClick = () => {
+      this.state = this.STATES.MENU
+      this.UI.MENU_BACKGROUND.updatePos(0,0)
+      this.UI.GAME_TITLE.updatePos(canvas.width / 2 - 1500 / 2.5 / 2,0)
+    }
+
+    this.UI.BTN_JUGAR_DE_NUEVO.onClick = () => {
+      this.state = this.STATES.STARTING
+      this.fichaBehaviour = {
+        currentTurn: 0,
+        counter: 0,
+        currentColumn: undefined,
+        currentFichaIndex: -1,
+        currentRow: -1,
+        currentCasillero: undefined,
+        targetY: 0
+      }
+      this.ESCENAS.TIMER_COUNT.startTime = -1
+      this.newGame(this.gameSettings.columnas, this.gameSettings.rows)
+    }
 
 
 
@@ -397,9 +418,16 @@ class Juego {
 
       let winnerArray = this.tablero.hasWinner(this.currentEquipo, this.fichaBehaviour.currentColumn, this.fichaBehaviour.currentRow, this.gameSettings.fichasToWin)
       if (winnerArray.length == this.gameSettings.fichasToWin) {
-        this.hasWinner = true
+        this.stopCounting = true
         this.FICHAS_GANADORAS = winnerArray
         return this.state = this.STATES.WINNER
+      }
+      
+      if (!this.FICHAS_EN_JUEGO[this.EQUIPOS_EN_JUEGO[0]].length && !this.FICHAS_EN_JUEGO[this.EQUIPOS_EN_JUEGO[1]].length) {
+        this.stopCounting = true
+        this.UI.WINNER_TEXT.text = 'Empate: no hay más fichas'
+        this.UI.WINNER_TEXT.pos.x = canvas.width / 2 - this.UI.WINNER_TEXT.getPixelWidth() / 2
+        return this.state = this.STATES.TIE
       }
       this.switchTurn()
       this.currentFicha = null
@@ -412,7 +440,7 @@ class Juego {
 
 
     this.ESCENAS.TRANSITION_MENU_SELECT_MODE = new Escena(this.ctx, (t => {
-      this.UI.GAME_TITLE.updatePos(canvas.width / 2 - 1500 / 2.5 / 2, 60 - 500 * t - 500 * 0)
+      this.UI.GAME_TITLE.updatePos(canvas.width / 2 - 1500 / 2.5 / 2, 0 - 500 * t - 500 * 0)
       this.UI.MENU_BACKGROUND.updatePos(0, -500 * t)
       this.UI.SELECTMODE[4].updatePos(this.canvas.width / 2 - 343 / 2, canvas.height + (canvas.height / 2 - 55 / 2) - 500 * t)
       this.UI.SELECTMODE[5].updatePos(this.canvas.width / 2 - 343 / 2, canvas.height + (canvas.height / 2 - 55 / 2) - 500 * t)
@@ -521,15 +549,17 @@ class Juego {
       this.UI.WINNER_TEXT.text = 'Ganó el equipo '+ display_equipo.join('')
       this.UI.WINNER_TEXT.pos.x = canvas.width / 2 - this.UI.WINNER_TEXT.getPixelWidth() / 2
       this.state = this.STATES.WINNER_END
-      // this.switchTurn()
     })
 
     this.ESCENAS.TIMER_COUNT = new Escena(this.ctx, (t, s) => {
       this.UI.TIMER.text = this.gameSettings.duration - s + 1
       this.UI.TIMER.pos.x = this.canvas.width / 2 - this.UI.TIMER.getPixelWidth() / 2
     }, () => {
-      if (!this.hasWinner) {
+      if (!this.stopCounting) {
         this.state = this.STATES.TIE
+        this.stopCounting = true
+        this.UI.WINNER_TEXT.text = 'Empate: no hay más tiempo'
+        this.UI.WINNER_TEXT.pos.x = canvas.width / 2 - this.UI.WINNER_TEXT.getPixelWidth() / 2
       }
     })
 
@@ -548,6 +578,33 @@ class Juego {
       this.UI.MENU_BACKGROUND.setOpacity(0)
       this.ctx.globalAlpha = 0
       this.state = this.STATES.STARTING
+
+      // this.UI.FICHAS_SELECCIONABLES
+
+      // this.UI.FICHAS_SELECCIONABLES = {
+      //   REBELDE: {
+      //     OPTION: new UIElement(getResizedImage('./img/juego/ficha_REBELDE.png', 70, 70, - 1000, - 1000, ctx), getResizedImage('./img/juego/ficha_REBELDE_hover.png', 70, 70, - 1000, - 1000, ctx), - 1000, - 1000, ctx),
+      //     DISABLED: new UIElement(getResizedImage('./img/juego/ficha_REBELDE_disabled.png', 70, 70, - 1000, - 1000, ctx), null, - 1000, - 1000, ctx)
+      //   },
+      //   IMPERIAL: {
+      //     OPTION: new UIElement(getResizedImage('./img/juego/ficha_IMPERIAL.png', 70, 70, - 1000, - 1000, ctx), getResizedImage('./img/juego/ficha_IMPERIAL_hover.png', 70, 70, - 1000, - 1000, ctx), - 1000, - 1000, ctx),
+      //     DISABLED: new UIElement(getResizedImage('./img/juego/ficha_IMPERIAL_disabled.png', 70, 70, - 1000, - 1000, ctx), null, - 1000, - 1000, ctx)
+      //   },
+      //   SEPARATISTA: {
+      //     OPTION: new UIElement(getResizedImage('./img/juego/ficha_SEPARATISTA.png', 70, 70, - 1000, - 1000, ctx), getResizedImage('./img/juego/ficha_SEPARATISTA_hover.png', 70, 70, - 1000, - 1000, ctx), - 1000, - 1000, ctx),
+      //     DISABLED: new UIElement(getResizedImage('./img/juego/ficha_SEPARATISTA_disabled.png', 70, 70, - 1000, - 1000, ctx), null, - 1000, - 1000, ctx)
+      //   },
+      //   JEDI: {
+      //     OPTION: new UIElement(getResizedImage('./img/juego/ficha_JEDI.png', 70, 70, - 1000, - 1000, ctx), getResizedImage('./img/juego/ficha_JEDI_hover.png', 70, 70, - 1000, - 1000, ctx), - 1000, - 1000, ctx),
+      //     DISABLED: new UIElement(getResizedImage('./img/juego/ficha_JEDI_disabled.png', 70, 70, - 1000, - 1000, ctx), null, - 1000, - 1000, ctx)
+      //   },
+      // }
+
+      this.UI.FICHAS_SELECCIONABLES.REBELDE.OPTION.isHovereable = true
+      this.UI.FICHAS_SELECCIONABLES.IMPERIAL.OPTION.isHovereable = true
+      this.UI.FICHAS_SELECCIONABLES.SEPARATISTA.OPTION.isHovereable = true
+      this.UI.FICHAS_SELECCIONABLES.JEDI.OPTION.isHovereable = true
+
     })
 
 
@@ -567,7 +624,7 @@ class Juego {
       this.UI.MENU_BACKGROUND.draw()
       this.UI.GAME_TITLE.draw()
       this.UI.CLICPARAEMPEZAR.draw()
-
+      
       this.ESCENAS.ANIMATE_CLICPARAEMPEZAR.animate(1)
 
     }
@@ -734,7 +791,17 @@ class Juego {
       this.UI.GAME_BACKGROUND.draw()
       this.tablero.draw()
       this.FICHAS_GANADORAS.forEach(ficha => ficha.draw())
-      this.UI.WINNER_TEXT.draw()
+      this.UI.WINNER_TEXT.draw()      
+      this.UI.BTN_VOLVER_AL_MENU.draw()
+      this.UI.BTN_JUGAR_DE_NUEVO.draw()
+    }
+
+    if (this.state == this.STATES.TIE) {
+      this.UI.GAME_BACKGROUND.draw()
+      this.tablero.draw()
+      this.UI.WINNER_TEXT.draw()      
+      this.UI.BTN_VOLVER_AL_MENU.draw()
+      this.UI.BTN_JUGAR_DE_NUEVO.draw()
 
     }
 
@@ -755,7 +822,11 @@ class Juego {
     this.FICHAS_EN_JUEGO[this.EQUIPOS_EN_JUEGO[0]] = []
     this.FICHAS_EN_JUEGO[this.EQUIPOS_EN_JUEGO[1]] = []
 
-    for (let i = columns * rows / 2; i > 0; i--) {
+    // for (let i = columns * rows / 2; i > 0; i--) {
+    //   this.FICHAS_EN_JUEGO[this.EQUIPOS_EN_JUEGO[0]].push(new Ficha(this.EQUIPOS_EN_JUEGO[0], 100, this.canvas.height - 200 + (i * 15), this.ctx))
+    //   this.FICHAS_EN_JUEGO[this.EQUIPOS_EN_JUEGO[1]].push(new Ficha(this.EQUIPOS_EN_JUEGO[1], this.canvas.width - 100 - this.gameSettings.fichaSize, this.canvas.height - 200 + (i * 15), this.ctx))
+    // }
+    for (let i = 1; i > 0; i--) {
       this.FICHAS_EN_JUEGO[this.EQUIPOS_EN_JUEGO[0]].push(new Ficha(this.EQUIPOS_EN_JUEGO[0], 100, this.canvas.height - 200 + (i * 15), this.ctx))
       this.FICHAS_EN_JUEGO[this.EQUIPOS_EN_JUEGO[1]].push(new Ficha(this.EQUIPOS_EN_JUEGO[1], this.canvas.width - 100 - this.gameSettings.fichaSize, this.canvas.height - 200 + (i * 15), this.ctx))
     }
@@ -864,9 +935,7 @@ class Juego {
 
         let [column, zone] = this.tablero.isInsideColumn(this.mouse.x, this.mouse.y)
 
-        if (column >= 0) {
-          console.log(this.currentFicha.size);
-          
+        if (column >= 0) {          
           this.fichaBehaviour.currentColumn = column
           this.currentFicha.setOverFill('#0008')
           this.currentFicha.updatePos(
@@ -881,6 +950,11 @@ class Juego {
 
 
       }
+    }
+
+    if (this.state == this.STATES.WINNER_END || this.state == this.STATES.TIE) {
+      this.UI.BTN_JUGAR_DE_NUEVO.mouseHover(this.mouse.x, this.mouse.y)
+      this.UI.BTN_VOLVER_AL_MENU.mouseHover(this.mouse.x, this.mouse.y)
     }
 
 
@@ -949,6 +1023,11 @@ class Juego {
         this.canvas.classList.add('grabbing')
         this.state = this.STATES.GAME
       }
+    }
+
+    if (this.state == this.STATES.WINNER_END || this.state == this.STATES.TIE) {
+      this.UI.BTN_JUGAR_DE_NUEVO.mouseClick()
+      this.UI.BTN_VOLVER_AL_MENU.mouseClick()
     }
 
         // Skips
