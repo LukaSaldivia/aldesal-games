@@ -1,15 +1,11 @@
 class Ficha extends Dibujable{
-  
-
-  static size = 40
-
   constructor(equipo = "", xPos = 0, yPos = 0 ,ctx = CanvasRenderingContext2D){
     super(ctx, xPos, yPos)
 
     this.equipo = equipo
 
 
-    this.size = Ficha.size
+    this.size = 40
     this.image = getResizedImage(`./img/juego/ficha_${this.equipo}.png`, this.size, this.size, this.pos.x, this.pos.y, this.ctx)
     
     this.circle = new Circulo(this.size / 2, this.pos.x + this.size / 2, this.pos.y + this.size / 2, ctx)
@@ -65,6 +61,13 @@ class Ficha extends Dibujable{
       x : this.pos.x,
       y : this.pos.y
     }
+  }
+
+  setSize(n = 0){
+    this.size = n
+    this.image = getResizedImage(`./img/juego/ficha_${this.equipo}.png`, this.size, this.size, this.pos.x, this.pos.y, this.ctx)
+    this.circle = new Circulo(this.size / 2, this.pos.x + this.size / 2, this.pos.y + this.size / 2, ctx)
+
   }
 
 

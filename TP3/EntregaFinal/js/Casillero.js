@@ -4,7 +4,7 @@ class Casillero extends Dibujable {
     this.img = img
     this.jugador = null
     this.endedFall = false
-    this.offset = 12.5
+    this.offset = this.offset
   }
 
   draw() {
@@ -16,10 +16,10 @@ class Casillero extends Dibujable {
   }
 
   setJugador(jugador = Ficha) {    
+  
     this.jugador = new Ficha(jugador.equipo, undefined, undefined, this.ctx)
-
+    this.jugador.setSize(jugador.size)
     this.jugador.isHovereable = false
-
     this.jugador.updatePos(this.pos.x + this.offset, this.pos.y + this.offset)
   }
 }

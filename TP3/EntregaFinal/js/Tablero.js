@@ -1,11 +1,14 @@
 class Tablero extends Dibujable {
+
+  static cellSize = 65
+
   constructor(columns = 7, rows = 6, imgs = [Image], xPos = 0, yPos = 0, ctx = CanvasRenderingContext2D) {
     super(ctx, xPos, yPos)
 
     this.rows = rows
     this.columns = columns
 
-    this.cellSize = 65
+    this.cellSize = Tablero.cellSize
 
     this.imgs = imgs
 
@@ -207,6 +210,15 @@ class Tablero extends Dibujable {
     for (let i = 0; i < this.columns; i++) {
       for (let j = 0; j < this.rows; j++) {        
         this.matrix[i][j].img.opacity = opacity
+      }
+      
+    }
+  }
+
+  setOffset(n = 0){
+    for (let i = 0; i < this.columns; i++) {
+      for (let j = 0; j < this.rows; j++) {
+        this.matrix[i][j].offset = n
       }
       
     }

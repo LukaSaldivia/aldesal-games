@@ -18,7 +18,10 @@ class Juego {
       columnas: 7,
       rows: 6,
       fichasToWin: 4,
-      duration: 0
+      duration: 0,
+      fichaSize : 0,
+      cellSize : 0,
+      casilleroOffset : 0
     }
 
     this.fichaBehaviour = {
@@ -235,7 +238,7 @@ class Juego {
 
       this.UI.MODE_SELECTED.text = '5 en línea'
       this.UI.MODE_SELECTED.pos.x = canvas.width / 2 - this.UI.MODE_SELECTED.getPixelWidth() / 2
-      this.UI.TABLERO_SIZE_INDICATOR.text = 'Columnas: 8, Filas: 6'
+      this.UI.TABLERO_SIZE_INDICATOR.text = 'Columnas: 8, Filas: 7'
       this.UI.TABLERO_SIZE_INDICATOR.pos.x = canvas.width / 2 - this.UI.TABLERO_SIZE_INDICATOR.getPixelWidth() / 2
 
     }
@@ -246,7 +249,7 @@ class Juego {
 
       this.UI.MODE_SELECTED.text = '6 en línea'
       this.UI.MODE_SELECTED.pos.x = canvas.width / 2 - this.UI.MODE_SELECTED.getPixelWidth() / 2
-      this.UI.TABLERO_SIZE_INDICATOR.text = 'Columnas: 9, Filas: 6'
+      this.UI.TABLERO_SIZE_INDICATOR.text = 'Columnas: 9, Filas: 7'
       this.UI.TABLERO_SIZE_INDICATOR.pos.x = canvas.width / 2 - this.UI.TABLERO_SIZE_INDICATOR.getPixelWidth() / 2
 
     }
@@ -258,7 +261,7 @@ class Juego {
 
       this.UI.MODE_SELECTED.text = '7 en línea'
       this.UI.MODE_SELECTED.pos.x = canvas.width / 2 - this.UI.MODE_SELECTED.getPixelWidth() / 2
-      this.UI.TABLERO_SIZE_INDICATOR.text = 'Columnas: 10, Filas: 6'
+      this.UI.TABLERO_SIZE_INDICATOR.text = 'Columnas: 10, Filas: 10'
       this.UI.TABLERO_SIZE_INDICATOR.pos.x = canvas.width / 2 - this.UI.TABLERO_SIZE_INDICATOR.getPixelWidth() / 2
 
     }
@@ -289,27 +292,37 @@ class Juego {
     this.UI.SELECTMODE[4].onClick = () => {
       this.gameSettings.fichasToWin = 4
       this.gameSettings.columnas = 7
+      this.gameSettings.cellSize = 65
+      this.gameSettings.fichaSize = 40
       this.gameSettings.duration = this.gameSettings.columnas * this.gameSettings.rows * 10
-
       this.state = this.STATES.TRANSITION_SELECT_MODE_SELECT_FICHA
     }
     this.UI.SELECTMODE[5].onClick = () => {
       this.gameSettings.fichasToWin = 5
       this.gameSettings.columnas = 8
+      this.gameSettings.rows = 7
+      this.gameSettings.cellSize = 50
+      this.gameSettings.fichaSize = 30
       this.gameSettings.duration = this.gameSettings.columnas * this.gameSettings.rows * 10
-
+      
       this.state = this.STATES.TRANSITION_SELECT_MODE_SELECT_FICHA
     }
     this.UI.SELECTMODE[6].onClick = () => {
       this.gameSettings.fichasToWin = 6
       this.gameSettings.columnas = 9
+      this.gameSettings.rows = 7
+      this.gameSettings.cellSize = 50
+      this.gameSettings.fichaSize = 30
       this.gameSettings.duration = this.gameSettings.columnas * this.gameSettings.rows * 10
-
+      
       this.state = this.STATES.TRANSITION_SELECT_MODE_SELECT_FICHA
     }
     this.UI.SELECTMODE[7].onClick = () => {
       this.gameSettings.fichasToWin = 7
       this.gameSettings.columnas = 10
+      this.gameSettings.rows = 10
+      this.gameSettings.cellSize = 40
+      this.gameSettings.fichaSize = 25
       this.gameSettings.duration = this.gameSettings.columnas * this.gameSettings.rows * 10
 
       this.state = this.STATES.TRANSITION_SELECT_MODE_SELECT_FICHA
@@ -735,14 +748,20 @@ class Juego {
   }
 
   newGame(columns = 7, rows = 6) {
-
+    
     this.FICHAS_EN_JUEGO[this.EQUIPOS_EN_JUEGO[0]] = []
     this.FICHAS_EN_JUEGO[this.EQUIPOS_EN_JUEGO[1]] = []
 
     for (let i = columns * rows / 2; i > 0; i--) {
       this.FICHAS_EN_JUEGO[this.EQUIPOS_EN_JUEGO[0]].push(new Ficha(this.EQUIPOS_EN_JUEGO[0], 100, this.canvas.height - 200 + (i * 15), this.ctx))
-      this.FICHAS_EN_JUEGO[this.EQUIPOS_EN_JUEGO[1]].push(new Ficha(this.EQUIPOS_EN_JUEGO[1], this.canvas.width - 100 - Ficha.size, this.canvas.height - 200 + (i * 15), this.ctx))
+      this.FICHAS_EN_JUEGO[this.EQUIPOS_EN_JUEGO[1]].push(new Ficha(this.EQUIPOS_EN_JUEGO[1], this.canvas.width - 100 - this.gameSettings.fichaSize, this.canvas.height - 200 + (i * 15), this.ctx))
     }
+    this.FICHAS_EN_JUEGO[this.EQUIPOS_EN_JUEGO[0]].forEach(ficha => {
+      ficha.setSize(this.gameSettings.fichaSize)
+    })
+    this.FICHAS_EN_JUEGO[this.EQUIPOS_EN_JUEGO[1]].forEach(ficha => {
+      ficha.setSize(this.gameSettings.fichaSize)
+    })
 
     this.switchTurn()
 
@@ -758,8 +777,10 @@ class Juego {
 
     }
     this.tablero = new Tablero(columns, rows, imagenesCasilleros, undefined, undefined, this.ctx)
+    this.tablero.cellSize = this.gameSettings.cellSize
     this.tablero.centerOnScreen(this.canvas.width, this.canvas.height)
     this.tablero.setMatrix()
+    this.tablero.setOffset((this.gameSettings.cellSize - this.gameSettings.fichaSize) / 2)
 
 
 
