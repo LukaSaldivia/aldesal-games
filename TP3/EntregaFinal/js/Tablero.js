@@ -19,6 +19,8 @@ class Tablero extends Dibujable {
 
     this.hints = []
 
+    this.hintSize = 0
+
 
 
     this.setMatrix()
@@ -51,8 +53,10 @@ class Tablero extends Dibujable {
           }
         }
       )
+      console.warn(this.hintSize);
+      
 
-      this.hints.push(new Circulo(20,this.fixedZones[i].x.start + (this.fixedZones[i].x.end - this.fixedZones[i].x.start )/2,this.fixedZones[i].y.end - 30, this.ctx))
+      this.hints.push(new Circulo(this.hintSize/2,this.fixedZones[i].x.start + (this.fixedZones[i].x.end - this.fixedZones[i].x.start )/2,this.fixedZones[i].y.end - this.hintSize / 2 - 10, this.ctx))
       this.hints[i].fill = "#0000"
 
 

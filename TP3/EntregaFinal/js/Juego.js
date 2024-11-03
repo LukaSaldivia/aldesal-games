@@ -171,16 +171,16 @@ class Juego {
     this.UI.ELIGE_TU_EQUIPO.pos.x = canvas.width / 2 - this.UI.ELIGE_TU_EQUIPO.getPixelWidth() / 2
     this.UI.ELIGE_TU_EQUIPO.color = "#eee"
 
-    this.UI.WINNER_TEXT = new UIText('Ganó el equipo: ', 0, 50, this.ctx)
+    this.UI.WINNER_TEXT = new UIText('', 0, 50, this.ctx)
     this.UI.WINNER_TEXT.color = "#ddd"
 
-    this.UI.TIMER = new UIText(200, 0, 50, this.ctx)
+    this.UI.TIMER = new UIText('', 0, 50, this.ctx)
     this.UI.TIMER.color = "#aaa"
 
     this.UI.GAME_TITLE = new UIElement(getResizedImage('./img/juego/title_1500x800.png', 1500 / 2.5, 800 / 2.5, 0, 0, ctx), null, canvas.width / 2 - 1500 / 2.5 / 2, 50, ctx)
 
-    this.UI.SPACE_BACKGROUND = new UIElement(getResizedImage('./img/juego/space_1300x1500.jpg', 1300, 1500, 0, 0, ctx), null, 0, 0, ctx)
-
+    this.UI.MENU_BACKGROUND = new UIElement(getResizedImage('./img/juego/menu_background.jpg', 1300, 1500, 0, 0, ctx), null, 0, 0, ctx)
+    this.UI.GAME_BACKGROUND = new UIElement(getResizedImage('./img/juego/game_background.jpg', 1300, 500, 0, 0, ctx), null, 0, 0, ctx)
 
 
     this.UI.SELECTMODE = {
@@ -328,7 +328,12 @@ class Juego {
       this.state = this.STATES.TRANSITION_SELECT_MODE_SELECT_FICHA
     }
 
+    // falta implementar
     this.UI.GO_BACK = new UIElement(getResizedImage('./img/juego/arrow-back.png', 20, 20, 50, canvas.height - 50, ctx), null, 50, canvas.height - 50, ctx)
+
+
+    this.UI.BTN_VOLVER_AL_MENU = new UIElement(getResizedImage('./img/juego/btn_VOLVER_AL_MENU.png',400,62, canvas.width / 2 - 400 / 2,600,ctx), getResizedImage('./img/juego/btn_VOLVER_AL_MENU_hover.png',400,62, canvas.width / 2 - 400 / 2,600,ctx), canvas.width / 2 - 400 / 2, 600, ctx )
+    this.UI.BTN_JUGAR_DE_NUEVO = new UIElement(getResizedImage('./img/juego/btn_JUGAR_DE_NUEVO.png',400,62, canvas.width / 2 - 400 / 2,600,ctx), getResizedImage('./img/juego/btn_JUGAR_DE_NUEVO_hover.png',400,62, canvas.width / 2 - 400 / 2,600,ctx), canvas.width / 2 - 400 / 2, 600, ctx )
 
 
 
@@ -357,13 +362,13 @@ class Juego {
       this.ctx.setTransform(scaleFactor, 0, 0, scaleFactor, -centerX * (1 - t) + (Math.cos(Math.PI * 1 / t * 500) * 20) * (1 - t), (translateY + centerY) * (1 - t))
 
 
-      this.UI.SPACE_BACKGROUND.setOpacity(t)
+      this.UI.MENU_BACKGROUND.setOpacity(t)
       
     }, () => {
       this.ctx.setTransform(1, 0, 0, 1, 0, 0);
       this.ctx.globalAlpha = 1
       this.state = this.STATES.DISPLAY_CURRENT_FICHAS
-      this.UI.SPACE_BACKGROUND.setOpacity(1)
+      this.UI.MENU_BACKGROUND.setOpacity(1)
     })
 
     this.ESCENAS.FICHA_DROP = new Escena(this.ctx, (t) => {
@@ -402,14 +407,13 @@ class Juego {
     })
 
     this.ESCENAS.ANIMATE_CLICPARAEMPEZAR = new Escena(this.ctx, (t) => {
-      this.UI.CLICPARAEMPEZAR.setOpacity(Math.floor(t*10) % 2 == 0 ? 0 : 1)
-      // this.UI.CLICPARAEMPEZAR.setOpacity(1 - t)
+      this.UI.CLICPARAEMPEZAR.setOpacity(1 - t)
     })
 
 
     this.ESCENAS.TRANSITION_MENU_SELECT_MODE = new Escena(this.ctx, (t => {
       this.UI.GAME_TITLE.updatePos(canvas.width / 2 - 1500 / 2.5 / 2, 60 - 500 * t - 500 * 0)
-      this.UI.SPACE_BACKGROUND.updatePos(0, -500 * t)
+      this.UI.MENU_BACKGROUND.updatePos(0, -500 * t)
       this.UI.SELECTMODE[4].updatePos(this.canvas.width / 2 - 343 / 2, canvas.height + (canvas.height / 2 - 55 / 2) - 500 * t)
       this.UI.SELECTMODE[5].updatePos(this.canvas.width / 2 - 343 / 2, canvas.height + (canvas.height / 2 - 55 / 2) - 500 * t)
       this.UI.SELECTMODE[6].updatePos(this.canvas.width / 2 - 343 / 2, canvas.height + (canvas.height / 2 - 55 / 2) - 500 * t)
@@ -465,7 +469,7 @@ class Juego {
     })
 
     this.ESCENAS.TRANSITION_SELECT_MODE_SELECT_FICHA = new Escena(this.ctx, (t => {
-      this.UI.SPACE_BACKGROUND.updatePos(0, -500 * t - 500)
+      this.UI.MENU_BACKGROUND.updatePos(0, -500 * t - 500)
       this.UI.SELECTMODE[4].updatePos(this.canvas.width / 2 - 343 / 2, (canvas.height / 2 - 55 / 2) - 500 * t)
       this.UI.SELECTMODE[5].updatePos(this.canvas.width / 2 - 343 / 2, (canvas.height / 2 - 55 / 2) - 500 * t)
       this.UI.SELECTMODE[6].updatePos(this.canvas.width / 2 - 343 / 2, (canvas.height / 2 - 55 / 2) - 500 * t)
@@ -514,7 +518,7 @@ class Juego {
       let display_equipo = this.currentEquipo.toLowerCase().split('')
 
       display_equipo[0] = display_equipo[0].toUpperCase()
-      this.UI.WINNER_TEXT.text += display_equipo.join('')
+      this.UI.WINNER_TEXT.text = 'Ganó el equipo '+ display_equipo.join('')
       this.UI.WINNER_TEXT.pos.x = canvas.width / 2 - this.UI.WINNER_TEXT.getPixelWidth() / 2
       this.state = this.STATES.WINNER_END
       // this.switchTurn()
@@ -540,8 +544,8 @@ class Juego {
       this.UI.HACEMUCHOTIEMPO.setOpacity(1-t)
     }), () => {
       this.UI.HACEMUCHOTIEMPO.setOpacity(0)
-      this.UI.SPACE_BACKGROUND.updatePos(0,0)
-      this.UI.SPACE_BACKGROUND.setOpacity(0)
+      this.UI.MENU_BACKGROUND.updatePos(0,0)
+      this.UI.MENU_BACKGROUND.setOpacity(0)
       this.ctx.globalAlpha = 0
       this.state = this.STATES.STARTING
     })
@@ -560,27 +564,26 @@ class Juego {
 
 
     if (this.state == this.STATES.MENU) {
-      this.UI.SPACE_BACKGROUND.draw()
+      this.UI.MENU_BACKGROUND.draw()
       this.UI.GAME_TITLE.draw()
       this.UI.CLICPARAEMPEZAR.draw()
 
-      this.ESCENAS.ANIMATE_CLICPARAEMPEZAR.animate(4)
+      this.ESCENAS.ANIMATE_CLICPARAEMPEZAR.animate(1)
 
     }
 
     if (this.state == this.STATES.TRANSITION_MENU_SELECT_MODE) {
-      this.UI.SPACE_BACKGROUND.draw()
+      this.UI.MENU_BACKGROUND.draw()
       this.UI.GAME_TITLE.draw()
       this.UI.SELECTMODE[4].draw()
       this.UI.SELECTMODE[5].draw()
       this.UI.SELECTMODE[6].draw()
       this.UI.SELECTMODE[7].draw()
       this.ESCENAS.TRANSITION_MENU_SELECT_MODE.animate(1)
-      // this.ESCENAS.TRANSITION_MENU_SELECT_MODE.animate(0)
     }
 
     if (this.state == this.STATES.SELECT_MODE) {
-      this.UI.SPACE_BACKGROUND.draw()
+      this.UI.MENU_BACKGROUND.draw()
       this.UI.SELECTMODE[4].draw()
       this.UI.SELECTMODE[5].draw()
       this.UI.SELECTMODE[6].draw()
@@ -599,7 +602,7 @@ class Juego {
     }
 
     if (this.state == this.STATES.TRANSITION_SELECT_MODE_SELECT_FICHA) {
-      this.UI.SPACE_BACKGROUND.draw()
+      this.UI.MENU_BACKGROUND.draw()
       this.UI.SELECTMODE[4].draw()
       this.UI.SELECTMODE[5].draw()
       this.UI.SELECTMODE[6].draw()
@@ -617,7 +620,7 @@ class Juego {
 
     if (this.state == this.STATES.SELECT_FICHA) {
 
-      this.UI.SPACE_BACKGROUND.draw()
+      this.UI.MENU_BACKGROUND.draw()
       for (const FICHA in this.UI.FICHAS_SELECCIONABLES) {
         let option = this.UI.FICHAS_SELECCIONABLES[FICHA]
         option.DISABLED.draw()
@@ -640,7 +643,7 @@ class Juego {
     }
 
     if (this.state == this.STATES.TRANSITION_MUCHO_TIEMPO_IN) {
-      this.UI.SPACE_BACKGROUND.draw()
+      this.UI.MENU_BACKGROUND.draw()
 
       for (const FICHA in this.UI.FICHAS_SELECCIONABLES) {
         let option = this.UI.FICHAS_SELECCIONABLES[FICHA]
@@ -661,7 +664,7 @@ class Juego {
     
     
     if (this.state == this.STATES.STARTING) {
-      this.UI.SPACE_BACKGROUND.draw()
+      this.UI.GAME_BACKGROUND.draw()
       this.tablero.draw()
       this.EQUIPOS_EN_JUEGO.forEach(equipo => {
         this.FICHAS_EN_JUEGO[equipo].forEach(ficha => {
@@ -671,7 +674,7 @@ class Juego {
       this.ESCENAS.INICIA_TABLERO.animate(5)
     }
     if (this.state == this.STATES.FICHA_DROP) {
-      this.UI.SPACE_BACKGROUND.draw()
+      this.UI.GAME_BACKGROUND.draw()
       this.UI.TIMER.draw()
       this.ESCENAS.TIMER_COUNT.animate(this.gameSettings.duration)
 
@@ -686,7 +689,7 @@ class Juego {
     }
 
     if (this.state == this.STATES.DISPLAY_CURRENT_FICHAS) {
-      this.UI.SPACE_BACKGROUND.draw()
+      this.UI.GAME_BACKGROUND.draw()
       this.tablero.draw()
       this.EQUIPOS_EN_JUEGO.forEach(equipo => {
         this.FICHAS_EN_JUEGO[equipo].forEach(ficha => {
@@ -702,7 +705,7 @@ class Juego {
     }
 
     if (this.state == this.STATES.GAME) {
-      this.UI.SPACE_BACKGROUND.draw()
+      this.UI.GAME_BACKGROUND.draw()
       this.UI.TIMER.draw()
       this.ESCENAS.TIMER_COUNT.animate(this.gameSettings.duration)
 
@@ -720,7 +723,7 @@ class Juego {
     }
 
     if (this.state == this.STATES.WINNER) {
-      this.UI.SPACE_BACKGROUND.draw()
+      this.UI.GAME_BACKGROUND.draw()
       this.tablero.draw()
       this.ESCENAS.WINNER.animate(2)
 
@@ -728,7 +731,7 @@ class Juego {
     }
 
     if (this.state == this.STATES.WINNER_END) {
-      this.UI.SPACE_BACKGROUND.draw()
+      this.UI.GAME_BACKGROUND.draw()
       this.tablero.draw()
       this.FICHAS_GANADORAS.forEach(ficha => ficha.draw())
       this.UI.WINNER_TEXT.draw()
@@ -778,6 +781,7 @@ class Juego {
     }
     this.tablero = new Tablero(columns, rows, imagenesCasilleros, undefined, undefined, this.ctx)
     this.tablero.cellSize = this.gameSettings.cellSize
+    this.tablero.hintSize = this.gameSettings.fichaSize
     this.tablero.centerOnScreen(this.canvas.width, this.canvas.height)
     this.tablero.setMatrix()
     this.tablero.setOffset((this.gameSettings.cellSize - this.gameSettings.fichaSize) / 2)
@@ -861,6 +865,8 @@ class Juego {
         let [column, zone] = this.tablero.isInsideColumn(this.mouse.x, this.mouse.y)
 
         if (column >= 0) {
+          console.log(this.currentFicha.size);
+          
           this.fichaBehaviour.currentColumn = column
           this.currentFicha.setOverFill('#0008')
           this.currentFicha.updatePos(
