@@ -822,14 +822,11 @@ class Juego {
     this.FICHAS_EN_JUEGO[this.EQUIPOS_EN_JUEGO[0]] = []
     this.FICHAS_EN_JUEGO[this.EQUIPOS_EN_JUEGO[1]] = []
 
-    // for (let i = columns * rows / 2; i > 0; i--) {
-    //   this.FICHAS_EN_JUEGO[this.EQUIPOS_EN_JUEGO[0]].push(new Ficha(this.EQUIPOS_EN_JUEGO[0], 100, this.canvas.height - 200 + (i * 15), this.ctx))
-    //   this.FICHAS_EN_JUEGO[this.EQUIPOS_EN_JUEGO[1]].push(new Ficha(this.EQUIPOS_EN_JUEGO[1], this.canvas.width - 100 - this.gameSettings.fichaSize, this.canvas.height - 200 + (i * 15), this.ctx))
-    // }
-    for (let i = 1; i > 0; i--) {
+    for (let i = columns * rows / 2; i > 0; i--) {
       this.FICHAS_EN_JUEGO[this.EQUIPOS_EN_JUEGO[0]].push(new Ficha(this.EQUIPOS_EN_JUEGO[0], 100, this.canvas.height - 200 + (i * 15), this.ctx))
       this.FICHAS_EN_JUEGO[this.EQUIPOS_EN_JUEGO[1]].push(new Ficha(this.EQUIPOS_EN_JUEGO[1], this.canvas.width - 100 - this.gameSettings.fichaSize, this.canvas.height - 200 + (i * 15), this.ctx))
     }
+    
     this.FICHAS_EN_JUEGO[this.EQUIPOS_EN_JUEGO[0]].forEach(ficha => {
       ficha.setSize(this.gameSettings.fichaSize)
     })
