@@ -292,6 +292,7 @@ class Juego {
     this.UI.SELECTMODE[4].onClick = () => {
       this.gameSettings.fichasToWin = 4
       this.gameSettings.columnas = 7
+      this.gameSettings.rows = 6
       this.gameSettings.cellSize = 65
       this.gameSettings.fichaSize = 40
       this.gameSettings.duration = this.gameSettings.columnas * this.gameSettings.rows * 10
