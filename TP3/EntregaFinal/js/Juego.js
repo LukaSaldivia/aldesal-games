@@ -1,19 +1,35 @@
+// Para comprender mejor, el juego se maneja con estados para ir variando la ejecución del update(),
+// que se ejecuta en el main.js en una función un requestAnimationFrame
+
+
 class Juego {
   constructor(ctx = CanvasRenderingContext2D, canvas = HTMLCanvasElement) {
 
     this.ctx = ctx;
     this.canvas = canvas;
 
+    // Array que contenerá los dos equipos de losjugadores
     this.EQUIPOS_EN_JUEGO = []
 
+    // Objeto que tendrá arreglos de fichas según el equipo
+    // ej:
+    // this.FICHAS_EN_JUEGO = {
+    // 
+    // "REBELDE" : [],
+    // "SEPARATISTA" : []
+    // 
+    // }
     this.FICHAS_EN_JUEGO = {}
 
+    // Array con las fichas ganadoras (se usa para el STATE.WINNER)
     this.FICHAS_GANADORAS = []
 
     this.currentEquipo = ''
 
+    // 👇 se encarga de cuando se ejecuta el timer
     this.stopCounting = false
 
+    // Configuraciones iniciales
     this.gameSettings = {
       columnas: 7,
       rows: 6,
@@ -24,6 +40,7 @@ class Juego {
       casilleroOffset: 0
     }
 
+    // Objeto que engloba los comportamientos de currentFicha
     this.fichaBehaviour = {
       currentTurn: 0,
       counter: 0,
@@ -34,7 +51,10 @@ class Juego {
       targetY: 0
     }
 
+    // Ficha arrastrada
     this.currentFicha = null
+
+    // Imagenes iniciales para que se descarguen lo antes posibles
     this.IMGS = {
       MENU: getImage('./img/juego/menu.jpg'),
       CLICPARAEMPEZAR: {
@@ -63,12 +83,12 @@ class Juego {
     }
 
 
+    // Estados totales posibles del juego
     this.STATES = {
       MENU: 'menu',
       TRANSITION_MENU_SELECT_MODE: 'transition menu to select ficha',
       SELECT_MODE: 'select mode',
       TRANSITION_SELECT_MODE_SELECT_FICHA: 'transition select mode to select ficha',
-      TRANSITION_SELECT_FICHA_SELECT_MODE: 'transition select ficha to select mode',
       SELECT_FICHA: 'select ficha',
       TRANSITION_MUCHO_TIEMPO_IN: 'transition hace mucho tiempo in',
       TRANSITION_MUCHO_TIEMPO_OUT: 'transition hace mucho tiempo out',
@@ -82,13 +102,13 @@ class Juego {
       FICHA_DROP: 'ficha drop',
     }
 
-    this.state = this.STATES.MENU
 
+    this.state = this.STATES.MENU // Se declara como MENU para iniciar en el menú
+
+    // Objeto que engloba todos los UIElement utilizados
     this.UI = {}
 
-
     this.UI.HACEMUCHOTIEMPO = new UIElement(new ResizedImage(this.IMGS.HACEMUCHOTIEMPO, 1300, 500, 0, 0, this.ctx), null, 0, 0, this.ctx)
-
     this.UI.HACEMUCHOTIEMPO.setOpacity(0)
 
 
@@ -103,6 +123,7 @@ class Juego {
       this.canvas.classList.remove('pointer')
     }
 
+    // Fichas para seleccionar cuando elegis equipos
     this.UI.FICHAS_SELECCIONABLES = {
       REBELDE: {
         OPTION: new UIElement(getResizedImage('./img/juego/ficha_REBELDE.png', 70, 70, - 1000, - 1000, ctx), getResizedImage('./img/juego/ficha_REBELDE_hover.png', 70, 70, - 1000, - 1000, ctx), - 1000, - 1000, ctx),
@@ -121,6 +142,9 @@ class Juego {
         DISABLED: new UIElement(getResizedImage('./img/juego/ficha_JEDI_disabled.png', 70, 70, - 1000, - 1000, ctx), null, - 1000, - 1000, ctx)
       },
     }
+
+
+    // Comportamientos de cuando se selecciona una ficha, deshabilitando su aliado para que no puedan enfrentarse
 
     this.UI.FICHAS_SELECCIONABLES.REBELDE.OPTION.onClick = () => {
       this.EQUIPOS_EN_JUEGO.push('REBELDE')
@@ -149,6 +173,7 @@ class Juego {
 
 
 
+    // Creación de textos
     this.UI.MODE_SELECTED = new UIText('Selecciona un modo de juego', 0, this.canvas.height - 120, this.ctx)
     this.UI.MODE_SELECTED.fontSize = 26
     this.UI.MODE_SELECTED.pos.x = canvas.width / 2 - this.UI.MODE_SELECTED.getPixelWidth() / 2
@@ -176,6 +201,7 @@ class Juego {
     this.UI.GAME_BACKGROUND = new UIElement(getResizedImage('./img/juego/game_background.jpg', 1300, 500, 0, 0, ctx), null, 0, 0, ctx)
 
 
+    // Modos de juego (4 en linea, 5 en linea, 6 en linea, 7 en linea)
     this.UI.SELECTMODE = {
       4: new UIElement(new ResizedImage(this.IMGS.SELECTMODE[4].empty, 197, 50, undefined, undefined, this.ctx), new ResizedImage(this.IMGS.SELECTMODE[4].filled, 197, 50, undefined, undefined, this.ctx), canvas.width / 2 - 343 / 2, (canvas.height / 2 - 50 / 2) * 4, this.ctx),
       5: new UIElement(new ResizedImage(this.IMGS.SELECTMODE[5].empty, 243, 50, undefined, undefined, this.ctx), new ResizedImage(this.IMGS.SELECTMODE[5].filled, 243, 50, undefined, undefined, this.ctx), canvas.width / 2 - 343 / 2, (canvas.height / 2 - 50 / 2) * 4, this.ctx),
@@ -183,6 +209,7 @@ class Juego {
       7: new UIElement(new ResizedImage(this.IMGS.SELECTMODE[7].empty, 343, 50, undefined, undefined, this.ctx), new ResizedImage(this.IMGS.SELECTMODE[7].filled, 343, 50, undefined, undefined, this.ctx), canvas.width / 2 - 343 / 2, (canvas.height / 2 - 50 / 2) * 4, this.ctx),
     }
 
+    // Cambiando los clickableAreas para que no se solapen entre si
     this.UI.SELECTMODE[5].clickableArea = {
       x: {
         start: this.UI.SELECTMODE[4].pos.x + this.UI.SELECTMODE[4].width,
@@ -214,6 +241,8 @@ class Juego {
       }
     }
 
+
+    // Comportamientos para dar feedback según el modo seleccionado
     this.UI.SELECTMODE[4].onHover = () => {
       this.UI.SELECTMODE[5].isHovereable = false
       this.UI.SELECTMODE[6].isHovereable = false
@@ -322,14 +351,11 @@ class Juego {
       this.state = this.STATES.TRANSITION_SELECT_MODE_SELECT_FICHA
     }
 
-    // falta implementar
-    this.UI.GO_BACK = new UIElement(getResizedImage('./img/juego/arrow-back.png', 20, 20, 50, canvas.height - 50, ctx), null, 50, canvas.height - 50, ctx)
-
-
     this.UI.BTN_VOLVER_AL_MENU = new UIElement(getResizedImage('./img/juego/btn_VOLVER_AL_MENU.png', 400, 62, undefined, undefined, ctx), getResizedImage('./img/juego/btn_VOLVER_AL_MENU_hover.png', 400, 62, undefined, undefined, ctx), canvas.width / 2 - 400 / 2, canvas.height - 200, ctx)
     this.UI.BTN_JUGAR_DE_NUEVO = new UIElement(getResizedImage('./img/juego/btn_JUGAR_DE_NUEVO.png', 400, 62, undefined, undefined, ctx), getResizedImage('./img/juego/btn_JUGAR_DE_NUEVO_hover.png', 400, 62, undefined, undefined, ctx), canvas.width / 2 - 400 / 2, canvas.height - 300, ctx)
 
 
+    // Reinicia los estados si se vuelve al menú ó a jugar de nuevo
     this.UI.BTN_VOLVER_AL_MENU.onClick = () => {
       this.state = this.STATES.MENU
       this.UI.MENU_BACKGROUND.updatePos(0, 0)
@@ -348,7 +374,7 @@ class Juego {
       this.ESCENAS.TRANSITION_MUCHO_TIEMPO_IN.startTime = -1
       this.ESCENAS.TRANSITION_MUCHO_TIEMPO_OUT.startTime = -1
     }
-
+    
     this.UI.BTN_JUGAR_DE_NUEVO.onClick = () => {
       this.state = this.STATES.STARTING
       this.fichaBehaviour = {
@@ -364,11 +390,8 @@ class Juego {
       this.newGame(this.gameSettings.columnas, this.gameSettings.rows)
     }
 
+    this.tablero = null
 
-
-
-
-    this.tablero
 
     this.mouse = {
       x: 0,
@@ -376,6 +399,7 @@ class Juego {
     }
 
 
+    // Objeto que engloba todas las Animaciones que se irán reproduciendo a medida que se las llame
     this.ESCENAS = {}
 
     this.ESCENAS.INICIA_TABLERO = new Escena(this.ctx, (t, s) => {
@@ -414,15 +438,18 @@ class Juego {
           ficha.updatePos(ficha.pos.x, ficha.originalPosition.y - (15 * t))
         }
       })
-
-
-
     }, () => {
+      // Se habilita a que el casillero dibuje el jugador que ya tiene (por el addFicha()) 
       this.fichaBehaviour.currentCasillero.endedFall = true
       this.state = this.STATES.DISPLAY_CURRENT_FICHAS
-      this.FICHAS_EN_JUEGO[this.currentEquipo].splice(this.fichaBehaviour.currentFichaIndex, 1)
-      this.FICHAS_EN_JUEGO[this.currentEquipo].forEach(ficha => ficha.updateOriginalPosition())
 
+      // Se elimina del arreglo a la ficha agregada
+      this.FICHAS_EN_JUEGO[this.currentEquipo].splice(this.fichaBehaviour.currentFichaIndex, 1)
+      
+      // Se actualizan las posiciones de las fichas
+      this.FICHAS_EN_JUEGO[this.currentEquipo].forEach(ficha => ficha.updateOriginalPosition())
+      
+      // Al terminar de caer chequea el ganador
       let winnerArray = this.tablero.hasWinner(this.currentEquipo, this.fichaBehaviour.currentColumn, this.fichaBehaviour.currentRow, this.gameSettings.fichasToWin)
       if (winnerArray.length == this.gameSettings.fichasToWin) {
         this.stopCounting = true
@@ -430,6 +457,7 @@ class Juego {
         return this.state = this.STATES.WINNER
       }
 
+      // Verifica posible empate por quedarse sin fichas
       if (!this.FICHAS_EN_JUEGO[this.EQUIPOS_EN_JUEGO[0]].length && !this.FICHAS_EN_JUEGO[this.EQUIPOS_EN_JUEGO[1]].length) {
         this.stopCounting = true
         this.UI.WINNER_TEXT.text = 'Empate: no hay más fichas'
@@ -562,6 +590,7 @@ class Juego {
       this.UI.TIMER.text = this.gameSettings.duration - s + 1
       this.UI.TIMER.pos.x = this.canvas.width / 2 - this.UI.TIMER.getPixelWidth() / 2
     }, () => {
+      // Cuando termina la animación, se verifica si ya hubo ganador o se terminaron las fichas, por ende, terminó antes
       if (!this.stopCounting) {
         this.state = this.STATES.TIE
         this.stopCounting = true
@@ -585,28 +614,6 @@ class Juego {
       this.UI.MENU_BACKGROUND.setOpacity(0)
       this.ctx.globalAlpha = 0
       this.state = this.STATES.STARTING
-
-      // this.UI.FICHAS_SELECCIONABLES
-
-      // this.UI.FICHAS_SELECCIONABLES = {
-      //   REBELDE: {
-      //     OPTION: new UIElement(getResizedImage('./img/juego/ficha_REBELDE.png', 70, 70, - 1000, - 1000, ctx), getResizedImage('./img/juego/ficha_REBELDE_hover.png', 70, 70, - 1000, - 1000, ctx), - 1000, - 1000, ctx),
-      //     DISABLED: new UIElement(getResizedImage('./img/juego/ficha_REBELDE_disabled.png', 70, 70, - 1000, - 1000, ctx), null, - 1000, - 1000, ctx)
-      //   },
-      //   IMPERIAL: {
-      //     OPTION: new UIElement(getResizedImage('./img/juego/ficha_IMPERIAL.png', 70, 70, - 1000, - 1000, ctx), getResizedImage('./img/juego/ficha_IMPERIAL_hover.png', 70, 70, - 1000, - 1000, ctx), - 1000, - 1000, ctx),
-      //     DISABLED: new UIElement(getResizedImage('./img/juego/ficha_IMPERIAL_disabled.png', 70, 70, - 1000, - 1000, ctx), null, - 1000, - 1000, ctx)
-      //   },
-      //   SEPARATISTA: {
-      //     OPTION: new UIElement(getResizedImage('./img/juego/ficha_SEPARATISTA.png', 70, 70, - 1000, - 1000, ctx), getResizedImage('./img/juego/ficha_SEPARATISTA_hover.png', 70, 70, - 1000, - 1000, ctx), - 1000, - 1000, ctx),
-      //     DISABLED: new UIElement(getResizedImage('./img/juego/ficha_SEPARATISTA_disabled.png', 70, 70, - 1000, - 1000, ctx), null, - 1000, - 1000, ctx)
-      //   },
-      //   JEDI: {
-      //     OPTION: new UIElement(getResizedImage('./img/juego/ficha_JEDI.png', 70, 70, - 1000, - 1000, ctx), getResizedImage('./img/juego/ficha_JEDI_hover.png', 70, 70, - 1000, - 1000, ctx), - 1000, - 1000, ctx),
-      //     DISABLED: new UIElement(getResizedImage('./img/juego/ficha_JEDI_disabled.png', 70, 70, - 1000, - 1000, ctx), null, - 1000, - 1000, ctx)
-      //   },
-      // }
-
       this.UI.FICHAS_SELECCIONABLES.REBELDE.OPTION.isHovereable = true
       this.UI.FICHAS_SELECCIONABLES.IMPERIAL.OPTION.isHovereable = true
       this.UI.FICHAS_SELECCIONABLES.SEPARATISTA.OPTION.isHovereable = true
@@ -652,15 +659,14 @@ class Juego {
       this.UI.SELECTMODE[5].draw()
       this.UI.SELECTMODE[6].draw()
       this.UI.SELECTMODE[7].draw()
+
+      // Si no hay ningún modo de juego hovereado, se muestra un texto por default
       if (Object.values(this.UI.SELECTMODE).every(select => !select.isHover)) {
         this.UI.MODE_SELECTED.text = 'Selecciona un modo de juego'
         this.UI.MODE_SELECTED.pos.x = this.canvas.width / 2 - this.UI.MODE_SELECTED.getPixelWidth() / 2
         this.UI.TABLERO_SIZE_INDICATOR.text = ''
 
       }
-
-
-
       this.UI.MODE_SELECTED.draw()
       this.UI.TABLERO_SIZE_INDICATOR.draw()
     }
@@ -676,9 +682,6 @@ class Juego {
         option.OPTION.draw()
 
       }
-
-
-
       this.ESCENAS.TRANSITION_SELECT_MODE_SELECT_FICHA.animate(1)
     }
 
@@ -693,12 +696,15 @@ class Juego {
       }
 
       this.UI.ELIGE_TU_EQUIPO.draw()
+
+      // Si ya se eligió un jugador
       if (this.EQUIPOS_EN_JUEGO.length == 1) {
         this.UI.ELIGE_TU_EQUIPO.text = "Elige el equipo del jugador 2"
         this.UI.ELIGE_TU_EQUIPO.pos.x = this.canvas.width / 2 - this.UI.ELIGE_TU_EQUIPO.getPixelWidth() / 2
-
+        
       }
-
+      
+      // Si ya eligió el jugador 2
       if (this.EQUIPOS_EN_JUEGO.length == 2) {
 
         this.newGame(this.gameSettings.columnas, this.gameSettings.rows)
@@ -717,7 +723,6 @@ class Juego {
       }
 
       this.UI.HACEMUCHOTIEMPO.draw()
-
       this.ESCENAS.TRANSITION_MUCHO_TIEMPO_IN.animate(3)
     }
 
@@ -790,8 +795,6 @@ class Juego {
       this.UI.GAME_BACKGROUND.draw()
       this.tablero.draw()
       this.ESCENAS.WINNER.animate(2)
-
-
     }
 
     if (this.state == this.STATES.WINNER_END) {
@@ -809,23 +812,21 @@ class Juego {
       this.UI.WINNER_TEXT.draw()
       this.UI.BTN_VOLVER_AL_MENU.draw()
       this.UI.BTN_JUGAR_DE_NUEVO.draw()
-
     }
 
   }
 
 
   switchTurn() {
-    this.fichaBehaviour.currentTurn = this.fichaBehaviour.counter % this.EQUIPOS_EN_JUEGO.length
+    this.fichaBehaviour.currentTurn = this.fichaBehaviour.counter % this.EQUIPOS_EN_JUEGO.length // 0 ó 1
     this.currentEquipo = this.EQUIPOS_EN_JUEGO[this.fichaBehaviour.currentTurn]
     this.FICHAS_EN_JUEGO[this.currentEquipo].map(ficha => { ficha.isHovereable = true })
-
     this.fichaBehaviour.counter++
-
   }
 
   newGame(columns = 7, rows = 6) {
 
+    this.stopCounting = false
     this.FICHAS_EN_JUEGO[this.EQUIPOS_EN_JUEGO[0]] = []
     this.FICHAS_EN_JUEGO[this.EQUIPOS_EN_JUEGO[1]] = []
 
@@ -860,11 +861,6 @@ class Juego {
     this.tablero.centerOnScreen(this.canvas.width, this.canvas.height)
     this.tablero.setMatrix()
     this.tablero.setOffset((this.gameSettings.cellSize - this.gameSettings.fichaSize) / 2)
-
-
-
-
-
   }
 
 
@@ -922,6 +918,7 @@ class Juego {
         this.currentFicha.setOverFill("#0008")
         this.currentFicha.updatePos(this.mouse.x - this.currentFicha.size / 2, this.mouse.y - this.currentFicha.size / 2);
 
+        // Si está el cursor por encima del tablero e ingresa por izquierda o derecha
         let isEnteringFromLeftOrRight = (
           this.mouse.x + this.currentFicha.size / 2 >= this.tablero.pos.x &&
           this.mouse.x - this.currentFicha.size / 2 <= this.tablero.pos.x + this.tablero.columns * this.tablero.cellSize &&
@@ -936,6 +933,7 @@ class Juego {
 
         let [column, zone] = this.tablero.isInsideColumn(this.mouse.x, this.mouse.y)
 
+        // Si la columna es válida
         if (column >= 0) {
           this.fichaBehaviour.currentColumn = column
           this.currentFicha.setOverFill('#0008')
@@ -946,10 +944,6 @@ class Juego {
         } else {
           this.fichaBehaviour.currentColumn = undefined;
         }
-
-
-
-
       }
     }
 
@@ -971,13 +965,10 @@ class Juego {
           this.fichaBehaviour.currentRow = row
           this.fichaBehaviour.currentCasillero = this.tablero.getCasillero(this.fichaBehaviour.currentColumn, row)
           this.state = this.STATES.FICHA_DROP
-
         }
-        // this.fichaBehaviour.currentColumn = undefined
       }
 
       if (this.canvas.classList.contains('illegal')) {
-        // this.currentFicha.updatePos()
         this.canvas.classList.remove('illegal')
       }
 
@@ -1035,10 +1026,6 @@ class Juego {
 
     if (this.state == this.STATES.TRANSITION_MUCHO_TIEMPO_OUT) {
       this.ESCENAS.TRANSITION_MUCHO_TIEMPO_OUT.end()
-    }
-
-    if (this.state == this.STATES.TRANSITION_MENU_SELECT_MODE) {
-      // this.ESCENAS.TRANSITION_MENU_SELECT_MODE.end()
     }
 
   }
