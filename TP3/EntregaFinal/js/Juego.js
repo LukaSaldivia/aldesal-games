@@ -19,9 +19,9 @@ class Juego {
       rows: 6,
       fichasToWin: 4,
       duration: 0,
-      fichaSize : 0,
-      cellSize : 0,
-      casilleroOffset : 0
+      fichaSize: 0,
+      cellSize: 0,
+      casilleroOffset: 0
     }
 
     this.fichaBehaviour = {
@@ -305,7 +305,7 @@ class Juego {
       this.gameSettings.cellSize = 50
       this.gameSettings.fichaSize = 30
       this.gameSettings.duration = this.gameSettings.columnas * this.gameSettings.rows * 10
-      
+
       this.state = this.STATES.TRANSITION_SELECT_MODE_SELECT_FICHA
     }
     this.UI.SELECTMODE[6].onClick = () => {
@@ -315,7 +315,7 @@ class Juego {
       this.gameSettings.cellSize = 50
       this.gameSettings.fichaSize = 30
       this.gameSettings.duration = this.gameSettings.columnas * this.gameSettings.rows * 10
-      
+
       this.state = this.STATES.TRANSITION_SELECT_MODE_SELECT_FICHA
     }
     this.UI.SELECTMODE[7].onClick = () => {
@@ -333,14 +333,14 @@ class Juego {
     this.UI.GO_BACK = new UIElement(getResizedImage('./img/juego/arrow-back.png', 20, 20, 50, canvas.height - 50, ctx), null, 50, canvas.height - 50, ctx)
 
 
-    this.UI.BTN_VOLVER_AL_MENU = new UIElement(getResizedImage('./img/juego/btn_VOLVER_AL_MENU.png',400,62, undefined, undefined, ctx), getResizedImage('./img/juego/btn_VOLVER_AL_MENU_hover.png',400,62, undefined , undefined,ctx) , canvas.width / 2 - 400 / 2, canvas.height-200, ctx )
-    this.UI.BTN_JUGAR_DE_NUEVO = new UIElement(getResizedImage('./img/juego/btn_JUGAR_DE_NUEVO.png',400,62, undefined, undefined,ctx), getResizedImage('./img/juego/btn_JUGAR_DE_NUEVO_hover.png',400,62, undefined , undefined,ctx), canvas.width / 2 - 400 / 2, canvas.height-300, ctx )
+    this.UI.BTN_VOLVER_AL_MENU = new UIElement(getResizedImage('./img/juego/btn_VOLVER_AL_MENU.png', 400, 62, undefined, undefined, ctx), getResizedImage('./img/juego/btn_VOLVER_AL_MENU_hover.png', 400, 62, undefined, undefined, ctx), canvas.width / 2 - 400 / 2, canvas.height - 200, ctx)
+    this.UI.BTN_JUGAR_DE_NUEVO = new UIElement(getResizedImage('./img/juego/btn_JUGAR_DE_NUEVO.png', 400, 62, undefined, undefined, ctx), getResizedImage('./img/juego/btn_JUGAR_DE_NUEVO_hover.png', 400, 62, undefined, undefined, ctx), canvas.width / 2 - 400 / 2, canvas.height - 300, ctx)
 
-    
+
     this.UI.BTN_VOLVER_AL_MENU.onClick = () => {
       this.state = this.STATES.MENU
-      this.UI.MENU_BACKGROUND.updatePos(0,0)
-      this.UI.GAME_TITLE.updatePos(canvas.width / 2 - 1500 / 2.5 / 2,0)
+      this.UI.MENU_BACKGROUND.updatePos(0, 0)
+      this.UI.GAME_TITLE.updatePos(canvas.width / 2 - 1500 / 2.5 / 2, 0)
       this.fichaBehaviour = {
         currentTurn: 0,
         counter: 0,
@@ -398,7 +398,7 @@ class Juego {
 
 
       this.UI.MENU_BACKGROUND.setOpacity(t)
-      
+
     }, () => {
       this.ctx.setTransform(1, 0, 0, 1, 0, 0);
       this.ctx.globalAlpha = 1
@@ -436,7 +436,7 @@ class Juego {
         this.FICHAS_GANADORAS = winnerArray
         return this.state = this.STATES.WINNER
       }
-      
+
       if (!this.FICHAS_EN_JUEGO[this.EQUIPOS_EN_JUEGO[0]].length && !this.FICHAS_EN_JUEGO[this.EQUIPOS_EN_JUEGO[1]].length) {
         this.stopCounting = true
         this.UI.WINNER_TEXT.text = 'Empate: no hay más fichas'
@@ -516,7 +516,7 @@ class Juego {
       this.UI.SELECTMODE[5].updatePos(this.canvas.width / 2 - 343 / 2, (canvas.height / 2 - 55 / 2) - 500 * t)
       this.UI.SELECTMODE[6].updatePos(this.canvas.width / 2 - 343 / 2, (canvas.height / 2 - 55 / 2) - 500 * t)
       this.UI.SELECTMODE[7].updatePos(this.canvas.width / 2 - 343 / 2, (canvas.height / 2 - 55 / 2) - 500 * t)
-      
+
       this.UI.FICHAS_SELECCIONABLES.REBELDE.OPTION.updatePos(canvas.width / 2 - 100 / 2 - 150, canvas.height / 2 - 140 / 2 - 25 + 500 * (1 - t))
       this.UI.FICHAS_SELECCIONABLES.IMPERIAL.OPTION.updatePos(canvas.width / 2 - 100 / 2 + 150, canvas.height / 2 - 140 / 2 - 25 + 500 * (1 - t))
       this.UI.FICHAS_SELECCIONABLES.JEDI.OPTION.updatePos(canvas.width / 2 - 100 / 2 - 150, canvas.height / 2 + 140 / 2 - 60 + 500 * (1 - t))
@@ -560,7 +560,7 @@ class Juego {
       let display_equipo = this.currentEquipo.toLowerCase().split('')
 
       display_equipo[0] = display_equipo[0].toUpperCase()
-      this.UI.WINNER_TEXT.text = 'Ganó el equipo '+ display_equipo.join('')
+      this.UI.WINNER_TEXT.text = 'Ganó el equipo ' + display_equipo.join('')
       this.UI.WINNER_TEXT.pos.x = canvas.width / 2 - this.UI.WINNER_TEXT.getPixelWidth() / 2
       this.state = this.STATES.WINNER_END
     })
@@ -585,10 +585,10 @@ class Juego {
     })
 
     this.ESCENAS.TRANSITION_MUCHO_TIEMPO_OUT = new Escena(this.ctx, (t => {
-      this.UI.HACEMUCHOTIEMPO.setOpacity(1-t)
+      this.UI.HACEMUCHOTIEMPO.setOpacity(1 - t)
     }), () => {
       this.UI.HACEMUCHOTIEMPO.setOpacity(0)
-      this.UI.MENU_BACKGROUND.updatePos(0,0)
+      this.UI.MENU_BACKGROUND.updatePos(0, 0)
       this.UI.MENU_BACKGROUND.setOpacity(0)
       this.ctx.globalAlpha = 0
       this.state = this.STATES.STARTING
@@ -638,7 +638,7 @@ class Juego {
       this.UI.MENU_BACKGROUND.draw()
       this.UI.GAME_TITLE.draw()
       this.UI.CLICPARAEMPEZAR.draw()
-      
+
       this.ESCENAS.ANIMATE_CLICPARAEMPEZAR.animate(1)
 
     }
@@ -724,16 +724,16 @@ class Juego {
       }
 
       this.UI.HACEMUCHOTIEMPO.draw()
-      
+
       this.ESCENAS.TRANSITION_MUCHO_TIEMPO_IN.animate(3)
     }
-    
+
     if (this.state == this.STATES.TRANSITION_MUCHO_TIEMPO_OUT) {
       this.UI.HACEMUCHOTIEMPO.draw()
       this.ESCENAS.TRANSITION_MUCHO_TIEMPO_OUT.animate(3)
     }
-    
-    
+
+
     if (this.state == this.STATES.STARTING) {
       this.UI.GAME_BACKGROUND.draw()
       this.tablero.draw()
@@ -805,7 +805,7 @@ class Juego {
       this.UI.GAME_BACKGROUND.draw()
       this.tablero.draw()
       this.FICHAS_GANADORAS.forEach(ficha => ficha.draw())
-      this.UI.WINNER_TEXT.draw()      
+      this.UI.WINNER_TEXT.draw()
       this.UI.BTN_VOLVER_AL_MENU.draw()
       this.UI.BTN_JUGAR_DE_NUEVO.draw()
     }
@@ -813,7 +813,7 @@ class Juego {
     if (this.state == this.STATES.TIE) {
       this.UI.GAME_BACKGROUND.draw()
       this.tablero.draw()
-      this.UI.WINNER_TEXT.draw()      
+      this.UI.WINNER_TEXT.draw()
       this.UI.BTN_VOLVER_AL_MENU.draw()
       this.UI.BTN_JUGAR_DE_NUEVO.draw()
 
@@ -832,7 +832,7 @@ class Juego {
   }
 
   newGame(columns = 7, rows = 6) {
-    
+
     this.FICHAS_EN_JUEGO[this.EQUIPOS_EN_JUEGO[0]] = []
     this.FICHAS_EN_JUEGO[this.EQUIPOS_EN_JUEGO[1]] = []
 
@@ -877,7 +877,7 @@ class Juego {
 
 
   mouseMove({ clientX = 0, clientY = 0 }) {
-    let { x: canvasXOffset, y: canvasYOffset } = this.canvas.getBoundingClientRect();    
+    let { x: canvasXOffset, y: canvasYOffset } = this.canvas.getBoundingClientRect();
 
     this.mouse.x = Math.floor(clientX - canvasXOffset);
     this.mouse.y = Math.floor(clientY - canvasYOffset);
@@ -888,22 +888,20 @@ class Juego {
     this.UI.SELECTMODE[5].mouseHover(this.mouse.x, this.mouse.y)
     this.UI.SELECTMODE[6].mouseHover(this.mouse.x, this.mouse.y)
     this.UI.SELECTMODE[7].mouseHover(this.mouse.x, this.mouse.y)
-    
+
     this.UI.BTN_JUGAR_DE_NUEVO.mouseHover(this.mouse.x, this.mouse.y)
     this.UI.BTN_VOLVER_AL_MENU.mouseHover(this.mouse.x, this.mouse.y)
 
-    if (this.state == this.STATES.SELECT_FICHA) {
-      for (const FICHA in this.UI.FICHAS_SELECCIONABLES) {
-        let option = this.UI.FICHAS_SELECCIONABLES[FICHA]
-        option.OPTION.resetClickableArea()
-        option.OPTION.mouseHover(this.mouse.x, this.mouse.y)
+    for (const FICHA in this.UI.FICHAS_SELECCIONABLES) {
+      let option = this.UI.FICHAS_SELECCIONABLES[FICHA]
+      option.OPTION.resetClickableArea()
+      option.OPTION.mouseHover(this.mouse.x, this.mouse.y)
 
-      }
     }
 
     if (this.state == this.STATES.DISPLAY_CURRENT_FICHAS) {
 
-      for (let i = this.FICHAS_EN_JUEGO[this.currentEquipo].length - 1; i >= 0; i--) {        
+      for (let i = this.FICHAS_EN_JUEGO[this.currentEquipo].length - 1; i >= 0; i--) {
         let ficha = this.FICHAS_EN_JUEGO[this.currentEquipo][i]
         const isMouseOver = ficha.hasMouseOver(this.mouse.x, this.mouse.y)
         ficha.isHover = isMouseOver
@@ -945,7 +943,7 @@ class Juego {
 
         let [column, zone] = this.tablero.isInsideColumn(this.mouse.x, this.mouse.y)
 
-        if (column >= 0) {          
+        if (column >= 0) {
           this.fichaBehaviour.currentColumn = column
           this.currentFicha.setOverFill('#0008')
           this.currentFicha.updatePos(
@@ -1032,7 +1030,7 @@ class Juego {
       this.UI.BTN_VOLVER_AL_MENU.mouseClick()
     }
 
-        // Skips
+    // Skips
 
     if (this.state == this.STATES.STARTING) {
       this.ESCENAS.INICIA_TABLERO.end()
