@@ -882,16 +882,15 @@ class Juego {
     this.mouse.x = Math.floor(clientX - canvasXOffset);
     this.mouse.y = Math.floor(clientY - canvasYOffset);
 
-    if (this.state == this.STATES.MENU) {
-      this.UI.CLICPARAEMPEZAR.mouseHover(this.mouse.x, this.mouse.y)
-    }
+    this.UI.CLICPARAEMPEZAR.mouseHover(this.mouse.x, this.mouse.y)
 
-    if (this.state == this.STATES.SELECT_MODE) {
-      this.UI.SELECTMODE[4].mouseHover(this.mouse.x, this.mouse.y)
-      this.UI.SELECTMODE[5].mouseHover(this.mouse.x, this.mouse.y)
-      this.UI.SELECTMODE[6].mouseHover(this.mouse.x, this.mouse.y)
-      this.UI.SELECTMODE[7].mouseHover(this.mouse.x, this.mouse.y)
-    }
+    this.UI.SELECTMODE[4].mouseHover(this.mouse.x, this.mouse.y)
+    this.UI.SELECTMODE[5].mouseHover(this.mouse.x, this.mouse.y)
+    this.UI.SELECTMODE[6].mouseHover(this.mouse.x, this.mouse.y)
+    this.UI.SELECTMODE[7].mouseHover(this.mouse.x, this.mouse.y)
+    
+    this.UI.BTN_JUGAR_DE_NUEVO.mouseHover(this.mouse.x, this.mouse.y)
+    this.UI.BTN_VOLVER_AL_MENU.mouseHover(this.mouse.x, this.mouse.y)
 
     if (this.state == this.STATES.SELECT_FICHA) {
       for (const FICHA in this.UI.FICHAS_SELECCIONABLES) {
@@ -962,14 +961,6 @@ class Juego {
 
       }
     }
-
-    if (this.state == this.STATES.WINNER_END || this.state == this.STATES.TIE) {
-      this.UI.BTN_JUGAR_DE_NUEVO.mouseHover(this.mouse.x, this.mouse.y)
-      this.UI.BTN_VOLVER_AL_MENU.mouseHover(this.mouse.x, this.mouse.y)
-    }
-
-
-
 
   }
 
