@@ -103,13 +103,6 @@ class Juego {
       this.canvas.classList.remove('pointer')
     }
 
-    this.UI.CLICPARAEMPEZAR.onHover = () => {
-      this.canvas.classList.add('pointer')
-    }
-    this.UI.CLICPARAEMPEZAR.onHoverLeave = () => {
-      this.canvas.classList.remove('pointer')
-    }
-
     this.UI.FICHAS_SELECCIONABLES = {
       REBELDE: {
         OPTION: new UIElement(getResizedImage('./img/juego/ficha_REBELDE.png', 70, 70, - 1000, - 1000, ctx), getResizedImage('./img/juego/ficha_REBELDE_hover.png', 70, 70, - 1000, - 1000, ctx), - 1000, - 1000, ctx),
