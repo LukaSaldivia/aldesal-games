@@ -1,0 +1,268 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
+
+:root {
+
+  /* Colores */
+
+
+
+  --clr-green: #83C252;
+
+  --clr-orange: #F39E46;
+
+  --clr-yellow: #EFB71E;
+
+  --clr-purple: #5829BF;
+
+  --clr-dark-red: #9D2121;
+
+  --clr-darker-blue: #02187E;
+  --clr-dark-blue: #1B428F;
+  --clr-blue: #1B5F99;
+  --clr-light-blue: #01D1D8;
+
+  --clr-black-39: rgba(0, 0, 0, 39);
+  --clr-black: #000;
+  --clr-darker-gray: #242424;
+  --clr-dark-gray: #5E5E5D;
+  --clr-gray: #ECECEC;
+  --clr-white: #FFFFFF;
+
+  /* Tipografia */
+
+  --ff: 'Lato', system-ui;
+
+  --fw-regular: 400;
+  --fw-semibold: 600;
+  --fw-bold: 700;
+  --fw-black: 900;
+
+  --fs-100: 20px;
+  --fs-200: 40px;
+  --fs-247: 47px;
+  --fs-300: 60px;
+  --fs-361: 61.14px;
+}
+
+*,
+::before,
+::after {
+  box-sizing: border-box;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  font-family: inherit;
+  color: inherit;
+  font-size: inherit;
+}
+
+
+html:focus-within {
+  scroll-behavior: smooth;
+}
+
+.stack {
+  display: grid;
+  grid-template-areas: "stack";
+  align-items: center;
+
+  >* {
+    grid-area: stack;
+  }
+}
+
+
+img,
+picture,
+svg {
+  max-width: 100%;
+  display: block;
+}
+
+img {
+  height: auto;
+  vertical-align: middle;
+  font-style: italic;
+  shape-margin: 1rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html:focus-within {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+
+.container-grid {
+
+
+  --_container-size: 1280px;
+  --_content-size: 1080px;
+  --_container-sides: calc((var(--_container-size) - var(--_content-size)) / 2);
+
+  display: grid;
+  grid-template-columns:
+    auto [container-start] var(--_container-sides) [content-start] var(--_content-size) [content-end] var(--_container-sides) [container-end] auto;
+}
+
+body {
+  background-color: var(--clr-white);
+  display: grid;
+  justify-items: start;
+  grid-template-rows: [header-start main-start] 100px [header-end] auto [main-end footer-start] auto [footer-end];
+}
+
+body>* {
+  grid-column: container;
+  font-family: var(--ff);
+  font-size: var(--fs-100);
+
+  >* {
+    grid-column: content;
+  }
+}
+
+body > main{
+  grid-row: main;
+}
+
+body > footer {
+  grid-row: footer;
+}
+
+body>header {
+
+  grid-row: header;
+  position: sticky;
+  top: 0;
+  animation-name: color-add;
+  animation-range-end: 500px;
+  animation-direction: alternate;
+  animation-fill-mode: forwards;
+  animation-timeline: scroll(block nearest);
+}
+
+
+body>header>.wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 12px;
+  padding-bottom: 16px;
+
+  >* {
+
+    &:first-child,
+    &:last-child {
+      flex-grow: 1;
+      flex-basis: 0;
+    }
+
+    &:last-child{
+      display: flex;
+      justify-content: end;
+    }
+  }
+}
+
+.logo-wrapper {
+  position: relative;
+  width: 560px;
+  height: 100%;
+
+  animation-name: scale-down;
+  animation-range-end: 500px;
+  animation-direction: alternate;
+  animation-fill-mode: forwards;
+  animation-timeline: scroll(block nearest);
+
+  pointer-events: none;
+
+  >.logo {
+    position: absolute;
+    inset: 0;
+    top: 43px;
+    width: 100%;
+    animation-name: to-top;
+    animation-range-end: 100px;
+    animation-direction: alternate;
+    animation-fill-mode: forwards;
+    animation-timeline: scroll(block nearest);
+  }
+}
+
+@keyframes scale-down {
+  to {
+    width: 150px;
+
+    pointer-events: all;
+  }
+}
+
+@keyframes to-top {
+  to {
+    top: -10px;
+  }
+}
+
+@keyframes color-add {
+  to{
+    box-shadow: inset 0 110px 20px -30px var(--clr-light-blue);
+  }
+}
+
+.shadow{
+  filter: drop-shadow(4px 5px 0 var(--clr-darker-blue));
+}
+
+
+
+
+.cta {
+  display: grid;
+  place-items: center;
+
+  background-color: var(--clr-green);
+  border: 8px solid var(--clr-white);
+  border-radius: 111px;
+  color: var(--clr-white);
+
+  /* box-shadow: 4px 5px 0 0 var(--clr-darker-blue); */
+
+  box-sizing: content-box;
+  padding-block: 14px;
+  line-height: 94.5%;
+  padding-inline: 45px;
+  font-weight: var(--fw-black);
+}
+
+.cta.light {
+  font-weight: var(--fw-regular);
+}
+
+.hero{
+  grid-column: container;
+}
+
+.hero-background{
+  width: 100%;
+  height: 959px;
+  background-image: url(../assets/hero-background.png);
+  background-position: center;
+  background-size: cover  ;
+}
+
+::-webkit-scrollbar{
+  width: 0;
+}

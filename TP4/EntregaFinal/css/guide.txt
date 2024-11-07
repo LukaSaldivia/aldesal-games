@@ -1,0 +1,18 @@
+Original: https://www.figma.com/design/xoy26IpOV0V3YMbWeeRC0e/TP4-Interfaces---2024?node-id=1-5&node-type=frame&t=k253yjfnoZuDQMzs-0
+Copia: https://www.figma.com/design/EtG5vkSp5WSlMhABVkg6nK/TP4-Interfaces---2024-(Copy)?node-id=0-1&node-type=canvas&t=xO4VnZb2K09ZMZ4V-0
+
+
+----------------------------------------
+
+Tipografia -> Lato
+
+Grosores:
+ - Black
+ - Semibold
+ - Regular
+ - Bold
+
+Tamaños:
+ - 20px
+ - 60px
+ - 40px
