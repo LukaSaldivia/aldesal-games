@@ -128,9 +128,10 @@ body {
   display: grid;
   justify-items: start;
   grid-template-rows: [header-start main-start] 100px [header-end] auto [main-end footer-start] auto [footer-end];
-  overflow-x: hidden;  
+  overflow-x: hidden;
   font-family: var(--ff);
   font-size: var(--fs-100);
+
   >* {
     grid-column: container;
 
@@ -143,16 +144,16 @@ body {
 body>main {
   grid-row: main;
 
-  > * {
+  >* {
+    clip-path: polygon(0% -100%, 100% -100%, 100% 200%, 0% 200%);
     grid-column: container;
 
-    > * {
+    >* {
       grid-column: content;
     }
   }
 
   >.hero {
-    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
     height: 959px;
 
     background-color: var(--clr-blue-100);
@@ -161,6 +162,7 @@ body>main {
 
     --_animation: perspective;
     --_end: 35vh;
+    --_start : 10vh;
     --_speed: 0;
     --_blur: 0;
 
@@ -282,15 +284,113 @@ body>main {
       --_speed: -7;
       --_blur: 2;
     }
-    
-    
-  }
-  
-  >.intro{
-    background: linear-gradient(#85dd7b, #ADECED);
+
+
   }
 
-  >.download{
+  >.intro {
+    background-color: var(--clr-gray-000);
+    color: var(--clr-blue-200);
+    position: relative;
+    padding-bottom: 138px;
+
+
+    grid-template-rows: 
+    auto
+    auto
+    auto
+    520px
+    [cols-start]
+    auto
+    [cols-end]
+    ;
+
+    row-gap: var(--fs-100);
+
+
+    --_animation: translate;
+
+
+    --_speed-x: 0;
+    --_speed-y: 0;
+
+    .wave-background {
+      grid-column: container;
+      background: linear-gradient(#85dd7b, #ADECED);
+      clip-path: path("M0 742.37C183.201 870.171 655 790.5 655 790.5C655 790.5 1037.37 755.612 1280 894V0H0V742.37Z");
+      position: absolute;
+      width: 200%;
+      height: 100%;
+      top: -.2px;
+      left: 0%;
+      z-index: -1;
+    }
+
+    h1 {
+      grid-column: content;
+      font-size: var(--fs-247);
+      max-width: 500px;
+      letter-spacing: -1px;
+      line-height: 45px;
+    }
+
+    p {
+      max-width: 700px;
+    }
+
+    .screen {
+      border: 29px solid var(--clr-blue-200);
+      border-radius: 77px;
+      overflow: hidden;
+      width: 576.38px;
+      margin-left: 136px;
+
+      --_speed-y: -6;
+      --_speed-x: 5;
+      --_start: 0%;
+
+    }
+
+    .parallax__4,
+    .parallax__5 {
+      position: absolute;
+    }
+
+    .parallax__4 {
+      top: 500px;
+      left: -50px;
+      --_speed-y: -1;
+      --_speed-x: -20;
+      --_start: -100%;
+    }
+
+    .parallax__5 {
+      top: -150px;
+      right: -170px;
+      --_speed-y: 50;
+      --_speed-x: 0;
+    }
+
+    .cols-3{
+      grid-row: cols;
+      display: grid;
+
+      grid-template-columns: repeat(3, 1fr);
+      column-gap: var(--fs-200);
+      .col{
+        display: grid;
+        gap: var(--fs-100);
+        color: var(--clr-gray-400);
+        img{
+          border-style: inset;
+          border: 9px solid #2982FF;
+          border-radius: 41px;
+        }
+      }
+    }
+  }
+
+  >.download {
     background-color: var(--clr-purple);
   }
 
@@ -320,15 +420,15 @@ body>header {
     align-items: start;
     padding-top: 12px;
     padding-bottom: 16px;
-  
+
     >* {
-  
+
       &:first-child,
       &:last-child {
         flex-grow: 1;
         flex-basis: 0;
       }
-  
+
       &:last-child {
         display: flex;
         justify-content: end;
@@ -339,12 +439,12 @@ body>header {
       position: relative;
       width: 560px;
       height: 100%;
-    
+
       --_animation: scale-down;
       --_end: 500px;
-    
+
       pointer-events: none;
-    
+
       >.logo {
         position: absolute;
         inset: 0;
@@ -354,7 +454,7 @@ body>header {
         --_end: 100px;
       }
     }
-}
+  }
 }
 
 
@@ -455,11 +555,23 @@ details.menu {
 
 }
 
-.scroll-children>*, .scroll-this {
+.scroll-children>*,
+.scroll-this,
+.view-children>*,
+.view-this {
   animation: var(--_animation) linear both;
-  animation-timeline: scroll();
   animation-range-end: var(--_end);
   animation-range-start: var(--_start);
+}
+
+.scroll-children>*,
+.scroll-this {
+  animation-timeline: scroll();
+}
+
+.view-children>*,
+.view-this {
+  animation-timeline: view();
 }
 
 /* Animations */
@@ -468,7 +580,14 @@ details.menu {
   to {
     transform: translateY(calc(-6px * var(--_speed)));
     filter: blur(calc(1px * var(--_blur)));
-    scale: 1.02;
+    scale: 1.06;
+  }
+}
+
+@keyframes translate {
+  to {
+    transform: translateY(calc(-10px * var(--_speed)));
+    translate: calc(10px * var(--_speed-x)) calc(-10px * var(--_speed-y));
   }
 }
 
