@@ -440,7 +440,7 @@ body>main {
       z-index: -1;
 
       --_translate-x : calc(-1 * var(--_mouse-x) * 20px);
-      --_translate-y : calc(var(--_mouse-y) * 20px);
+      --_translate-y : calc(-1 * var(--_mouse-y) * 20px);
 
       translate: var(--_translate-x) var(--_translate-y);
     }

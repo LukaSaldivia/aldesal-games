@@ -5,15 +5,10 @@ let $$ = (selector) => document.querySelectorAll(selector)
 let download_section = $('section.download')
 
 download_section.addEventListener('mousemove', ({clientX, clientY}) => {
-
   let {height, width} = download_section.getBoundingClientRect()
-
   let x = clientX / width - .5  
   let y = clientY / height - .5
-  
   download_section.setAttribute('style', `--_mouse-x : ${x}; --_mouse-y : ${y}`)
-  
-  
 })
 
 
