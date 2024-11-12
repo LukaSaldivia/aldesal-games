@@ -443,6 +443,7 @@ body>main {
       --_translate-y : calc(-1 * var(--_mouse-y) * 20px);
 
       translate: var(--_translate-x) var(--_translate-y);
+      transition: translate .3s cubic-bezier(0, -10, 0, 20);
     }
 
 
@@ -634,7 +635,6 @@ details.menu {
   to {
     transform: translate3d(0px,calc(-6px * var(--_speed)), 0px);
     filter: blur(calc(1px * var(--_blur)));
-    scale: 1.06;
   }
 }
 
