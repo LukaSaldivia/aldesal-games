@@ -32,7 +32,7 @@
   --ff: 'Lato';
 
   --fw-regular: 400;
-  --fw-semibold: 600;
+  --fw-semibold: 500;
   --fw-bold: 700;
   --fw-black: 900;
 
@@ -388,7 +388,64 @@ body>main {
   }
 
   >.download {
+    position: relative;
+    color: var(--clr-gray-000);
     background-color: var(--clr-gray-000);
+    padding-top: 180px;
+    justify-items: center;
+    text-align: center;
+    grid-template-rows: 
+    auto
+    [cta-start characters-start]
+    auto
+    [cta-end]
+    auto
+    [characters-end];
+    row-gap: var(--fs-300);
+    overflow: hidden;
+
+    .purple-background {
+      grid-column: container;
+      background-color: var(--clr-purple);
+      clip-path: path("M0 0C499.868 48.2939 780.13 47.017 1280 0V1157H0V0Z");
+
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: -.2px;
+      left: 0%;
+      z-index: -1;
+    }
+
+    > h2{
+      font-size: var(--fs-361);
+      font-weight: var(--fw-semibold);
+      text-wrap: balance;
+
+      >.highlight{
+        font-weight: var(--fw-bold);
+        font-style: italic;
+      }
+    }
+
+    > .cta{
+      width: 540px;
+      grid-row: cta;
+    }
+
+    > img{
+      grid-row: characters;
+      grid-column: container;
+      scale: 1.1;
+      z-index: -1;
+
+      --_translate-x : calc(-1 * var(--_mouse-x) * 20px);
+      --_translate-y : calc(var(--_mouse-y) * 20px);
+
+      translate: var(--_translate-x) var(--_translate-y);
+    }
+
+
   }
 
 
@@ -575,7 +632,7 @@ details.menu {
 
 @keyframes perspective {
   to {
-    transform: translateY(calc(-6px * var(--_speed)));
+    transform: translate3d(0px,calc(-6px * var(--_speed)), 0px);
     filter: blur(calc(1px * var(--_blur)));
     scale: 1.06;
   }
