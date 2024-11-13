@@ -346,6 +346,10 @@ body>main {
       --_speed-x: 5;
       --_start: 0%;
 
+      > *:first-child {
+        animation: batman-circle 1s ease-out forwards;
+      }
+
     }
 
     .parallax__4,
@@ -453,10 +457,11 @@ body>main {
       grid-column: container;
       scale: 1.1;
       z-index: -1;
+      transform-style: preserve-3d;
+      perspective: 200px;
 
       --_translate-x : calc(-1 * var(--_mouse-x) * 20px);
       --_translate-y : calc(-1 * var(--_mouse-y) * 20px);
-
       translate: var(--_translate-x) var(--_translate-y);
     }
 
@@ -691,4 +696,14 @@ details.menu {
   }
 
 
+}
+
+@keyframes batman-circle {
+  from{
+    clip-path: circle(0% at 50% 50%); 
+  }
+  
+  to{
+    clip-path: circle(100% at 50% 50%);
+  }
 }

@@ -1,7 +1,16 @@
 let $ = (selector) => document.querySelector(selector)
 let $$ = (selector) => document.querySelectorAll(selector)
+let _$ = (element, selector) => element.querySelector(selector)
+let _$$ = (element, selector) => element.querySelectorAll(selector)
 
 // Sección "La app más divertida y educativa y para niños de 3 años"
+const screen = $('.intro > .screen')
+setInterval(()=>{
+  screen.append(_$(screen, 'img:first-child'))
+}, 3000)
+
+
+
 const columns = $$('.cols-3 > .col');
 
 const observer = new IntersectionObserver((entries) => {
