@@ -468,6 +468,55 @@ body>main {
 
   }
 
+  >.scroll-2-columns{
+    background-color: var(--clr-gray-000);
+    padding-top: 150px;
+    > h3 {
+      font-size: var(--fs-300);
+    }
+
+    >.cols-2{
+      margin-top: 10px;
+      display: grid;
+      grid-template-columns: 1fr 450px;
+
+      >.scrolling-image{
+        align-self: start;
+        position: sticky;
+        top: 50px;
+        justify-items: center;
+        
+        *:not(.show){
+          animation: batman-circle 2s ease-out reverse forwards;
+        }
+        
+        *.show{
+          animation: batman-circle 2s ease-out forwards;
+        }
+      }
+
+      >.paragraphs{
+        display: grid;
+        row-gap: 500px;
+
+
+
+        >section{
+          height: min-content;
+          display: grid;
+          gap: 15px;
+
+          &:first-child{
+            margin-top: 150px;
+          }
+          h5{
+            font-size: var(--fs-200);
+          }
+        }
+      }
+    }
+  }
+
 
 }
 

@@ -13,13 +13,13 @@ setInterval(()=>{
 
 const columns = $$('.cols-3 > .col');
 
-const observer = new IntersectionObserver((entries) => {
+const observer_cols_3 = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     columns.forEach(el => el.classList.toggle('visible', entry.isIntersecting))
   });
 }, { threshold: 0 });
 
-columns.forEach(el => observer.observe(el))
+columns.forEach(el => observer_cols_3.observe(el))
 
 
 
@@ -32,5 +32,22 @@ download_section.addEventListener('mousemove', ({clientX, clientY}) => {
   let y = clientY / height - .5
   download_section.setAttribute('style', `--_mouse-x : ${x}; --_mouse-y : ${y}`)
 })
+
+// Sección "Más amigos, más diversión!"
+
+const scrolling_image = $('.scroll-2-columns .cols-2 .scrolling-image')
+
+const paragraphs = $$('.scroll-2-columns .cols-2 .paragraphs > *')
+
+
+const observer_cols_2 = new IntersectionObserver((entries) => {
+
+  console.log(entries.length);
+  
+
+
+}, { threshold: 0.5 });
+
+paragraphs.forEach(el => observer_cols_2.observe(el))
 
 
