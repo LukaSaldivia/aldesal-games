@@ -37,17 +37,28 @@ download_section.addEventListener('mousemove', ({clientX, clientY}) => {
 
 const scrolling_image = $('.scroll-2-columns .cols-2 .scrolling-image')
 
-const paragraphs = $$('.scroll-2-columns .cols-2 .paragraphs > *')
+const paragraphs = [...$$('.scroll-2-columns .cols-2 .paragraphs > *')]
 
 
 const observer_cols_2 = new IntersectionObserver((entries) => {
+  _$$(scrolling_image, '*').forEach(el => el.classList.remove('actual'))
+  entries.map((entry) => {
+    
+    if (entry.isIntersecting) {
 
-  console.log(entries.length);
-  
 
 
-}, { threshold: 0.5 });
+      
+      
+      const index = paragraphs.indexOf(entry.target)      
+      scrolling_image.prepend(_$(scrolling_image, `img[data-index="${index}"]`))
+      
+    }
+  })  
 
-paragraphs.forEach(el => observer_cols_2.observe(el))
+
+}, { threshold: 1 });
+
+paragraphs.map(paragraph => observer_cols_2.observe(paragraph))
 
 
