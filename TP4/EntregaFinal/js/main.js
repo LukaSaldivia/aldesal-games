@@ -39,25 +39,19 @@ const scrolling_image = $('.scroll-2-columns .cols-2 .scrolling-image')
 
 const paragraphs = [...$$('.scroll-2-columns .cols-2 .paragraphs > *')]
 
-
 const observer_cols_2 = new IntersectionObserver((entries) => {
-  _$$(scrolling_image, '*').forEach(el => el.classList.remove('actual'))
-  entries.map((entry) => {
+  entries.map((entry) => {    
     
     if (entry.isIntersecting) {
-
-
-
-      
-      
-      const index = paragraphs.indexOf(entry.target)      
-      scrolling_image.prepend(_$(scrolling_image, `img[data-index="${index}"]`))
-      
+      const index = paragraphs.indexOf(entry.target)
+      if (index != _$(scrolling_image, 'img:first-child').getAttribute('data-index')) {
+        scrolling_image.prepend(_$(scrolling_image, `img[data-index="${index}"]`))
+      }
     }
   })  
 
 
-}, { threshold: 1 });
+}, { threshold: .5 });
 
 paragraphs.map(paragraph => observer_cols_2.observe(paragraph))
 

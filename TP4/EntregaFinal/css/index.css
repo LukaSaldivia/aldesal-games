@@ -461,7 +461,7 @@ body>main {
 
   >.scroll-2-columns {
     background-color: var(--clr-gray-000);
-    padding-block: 150px;
+    padding-block: 250px;
     >h3 {
       font-size: var(--fs-300);
     }
@@ -478,8 +478,12 @@ body>main {
         justify-items: center;
 
         *{
-          clip-path: circle(0%);
+          transition: clip-path 2s;
           height: 430px;
+        }
+        
+        *:not(:first-child){
+          clip-path: circle(0%);
         }
 
         *:first-child {
@@ -511,6 +515,11 @@ body>main {
         }
       }
     }
+  }
+
+  > .video{
+    background-color: var(--clr-yellow);
+    height: 1500px;
   }
 
 
