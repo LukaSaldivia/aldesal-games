@@ -51,7 +51,7 @@ const observer_cols_2 = new IntersectionObserver((entries) => {
   })  
 
 
-}, { threshold: .5 });
+}, { threshold: .8 });
 
 paragraphs.map(paragraph => observer_cols_2.observe(paragraph))
 
