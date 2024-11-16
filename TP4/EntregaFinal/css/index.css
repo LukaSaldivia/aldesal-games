@@ -591,9 +591,71 @@ body>main {
   }
 
 
-  > .characters{
+  > .characters-image{
+    position: relative;
+    background-color: var(--clr-gray-000);
+    height: 729px;
+    clip-path: none;
     > *{
       grid-column: container;
+    }
+
+    &:has(img:not(.gap-image):hover) img:not(:hover){
+      filter: grayscale(.5);
+
+      transition: .8s ease-out;
+
+      
+      &:not(.gap-image){
+        filter: grayscale(.5) blur(3px);
+
+      }
+    }
+
+    > img:not(.gap-image){
+      --_height : 373px;
+      --_gap-size : 30px;
+
+      --_width-0 : 242px;
+      --_width-1 : 233px;
+      --_width-2 : 238px;
+      --_width-3 : 224px;
+      --_width-4 : 223px;
+
+      width: 100%;
+      height: 100%;
+
+      --_gap-x-amount : calc(var(--_gap-size) * var(--_x));
+      --_pos-x: calc(
+        var(--_width-0) * clamp(0, var(--_x) - 0, 1) +
+        var(--_width-1) * clamp(0, var(--_x) - 1, 1) +
+        var(--_width-2) * clamp(0, var(--_x) - 2, 1) +
+        var(--_width-3) * clamp(0, var(--_x) - 3, 1) +
+        var(--_width-4) * clamp(0, var(--_x) - 4, 1) +
+        var(--_gap-x-amount)
+      );
+
+
+      --_gap-y-amount : calc(var(--_gap-size) * var(--_y));
+      --_pos-y : calc(var(--_y) * var(--_height) + var(--_gap-y-amount));
+
+      clip-path: polygon(
+      var(--_pos-x) var(--_pos-y), /* punta izquierda superior */ 
+      calc(var(--_pos-x) + var(--_w)) var(--_pos-y), /* punta derecha superior */
+      calc(var(--_pos-x) + var(--_w)) calc(var(--_pos-y) + var(--_height)), /* punta derecha inferior */
+      var(--_pos-x) calc(var(--_pos-y) + var(--_height)) /* punta izquierda inferior */
+      );
+      position: absolute;
+      left: 0;
+      top: 0;
+
+      transition: .3s ease-out;
+      transform-origin: center;
+
+      &:hover{
+        scale: 1.05;
+        filter: brightness(1.2);
+      }
     }
   }
 
