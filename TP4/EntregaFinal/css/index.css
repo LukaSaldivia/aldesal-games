@@ -686,6 +686,11 @@ body>main {
     > form{
       display: flex;
       width: 780px;
+      position: relative;
+
+      &:has(input:invalid:focus-visible){
+        --_shadow-color: red;
+      }
 
       input{
         border: 9px solid var(--clr-gray-000);
@@ -697,8 +702,7 @@ body>main {
         
         border-radius: 50px 0 0 50px;
 
-        caret-color: var(--clr-blue-200);
-
+        caret-color: var(--clr-blue-400);
         &::placeholder{
           color: #666;
           letter-spacing: .15em;
@@ -709,6 +713,7 @@ body>main {
           outline: none;
           background-color: #BCBCBC;
         }
+
       }
 
       button{
@@ -717,6 +722,25 @@ body>main {
 
         &:is(:hover, :focus-visible){
           translate: unset;
+        }
+      }
+
+      span{
+        position: absolute;
+        top: 50%;
+        right: 50px;
+        translate: 0 -50%;
+        padding: 10px 20px;
+        z-index: -1;
+        border-radius: 20px;
+        background-color: var(--clr-blue-300);
+        color: var(--clr-gray-000);
+        transition: transform .3s ease-out;
+        opacity: 0;
+
+        &.appear{
+          opacity: 1;
+          transform: translateX(300px);
         }
       }
     }

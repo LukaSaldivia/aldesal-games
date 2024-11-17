@@ -55,4 +55,18 @@ const observer_cols_2 = new IntersectionObserver((entries) => {
 
 paragraphs.map(paragraph => observer_cols_2.observe(paragraph))
 
+let newsletter_form = $('#newsletter')
+newsletter_form.addEventListener('submit', e => {
+  e.preventDefault();
+
+
+    _$(newsletter_form, 'input').value = ''
+  
+    _$(newsletter_form, 'span').classList.add('appear')
+    setTimeout(() => {
+      _$(newsletter_form, 'span').classList.remove('appear')
+    }, 3000);
+
+})
+
 
