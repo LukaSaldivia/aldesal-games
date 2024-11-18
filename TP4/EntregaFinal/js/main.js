@@ -55,6 +55,9 @@ const observer_cols_2 = new IntersectionObserver((entries) => {
 
 paragraphs.map(paragraph => observer_cols_2.observe(paragraph))
 
+
+// Sección "¿Quieres ser el primero en enterarse de todas las novedades?"
+
 let newsletter_form = $('#newsletter')
 newsletter_form.addEventListener('submit', e => {
   e.preventDefault();
