@@ -1178,43 +1178,6 @@ nav{
     }
 }
 
-
-.hamburguer-menu{
-  position: relative;
-
-  > input[type="checkbox"]{
-    visibility: hidden;
-    display: none;
-    
-    &:checked + .icon{
-      
-    }
-
-    &:checked ~ nav{
-
-
-      
-    }
-    
-    &:not(:checked) ~ nav{
-      li {
-        animation: nav-item-appear .5s ease-out forwards;
-        animation-direction: reverse;
-      }
-    }
-  }
-
-
-
-  > nav{
-    
-  }
-
-
-
-
-}
-
 .scroll-children>*,
 .scroll-this,
 .view-children>*,
