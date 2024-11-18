@@ -55,6 +55,22 @@ const observer_cols_2 = new IntersectionObserver((entries) => {
 
 paragraphs.map(paragraph => observer_cols_2.observe(paragraph))
 
+// Sección "¡Experimenta Efectos 3D Asombrosos en NumberBlocks: Una Aventura Matemática Inmersiva!"
+const modelViewer = $("#UNO-3D");
+
+  document.addEventListener("mousemove", (event) => {
+    const { clientX, clientY } = event;
+    const { innerWidth, innerHeight } = window;
+
+    // Map mouse position to rotation values
+    const xRotation = ((clientY / innerHeight) - 0.5) * 30; // 15deg por cada lado (15 * 2 = 30)
+    const yRotation = ((clientX / innerWidth) - 0.5) * 30;
+
+    // -75deg 85deg 0 <-- base state
+
+    modelViewer.setAttribute("camera-orbit", `${-75-yRotation}deg ${85 - xRotation}deg 0`);
+  });
+
 
 // Sección "¿Quieres ser el primero en enterarse de todas las novedades?"
 

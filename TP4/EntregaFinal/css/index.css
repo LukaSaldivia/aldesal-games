@@ -590,6 +590,45 @@ body>main {
 
   }
 
+  >.feature-3d{
+    background-color: var(--clr-gray-000);
+    padding-block: 200px;
+    position: relative;
+
+    row-gap: var(--fs-300);
+
+    > * {
+      grid-column: content;
+    }
+
+    > h2{
+      color: var(--clr-dark-red);
+      font-size: var(--fs-300);
+      font-weight: var(--fw-semibold);
+      line-height: .9em;
+      width: 700px;
+    }
+
+    > p {
+      width: 467px;
+      text-wrap: balance;
+    }
+
+    > model-viewer{
+      display: block;
+      position: absolute;
+      right: -150px;
+      top: 0px;
+      overflow: hidden;
+      --_size : 900px;
+      width: var(--_size);
+      height: var(--_size);
+      aspect-ratio: 1;
+      z-index: -1;
+    }
+
+
+  }
 
   >.characters-image {
     position: relative;

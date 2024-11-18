@@ -4,6 +4,7 @@
 <head>
   <link rel="stylesheet" href="css/index.css">
   <script defer src="js/main.js"></script>
+  <script defer type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="shortcut icon" href="assets/misc/favicon.ico" type="image/x-icon">
@@ -513,7 +514,15 @@
       </div>
       <img src="assets/characters/3/3_video.png" alt="">
     </section>
-    <section class="3d"></section>
+    <section class="feature-3d container-grid">
+      <h2>¡Experimenta Efectos 3D Asombrosos en NumberBlocks: Una Aventura Matemática Inmersiva!</h2>
+      <p>En NumberBlocks, la aventura no solo está en el aprendizaje, ¡sino también en la experiencia visual! Disfruta de efectos 3D asombrosos que dan vida a cada número y desafío, haciendo que las matemáticas cobren una nueva dimensión. A medida que los niños interactúan con los personajes y los bloques, verán cómo sus acciones tienen un impacto real en el entorno, creando un aprendizaje dinámico y emocionante. ¡Cada sesión de juego se convierte en una experiencia inolvidable llena de color y diversión!</p>
+      <model-viewer id="UNO-3D" 
+      disable-zoom 
+      src="assets/feature-3d/one.glb" 
+      camera-orbit="-75deg 85deg 0"
+      ></model-viewer>
+    </section>
     <section class="characters-image container-grid">
       <img class="gap-image" src="assets/characters-image/gap-image.png" alt="">
       <img src="assets/characters-image/full-image.png" style="--_x: 0; --_y: 0; --_w: var(--_width-0);" alt="">
