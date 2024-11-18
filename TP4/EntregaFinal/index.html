@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
   <link rel="stylesheet" href="css/index.css">
   <script defer src="js/main.js"></script>
-  <script defer type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script>
+  <script defer type="module"
+    src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="shortcut icon" href="assets/misc/favicon.ico" type="image/x-icon">
@@ -14,14 +15,41 @@
 <body>
   <header class="container-grid">
     <div class="wrapper">
-      <details class="menu">
-        <summary class="shadow">
+
+        <button class="hamburger icon shadow">
           <div class="line__1"></div>
           <div class="line__2"></div>
           <div class="line__3"></div>
-        </summary>
+        </button>
 
-      </details>
+
+        <nav class="shadow">
+          <ul>
+            <li>
+              <a href="#download">
+                <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 24 24">
+                  <path fill="none" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M4 16v1a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                </svg>
+                <p>Descarga NumberBlocks</p>
+              </a>
+            </li>
+            <li>
+              <a href="#game-modes">
+                <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 24 24"><g fill="none" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><rect width="7" height="7" x="14" y="3" rx="1"/><path d="M10 21V8a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-5a1 1 0 0 0-1-1H3"/></g>
+                </svg>
+                <p>Modos de juego</p>
+              </a>
+            </li>
+            <li>
+              <a href="#newsletter">
+                <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 256 256"><path fill="#ffffff" d="M100 148a12 12 0 0 1-12 12H64a12 12 0 0 1 0-24h24a12 12 0 0 1 12 12m144-32v60a20 20 0 0 1-20 20h-84v28a12 12 0 0 1-24 0v-28H32a20 20 0 0 1-20-20v-60a64.07 64.07 0 0 1 64-64h80V24a12 12 0 0 1 12-12h32a12 12 0 0 1 0 24h-20v16a64.07 64.07 0 0 1 64 64m-128 56v-56a40 40 0 0 0-80 0v56Zm104-56a40 40 0 0 0-40-40v68a12 12 0 0 1-24 0V76h-30.07A63.7 63.7 0 0 1 140 116v56h80Z"/>
+                </svg>
+                <p>Suscribite</p>
+              </a>
+            </li>
+          </ul>
+        </nav>
       <a href="#" class="logo-wrapper scroll-this">
         <img src="assets/logo.png" alt="Logo de Numberblocks" class="logo scroll-this">
       </a>
@@ -391,13 +419,13 @@
 
 
     </section>
-    <section class="download container-grid">
+    <section class="download container-grid" id="download">
       <div class="purple-background"></div>
       <h2>Descubre el juego que convierte las <span class="highlight">Matemáticas</span> en diversión </h2>
       <img src="assets/download/characters.png" alt="">
       <button class="cta light shadow">¡Descarga NumberBlocks hoy!</button>
     </section>
-    <section class="scroll-2-columns container-grid">
+    <section class="scroll-2-columns container-grid" id="game-modes">
       <h2>Más amigos, más diversión!</h2>
       <div class="cols-2">
         <div class="scrolling-image stack">
@@ -516,12 +544,13 @@
     </section>
     <section class="feature-3d container-grid">
       <h2>¡Experimenta Efectos 3D Asombrosos en NumberBlocks: Una Aventura Matemática Inmersiva!</h2>
-      <p>En NumberBlocks, la aventura no solo está en el aprendizaje, ¡sino también en la experiencia visual! Disfruta de efectos 3D asombrosos que dan vida a cada número y desafío, haciendo que las matemáticas cobren una nueva dimensión. A medida que los niños interactúan con los personajes y los bloques, verán cómo sus acciones tienen un impacto real en el entorno, creando un aprendizaje dinámico y emocionante. ¡Cada sesión de juego se convierte en una experiencia inolvidable llena de color y diversión!</p>
-      <model-viewer id="UNO-3D" 
-      disable-zoom 
-      src="assets/feature-3d/one.glb" 
-      camera-orbit="-75deg 85deg 0"
-      ></model-viewer>
+      <p>En NumberBlocks, la aventura no solo está en el aprendizaje, ¡sino también en la experiencia visual! Disfruta
+        de efectos 3D asombrosos que dan vida a cada número y desafío, haciendo que las matemáticas cobren una nueva
+        dimensión. A medida que los niños interactúan con los personajes y los bloques, verán cómo sus acciones tienen
+        un impacto real en el entorno, creando un aprendizaje dinámico y emocionante. ¡Cada sesión de juego se convierte
+        en una experiencia inolvidable llena de color y diversión!</p>
+      <model-viewer id="UNO-3D" disable-zoom src="assets/feature-3d/one.glb"
+        camera-orbit="-75deg 85deg 0"></model-viewer>
     </section>
     <section class="characters-image container-grid">
       <img class="gap-image" src="assets/characters-image/gap-image.png" alt="">
@@ -536,7 +565,7 @@
       <img src="assets/characters-image/full-image.png" style="--_x: 3; --_y: 1; --_w: var(--_width-3);" alt="">
       <img src="assets/characters-image/full-image.png" style="--_x: 4; --_y: 1; --_w: var(--_width-4);" alt="">
     </section>
-    <section class="newsletter container-grid">
+    <section class="newsletter container-grid" id="newsletter">
       <div class="cloud-row small">
         <img src="assets/newsletter/cloud.png" alt="">
         <img src="assets/newsletter/cloud.png" alt="">
@@ -583,7 +612,17 @@
       </div>
     </div>
 
-    <p>©SEGA. All rights reserved. SEGA is registered in the U.S. Patent and Trademark Office. SEGA, the SEGA logo and SONIC SUPERSTARS are either registered trademarks or trademarks of SEGA CORPORATION or its affiliates. All other trademarks, logos and copyrights are property of their respective owners.©2023 The LEGO Group. LEGO, the LEGO logo, the Minifigure, and the Brick and Knob configurations are trademarks and/or copyrights of the LEGO Group. All other marks and trademarks are the property of their respective owners. All rights reserved."PS", "PS5" and "PS4" are registered trademarks or trademarks of Sony Interactive Entertainment Inc.Microsoft, the Xbox Sphere mark, the Series X logo, Xbox One, and Xbox Series X are trademarks of the Microsoft group of companies.Nintendo Switch is a trademark of NintendoEPIC GAMES and the EPIC STORE LOGO are trademarks or registered trademarks of EPIC GAMES INC.©2023 Valve Corporation. Steam and the Steam logo are trademarks and/or registered trademarks of Valve Corporation in the U.S. and/or other countries.The ESRB rating icons are registered trademarks of the Entertainment Software Association.</p>
+    <p>©SEGA. All rights reserved. SEGA is registered in the U.S. Patent and Trademark Office. SEGA, the SEGA logo and
+      SONIC SUPERSTARS are either registered trademarks or trademarks of SEGA CORPORATION or its affiliates. All other
+      trademarks, logos and copyrights are property of their respective owners.©2023 The LEGO Group. LEGO, the LEGO
+      logo, the Minifigure, and the Brick and Knob configurations are trademarks and/or copyrights of the LEGO Group.
+      All other marks and trademarks are the property of their respective owners. All rights reserved."PS", "PS5" and
+      "PS4" are registered trademarks or trademarks of Sony Interactive Entertainment Inc.Microsoft, the Xbox Sphere
+      mark, the Series X logo, Xbox One, and Xbox Series X are trademarks of the Microsoft group of companies.Nintendo
+      Switch is a trademark of NintendoEPIC GAMES and the EPIC STORE LOGO are trademarks or registered trademarks of
+      EPIC GAMES INC.©2023 Valve Corporation. Steam and the Steam logo are trademarks and/or registered trademarks of
+      Valve Corporation in the U.S. and/or other countries.The ESRB rating icons are registered trademarks of the
+      Entertainment Software Association.</p>
 
     <span class="legal-links">
       <a href="">COOKIE POLICY</a>

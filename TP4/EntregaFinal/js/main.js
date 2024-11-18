@@ -3,6 +3,16 @@ let $$ = (selector) => document.querySelectorAll(selector)
 let _$ = (element, selector) => element.querySelector(selector)
 let _$$ = (element, selector) => element.querySelectorAll(selector)
 
+let btn_hamburger = $('.hamburger')
+
+btn_hamburger.addEventListener('click', e => {
+  btn_hamburger.classList.toggle('active')
+})
+
+$('nav').addEventListener('click' , e => {
+  btn_hamburger.classList.remove('active')
+})
+
 // Sección "La app más divertida y educativa y para niños de 3 años"
 const screen = $('.intro > .screen')
 setInterval(()=>{
