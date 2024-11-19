@@ -146,6 +146,61 @@ body {
 
 }
 
+body>header {
+
+  grid-row: header;
+  position: sticky;
+  top: 0;
+  animation-name: color-add;
+  animation-range-end: 500px;
+  animation-direction: alternate;
+  animation-fill-mode: forwards;
+  animation-timeline: scroll(block nearest);
+  z-index: 9;
+
+  >.wrapper {
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    padding-top: 12px;
+    padding-bottom: 16px;
+
+    >* {
+
+      &:first-child,
+      &:last-child {
+        flex-grow: 1;
+        flex-basis: 0;
+      }
+
+      &:last-child {
+        display: flex;
+        justify-content: end;
+      }
+    }
+
+    .logo-wrapper {
+      position: relative;
+      width: 560px;
+      height: 100%;
+
+      --_animation: scale-down;
+      --_end: 500px;
+
+      pointer-events: none;
+
+      >.logo {
+        position: absolute;
+        inset: 0;
+        top: 43px;
+        width: 100%;
+        --_animation: to-top;
+        --_end: 100px;
+      }
+    }
+  }
+}
+
 body>main {
   grid-row: main;
 
@@ -1087,60 +1142,7 @@ body>footer {
   }
 }
 
-body>header {
 
-  grid-row: header;
-  position: sticky;
-  top: 0;
-  animation-name: color-add;
-  animation-range-end: 500px;
-  animation-direction: alternate;
-  animation-fill-mode: forwards;
-  animation-timeline: scroll(block nearest);
-  z-index: 9;
-
-  >.wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding-top: 12px;
-    padding-bottom: 16px;
-
-    >* {
-
-      &:first-child,
-      &:last-child {
-        flex-grow: 1;
-        flex-basis: 0;
-      }
-
-      &:last-child {
-        display: flex;
-        justify-content: end;
-      }
-    }
-
-    .logo-wrapper {
-      position: relative;
-      width: 560px;
-      height: 100%;
-
-      --_animation: scale-down;
-      --_end: 500px;
-
-      pointer-events: none;
-
-      >.logo {
-        position: absolute;
-        inset: 0;
-        top: 43px;
-        width: 100%;
-        --_animation: to-top;
-        --_end: 100px;
-      }
-    }
-  }
-}
 
 
 
@@ -1231,6 +1233,7 @@ button.hamburger{
     }
 
     ~ nav {
+      pointer-events: all;
       li{
         translate: 0px;
         opacity: 1;
@@ -1244,6 +1247,7 @@ button.hamburger{
 nav{
   position: absolute;
     top: 100%;
+    pointer-events: none;
 
     ul{
       list-style: none;
