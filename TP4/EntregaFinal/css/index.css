@@ -202,7 +202,7 @@ body>main {
       left: -129px;
       top: -1px;
 
-      --_speed: 6;
+      --_speed: 2;
       --_blur: 3;
     }
 
@@ -289,6 +289,46 @@ body>main {
       --_speed: -7;
       --_blur: 2;
     }
+
+    .parallax__rock-large_arbol-1{
+      left: 130px;
+      top: 800px;
+
+      --_speed: 5;
+      --_blur: 3;
+    }
+
+    .parallax__bush-small_arbol-1{
+      left: 190px;
+      top: 830px;
+
+      --_speed: 14;
+      --_blur: 3;
+    }
+    
+    .parallax__bush-large_arbol-1{
+      left: 150px;
+      top: 730px;
+
+      --_speed: 0;
+      --_blur: 3;
+    }
+    .parallax__bush-large_arbol-2{
+      top: 650px;
+      right: -50px;
+
+      --_speed: -13;
+      --_blur: 3;
+    }
+
+    .parallax__bush-thin_arbol-3{
+      top: 620px;
+      right: 50px;
+
+      --_blur: 4;
+      --_speed: -19;
+    }
+    
 
 
   }
@@ -1109,7 +1149,7 @@ button.hamburger{
 
     ~ nav {
       li{
-        translate: 0;
+        translate: 0px;
         opacity: 1;
         pointer-events: all;
       }
@@ -1128,12 +1168,11 @@ nav{
 
       --_radius : 10px;
 
-      overflow: hidden;
 
       > li {
 
         background-color: var(--clr-orange);
-        transition: background-color .2s ease-out, translate .3s ease-out var(--_delay), opacity .4s ease-in var(--_delay);
+        transition: background-color .2s ease-out, translate .3s cubic-bezier(0, -1 , .5 , 2) var(--_delay), opacity .4s ease-in var(--_delay);
         translate: -50px;
         opacity: 0;
         pointer-events: none;
