@@ -967,6 +967,13 @@ body>footer {
     right: -80px;
     top: 200px;
 
+    --_animation : translate;
+
+    --_speed-x : 0;
+    --_speed-y : -15;
+    --_start : 20%;
+    --_end : 100%;
+
 
 
     .img-frame{
