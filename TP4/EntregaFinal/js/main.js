@@ -3,6 +3,14 @@ let $$ = (selector) => document.querySelectorAll(selector)
 let _$ = (element, selector) => element.querySelector(selector)
 let _$$ = (element, selector) => element.querySelectorAll(selector)
 
+// Loader
+const loader = $('.load-screen')
+
+setTimeout(() => {
+  loader.classList.add('loaded')
+}, 5000)
+
+// Menú hamburguesa
 let btn_hamburger = $('.hamburger')
 
 btn_hamburger.addEventListener('click', e => {
@@ -72,11 +80,10 @@ const modelViewer = $("#UNO-3D");
     const { clientX, clientY } = event;
     const { innerWidth, innerHeight } = window;
 
-    // Map mouse position to rotation values
     const xRotation = ((clientY / innerHeight) - 0.5) * 30; // 15deg por cada lado (15 * 2 = 30)
     const yRotation = ((clientX / innerWidth) - 0.5) * 30;
 
-    // -75deg 85deg 0 <-- base state
+    // -75deg 85deg 0 <-- Estado base
 
     modelViewer.setAttribute("camera-orbit", `${-75-yRotation}deg ${85 - xRotation}deg 0`);
   });
