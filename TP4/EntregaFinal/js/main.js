@@ -6,9 +6,11 @@ let _$$ = (element, selector) => element.querySelectorAll(selector)
 // Loader
 const loader = $('.load-screen')
 
-setTimeout(() => {
-  loader.classList.add('loaded')
-}, 5000)
+document.addEventListener('DOMContentLoaded', ()=> {
+  setTimeout(() => {
+    loader.classList.add('loaded')
+  }, 5000)
+})
 
 // Menú hamburguesa
 let btn_hamburger = $('.hamburger')
