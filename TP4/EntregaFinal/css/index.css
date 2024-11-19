@@ -948,6 +948,82 @@ body>footer {
   padding-bottom: var(--fs-200);
 
   row-gap: var(--fs-200);
+  position: relative;
+
+  > .fan-arts{
+    position: absolute;
+    display: grid;
+    grid-template-columns: 
+    auto auto auto;
+
+    grid-template-rows: 
+    [picture-start]
+    auto
+    [picture-end label-start]
+    auto
+    [label-end];
+    align-items: end;
+
+    right: -80px;
+    top: 200px;
+
+
+
+    .img-frame{
+      grid-row: picture;
+      border: 5px solid white;
+      filter: drop-shadow(0 0 10px var(--clr-gray-300));
+      &:nth-of-type(1){
+
+        translate: 10px;
+
+        rotate: -10deg;
+
+        > .spritesheet{
+          background-image: url("../assets/footer/fan-art-1.png");
+          --_full-size : calc(6580px / 4);
+          --_height : calc(470px / 4);
+          --_frame-count : 14;
+        }
+      }
+      &:nth-of-type(2){
+
+        z-index: 1;
+        > .spritesheet{
+          background-image: url("../assets/footer/fan-art-2.png");
+          --_full-size : calc(10810px / 4);
+          --_height : calc(470px / 4);
+          --_frame-count : 23;
+
+        }
+      }
+      &:nth-of-type(3){
+
+        translate: -10px;
+
+        rotate: 20deg;
+
+        > .spritesheet{
+          background-image: url("../assets/footer/fan-art-3.png");
+          --_full-size : calc(5340px / 4);
+          --_height : calc(356px / 4);
+          --_frame-count : 15;
+        }
+      }
+
+    }
+
+    > p{
+      grid-row: label;
+      grid-column: 1/4;
+      background-color: var(--clr-gray-000);
+      color: var(--clr-gray-300);
+      text-align: center;
+      padding: 6px 10px;
+      border-radius: 10px;
+      z-index: 2;
+    }
+  }
 
   > .platforms{
     grid-column: container;
@@ -1236,6 +1312,17 @@ nav{
   animation-timeline: view();
 }
 
+.spritesheet{
+
+  height: var(--_height);
+  --_width : calc(var(--_full-size) / var(--_frame-count));
+  width: var(--_width);
+  background-size: var(--_full-size) var(--_height);
+
+  animation: spritesheet-run calc(0.2s * var(--_frame-count)) steps(var(--_frame-count), jump-none) infinite;
+
+}
+
 /* Animations */
 
 @keyframes perspective {
@@ -1292,5 +1379,11 @@ nav{
 
   to {
     clip-path: circle(100% at 50% 50%);
+  }
+}
+
+@keyframes spritesheet-run{
+  to{
+    background-position: calc((var(--_full-size) - var(--_width)) * -1) 0px;
   }
 }
